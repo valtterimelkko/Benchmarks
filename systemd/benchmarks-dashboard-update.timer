@@ -1,0 +1,11 @@
+[Unit]
+Description=Weekly update timer for private LLM benchmark dashboard
+
+[Timer]
+OnCalendar=Mon 07:15
+RandomizedDelaySec=30m
+Persistent=true
+Unit=benchmarks-dashboard-update.service
+
+[Install]
+WantedBy=timers.target

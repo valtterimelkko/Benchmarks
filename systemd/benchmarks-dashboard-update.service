@@ -1,0 +1,17 @@
+[Unit]
+Description=Update private LLM benchmark dashboard data
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=root
+WorkingDirectory=/root/benchmarks
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/usr/bin/python3 -m benchmark_dashboard.update --commit
+
+# The updater writes snapshots and uses git/ssh/network.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ReadWritePaths=/root/benchmarks /root/.ssh /root/.config /root/.cache

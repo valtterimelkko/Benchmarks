@@ -1,0 +1,452 @@
+from __future__ import annotations
+
+import io
+import json
+import re
+from datetime import datetime, timezone
+from typing import Any, Callable
+
+import openpyxl
+import requests
+from bs4 import BeautifulSoup
+
+from .models import BenchmarkRow, BenchmarkSnapshot
+
+USER_AGENT = "letsautomate-benchmark-dashboard/0.1 (+private weekly dashboard)"
+TIMEOUT = 35
+
+
+ORG_PATTERNS = [
+    ("openai", "OpenAI"),
+    ("gpt", "OpenAI"),
+    ("claude", "Anthropic"),
+    ("anthropic", "Anthropic"),
+    ("gemini", "Google"),
+    ("google", "Google"),
+    ("kimi", "Moonshot AI"),
+    ("moonshot", "Moonshot AI"),
+    ("glm", "Z.AI"),
+    ("z.ai", "Z.AI"),
+    ("deepseek", "DeepSeek"),
+    ("qwen", "Alibaba"),
+    ("alibaba", "Alibaba"),
+    ("minimax", "MiniMax"),
+    ("mistral", "Mistral"),
+    ("xai", "xAI"),
+    ("grok", "xAI"),
+    ("meta", "Meta"),
+    ("llama", "Meta"),
+]
+
+
+def now_iso() -> str:
+    return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+
+
+def infer_org(model: str | None) -> str | None:
+    if not model:
+        return None
+    lowered = model.lower()
+    for needle, org in ORG_PATTERNS:
+        if needle in lowered:
+            return org
+    return None
+
+
+def normalise_org(org: str | None) -> str | None:
+    if not org:
+        return None
+    lookup = {"anthropic": "Anthropic", "openai": "OpenAI", "google": "Google", "deepseek": "DeepSeek", "moonshot ai": "Moonshot AI", "moonshot": "Moonshot AI", "z.ai": "Z.AI", "alibaba": "Alibaba"}
+    return lookup.get(org.strip().lower(), org.strip())
+
+
+def clean_text(value: Any) -> str:
+    return " ".join(str(value or "").replace("\xa0", " ").split())
+
+
+def as_float(value: Any) -> float | None:
+    if value is None:
+        return None
+    if isinstance(value, (int, float)):
+        return float(value)
+    match = re.search(r"-?\d+(?:\.\d+)?", str(value).replace(",", ""))
+    return float(match.group(0)) if match else None
+
+
+def fetch_text(url: str) -> str:
+    response = requests.get(url, timeout=TIMEOUT, headers={"User-Agent": USER_AGENT})
+    response.raise_for_status()
+    return response.text
+
+
+def fetch_bytes(url: str) -> bytes:
+    response = requests.get(url, timeout=TIMEOUT, headers={"User-Agent": USER_AGENT})
+    response.raise_for_status()
+    return response.content
+
+
+def parse_deepswe_html(html: str) -> list[BenchmarkRow]:
+    pattern = re.compile(
+        r'\{model:"(?P<model>[^"]+)",harness:"(?P<harness>[^"]+)",reasoning_effort:"(?P<effort>[^"]+)".*?'
+        r'pass_rate:(?P<pass_rate>\d+(?:\.\d+)?).*?'
+        r'n_tasks_attempted:(?P<attempted>\d+).*?'
+        r'n_tasks_passed_any:(?P<passed>\d+).*?'
+        r'mean_cost_usd:(?P<cost>\d+(?:\.\d+)?)',
+        re.DOTALL,
+    )
+    rows: list[BenchmarkRow] = []
+    for match in pattern.finditer(html):
+        model = match.group("model")
+        effort = match.group("effort")
+        score = round(float(match.group("pass_rate")) * 100, 2)
+        rows.append(
+            BenchmarkRow(
+                rank=0,
+                model=f"{model} [{effort}]",
+                organization=infer_org(model),
+                score=score,
+                score_unit="% solve rate",
+                metadata={
+                    "harness": match.group("harness"),
+                    "reasoning_effort": effort,
+                    "tasks_attempted": int(match.group("attempted")),
+                    "tasks_passed_any": int(match.group("passed")),
+                    "mean_cost_usd": round(float(match.group("cost")), 4),
+                },
+            )
+        )
+    rows.sort(key=lambda row: row.score, reverse=True)
+    for index, row in enumerate(rows, start=1):
+        row.rank = index
+    return rows
+
+
+def parse_terminal_html(html: str) -> list[BenchmarkRow]:
+    soup = BeautifulSoup(html, "html.parser")
+    table = soup.find("table")
+    if table is None:
+        return []
+    rows: list[BenchmarkRow] = []
+    for tr in table.find_all("tr"):
+        cells = [clean_text(td.get_text(" ", strip=True)) for td in tr.find_all("td")]
+        if len(cells) < 8 or not cells[1].isdigit():
+            continue
+        score = as_float(cells[7])
+        if score is None:
+            continue
+        rows.append(
+            BenchmarkRow(
+                rank=int(cells[1]),
+                model=cells[3],
+                organization=normalise_org(cells[6]) or infer_org(cells[3]),
+                score=score,
+                score_unit="% accuracy",
+                date=cells[4] or None,
+                metadata={"agent": cells[2], "agent_org": cells[5], "raw_accuracy": cells[7]},
+            )
+        )
+    return rows
+
+
+def parse_benchlm_next_data(html: str) -> list[BenchmarkRow]:
+    match = re.search(r'<script id="__NEXT_DATA__" type="application/json">(.*?)</script>', html, re.DOTALL)
+    if not match:
+        return []
+    data = json.loads(match.group(1))
+    leaderboard = data.get("props", {}).get("pageProps", {}).get("leaderboard", [])
+    rows: list[BenchmarkRow] = []
+    for index, item in enumerate(leaderboard, start=1):
+        score = as_float(item.get("score"))
+        if score is None:
+            continue
+        rows.append(
+            BenchmarkRow(
+                rank=index,
+                model=clean_text(item.get("model")),
+                organization=normalise_org(item.get("creator")) or infer_org(item.get("model")),
+                score=round(score, 2),
+                score_unit="% score",
+                metadata={
+                    "source_type": item.get("sourceType"),
+                    "context_window": item.get("contextWindow"),
+                    "overall_score": item.get("overallScore"),
+                    "benchlm_slug": item.get("slug"),
+                },
+            )
+        )
+    return rows
+
+
+def parse_osworld_workbook(content: bytes) -> list[BenchmarkRow]:
+    workbook = openpyxl.load_workbook(io.BytesIO(content), data_only=True)
+    sheet = workbook["Eval Results"] if "Eval Results" in workbook.sheetnames else workbook.active
+    headers = [clean_text(cell.value) for cell in next(sheet.iter_rows(min_row=1, max_row=1))]
+    index = {name: i for i, name in enumerate(headers)}
+    rows: list[BenchmarkRow] = []
+    for raw in sheet.iter_rows(min_row=2, values_only=True):
+        model = clean_text(raw[index.get("Model", 0)])
+        score = as_float(raw[index.get("Success rate", 10)])
+        if not model or score is None:
+            continue
+        date_value = raw[index.get("Date", 9)] if "Date" in index else None
+        date = date_value.strftime("%Y-%m-%d") if hasattr(date_value, "strftime") else (clean_text(date_value) or None)
+        max_steps_idx = index.get("Max steps")
+        approach_idx = index.get("Approach type")
+        success_idx = index.get("Success/Total")
+        rows.append(
+            BenchmarkRow(
+                rank=0,
+                model=model,
+                organization=normalise_org(clean_text(raw[index.get("Institution", 1)])) or infer_org(model),
+                score=round(score, 2),
+                score_unit="% success rate",
+                date=date,
+                metadata={
+                    "approach_type": clean_text(raw[approach_idx]) if approach_idx is not None else None,
+                    "max_steps": raw[max_steps_idx] if max_steps_idx is not None else None,
+                    "success_total": clean_text(raw[success_idx]) if success_idx is not None else None,
+                },
+            )
+        )
+    rows.sort(key=lambda row: row.score, reverse=True)
+    for index, row in enumerate(rows, start=1):
+        row.rank = index
+    return rows
+
+
+def parse_longbench_html(html: str) -> list[BenchmarkRow]:
+    soup = BeautifulSoup(html, "html.parser")
+    table = soup.find("table")
+    if table is None:
+        return []
+    rows: list[BenchmarkRow] = []
+    for tr in table.find_all("tr"):
+        cells = [clean_text(td.get_text(" ", strip=True)) for td in tr.find_all("td")]
+        if len(cells) < 7:
+            continue
+        model_cell = cells[1]
+        if not model_cell or model_cell.lower() == "model":
+            continue
+        score = as_float(cells[5]) if cells[5] != "-" else None
+        if score is None and len(cells) > 6:
+            score = as_float(cells[6])
+        if score is None:
+            continue
+        org = infer_org(model_cell)
+        # The official table appends provider names to many model labels.
+        for candidate in ["Google", "Alibaba", "DeepSeek", "OpenAI", "Anthropic", "Meta", "Moonshot AI", "Z.AI", "Mistral"]:
+            if candidate.lower() in model_cell.lower():
+                org = candidate
+                break
+        model = model_cell.replace("🧠", "").strip()
+        if org and model.endswith(org):
+            model = model[: -len(org)].strip()
+        rows.append(
+            BenchmarkRow(
+                rank=0,
+                model=model,
+                organization=org,
+                score=round(score, 2),
+                score_unit="% overall",
+                date=cells[4] or None,
+                metadata={"params": cells[2], "context": cells[3]},
+            )
+        )
+    rows.sort(key=lambda row: row.score, reverse=True)
+    for index, row in enumerate(rows, start=1):
+        row.rank = index
+    return rows
+
+
+def parse_lmarena_rows(payload: dict[str, Any]) -> list[BenchmarkRow]:
+    rows: list[BenchmarkRow] = []
+    for wrapper in payload.get("rows", []):
+        item = wrapper.get("row", wrapper)
+        score = as_float(item.get("rating"))
+        if score is None:
+            continue
+        rows.append(
+            BenchmarkRow(
+                rank=int(as_float(item.get("rank")) or len(rows) + 1),
+                model=clean_text(item.get("model_name")),
+                organization=normalise_org(clean_text(item.get("organization"))) or infer_org(item.get("model_name")),
+                score=round(score, 2),
+                score_unit="Arena rating",
+                date=item.get("leaderboard_publish_date"),
+                metadata={
+                    "rating_lower": item.get("rating_lower"),
+                    "rating_upper": item.get("rating_upper"),
+                    "votes": item.get("vote_count"),
+                    "license": item.get("license"),
+                    "category": item.get("category"),
+                },
+            )
+        )
+    rows.sort(key=lambda row: row.rank)
+    return rows
+
+
+def _snapshot(
+    *,
+    id: str,
+    name: str,
+    category: str,
+    description: str,
+    source_url: str,
+    methodology_url: str | None,
+    authenticity: str,
+    update_strategy: str,
+    fetcher: Callable[[], list[BenchmarkRow]],
+) -> BenchmarkSnapshot:
+    fetched_at = now_iso()
+    try:
+        rows = fetcher()
+        if not rows:
+            raise ValueError("No parseable leaderboard rows found")
+        return BenchmarkSnapshot(
+            id=id,
+            name=name,
+            category=category,
+            description=description,
+            source_url=source_url,
+            methodology_url=methodology_url,
+            authenticity=authenticity,
+            update_strategy=update_strategy,
+            fetched_at=fetched_at,
+            status="ok",
+            rows=rows[:30],
+        )
+    except Exception as exc:  # noqa: BLE001 - stored for dashboard diagnostics
+        return BenchmarkSnapshot(
+            id=id,
+            name=name,
+            category=category,
+            description=description,
+            source_url=source_url,
+            methodology_url=methodology_url,
+            authenticity=authenticity,
+            update_strategy=update_strategy,
+            fetched_at=fetched_at,
+            status="failed",
+            rows=[],
+            error=f"{type(exc).__name__}: {exc}",
+        )
+
+
+def collect_deepswe() -> BenchmarkSnapshot:
+    def fetcher() -> list[BenchmarkRow]:
+        rows = parse_deepswe_html(fetch_text("https://deepswe.datacurve.ai/"))
+        if rows:
+            return rows
+        return parse_benchlm_next_data(fetch_text("https://benchlm.ai/benchmarks/deepSwe"))
+
+    return _snapshot(
+        id="deep_swe",
+        name="DeepSWE",
+        category="Coding agents",
+        description="Long-horizon software engineering tasks written from scratch across active repositories.",
+        source_url="https://deepswe.datacurve.ai/",
+        methodology_url="https://deepswe.datacurve.ai/blog",
+        authenticity="Original tasks plus behavioural verifiers make it a stronger signal than saturated issue-derived coding benchmarks, though public tasks can still become contaminated over time.",
+        update_strategy="Fetch official Datacurve page and parse embedded leaderboard rows; fall back to BenchLM DeepSWE mirror if the official payload shape changes.",
+        fetcher=fetcher,
+    )
+
+
+def collect_terminal_bench() -> BenchmarkSnapshot:
+    version_url = "https://www.tbench.ai/leaderboard/terminal-bench/2.1"
+
+    def fetcher() -> list[BenchmarkRow]:
+        rows = parse_terminal_html(fetch_text(version_url))
+        if len(rows) < 5:
+            rows = parse_terminal_html(fetch_text("https://www.tbench.ai/leaderboard/terminal-bench/2.0"))
+            for row in rows:
+                row.metadata["fallback_version"] = "2.0"
+        return rows
+
+    return _snapshot(
+        id="terminal_bench",
+        name="Terminal-Bench",
+        category="Terminal/tool use",
+        description="Agent performance on real terminal tasks: shell commands, debugging, coding, sysadmin, and multi-step CLI workflows.",
+        source_url=version_url,
+        methodology_url="https://www.tbench.ai/",
+        authenticity="Real terminal execution is close to practical agent work. Public tasks and scaffold differences still create overfitting and comparability risks.",
+        update_strategy="Parse the official Terminal-Bench 2.1 table; if it becomes sparse/unavailable, use the official 2.0 table as a labelled fallback.",
+        fetcher=fetcher,
+    )
+
+
+def collect_browsecomp() -> BenchmarkSnapshot:
+    return _snapshot(
+        id="browsecomp",
+        name="BrowseComp",
+        category="Browser/web research",
+        description="Hard web-browsing questions requiring persistent search, source inspection, and concise verified answers.",
+        source_url="https://benchlm.ai/benchmarks/browseComp",
+        methodology_url="https://openai.com/index/browsecomp/",
+        authenticity="Closer to real research than static QA, but public questions and mirror-based score collection mean contamination and provenance should be labelled clearly.",
+        update_strategy="Parse BenchLM's benchmark-specific Next.js data for BrowseComp public leaderboard rows; link back to OpenAI's original benchmark methodology.",
+        fetcher=lambda: parse_benchlm_next_data(fetch_text("https://benchlm.ai/benchmarks/browseComp")),
+    )
+
+
+def collect_osworld() -> BenchmarkSnapshot:
+    return _snapshot(
+        id="osworld_verified",
+        name="OSWorld-Verified",
+        category="Computer use",
+        description="Open-ended GUI/computer-use tasks in real desktop environments across apps and workflows.",
+        source_url="https://os-world.github.io/",
+        methodology_url="https://github.com/xlang-ai/OSWorld",
+        authenticity="Execution in real desktop environments makes simple memorisation less useful; environment drift and agent-scaffold differences still matter.",
+        update_strategy="Download and parse the official OSWorld verified XLSX file from the project site.",
+        fetcher=lambda: parse_osworld_workbook(fetch_bytes("https://os-world.github.io/static/data/osworld_verified_results.xlsx")),
+    )
+
+
+def collect_longbench() -> BenchmarkSnapshot:
+    return _snapshot(
+        id="longbench_v2",
+        name="LongBench v2",
+        category="Long-context reasoning",
+        description="Long-context reasoning over documents, multi-document QA, code/repo context, structured data, and dialogue history.",
+        source_url="https://longbench2.github.io/",
+        methodology_url="https://github.com/THUDM/LongBench",
+        authenticity="Useful for context retention and document reasoning, but public multiple-choice data is more trainable than live agent tasks.",
+        update_strategy="Parse the official LongBench v2 leaderboard table from the GitHub Pages site.",
+        fetcher=lambda: parse_longbench_html(fetch_text("https://longbench2.github.io/")),
+    )
+
+
+def collect_lmarena_text() -> BenchmarkSnapshot:
+    url = "https://datasets-server.huggingface.co/rows?dataset=lmarena-ai%2Fleaderboard-dataset&config=text_style_control&split=latest&offset=0&length=50"
+
+    def fetcher() -> list[BenchmarkRow]:
+        response = requests.get(url, timeout=TIMEOUT, headers={"User-Agent": USER_AGENT})
+        response.raise_for_status()
+        return parse_lmarena_rows(response.json())
+
+    return _snapshot(
+        id="lmarena_text_style",
+        name="LMArena Text Style Control",
+        category="Writing preference",
+        description="Human-preference arena ratings for text models, used here as a pragmatic proxy for prose and style quality.",
+        source_url="https://huggingface.co/datasets/lmarena-ai/leaderboard-dataset",
+        methodology_url="https://arena.ai/",
+        authenticity="Live human preference battles are harder to optimise directly than static tests, but they reflect popularity/style preferences rather than academic correctness.",
+        update_strategy="Fetch the public Hugging Face dataset-server rows for the LMArena text_style_control latest split.",
+        fetcher=fetcher,
+    )
+
+
+def collect_all() -> list[BenchmarkSnapshot]:
+    collectors = [
+        collect_deepswe,
+        collect_terminal_bench,
+        collect_browsecomp,
+        collect_osworld,
+        collect_longbench,
+        collect_lmarena_text,
+    ]
+    return [collector() for collector in collectors]
