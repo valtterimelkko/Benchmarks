@@ -5,7 +5,7 @@
       "category": "Coding agents",
       "description": "Long-horizon software engineering tasks written from scratch across active repositories.",
       "error": null,
-      "fetched_at": "2026-06-08T11:05:53Z",
+      "fetched_at": "2026-06-08T12:47:48Z",
       "id": "deep_swe",
       "methodology_url": "https://deepswe.datacurve.ai/blog",
       "name": "DeepSWE",
@@ -249,6 +249,171 @@
           "rank": 16,
           "score": 24.34,
           "score_unit": "% solve rate"
+        },
+        {
+          "date": null,
+          "metadata": {
+            "harness": "mini-swe-agent",
+            "mean_cost_usd": 3.1616,
+            "reasoning_effort": null,
+            "tasks_attempted": 113,
+            "tasks_passed_any": 55
+          },
+          "model": "kimi-k2-6",
+          "organization": "Moonshot AI",
+          "rank": 17,
+          "score": 23.89,
+          "score_unit": "% solve rate"
+        },
+        {
+          "date": null,
+          "metadata": {
+            "harness": "mini-swe-agent",
+            "mean_cost_usd": 5.571,
+            "reasoning_effort": null,
+            "tasks_attempted": 113,
+            "tasks_passed_any": 55
+          },
+          "model": "minimax-m3",
+          "organization": "MiniMax",
+          "rank": 18,
+          "score": 20.44,
+          "score_unit": "% solve rate"
+        },
+        {
+          "date": null,
+          "metadata": {
+            "harness": "mini-swe-agent",
+            "mean_cost_usd": 1.9863,
+            "reasoning_effort": null,
+            "tasks_attempted": 113,
+            "tasks_passed_any": 51
+          },
+          "model": "mimo-v2-5-pro",
+          "organization": null,
+          "rank": 19,
+          "score": 19.47,
+          "score_unit": "% solve rate"
+        },
+        {
+          "date": null,
+          "metadata": {
+            "harness": "mini-swe-agent",
+            "mean_cost_usd": 7.4641,
+            "reasoning_effort": null,
+            "tasks_attempted": 113,
+            "tasks_passed_any": 44
+          },
+          "model": "glm-5-1",
+          "organization": "Z.AI",
+          "rank": 20,
+          "score": 17.52,
+          "score_unit": "% solve rate"
+        },
+        {
+          "date": null,
+          "metadata": {
+            "harness": "mini-swe-agent",
+            "mean_cost_usd": 6.6011,
+            "reasoning_effort": null,
+            "tasks_attempted": 113,
+            "tasks_passed_any": 33
+          },
+          "model": "grok-build-0-1",
+          "organization": "xAI",
+          "rank": 21,
+          "score": 13.08,
+          "score_unit": "% solve rate"
+        },
+        {
+          "date": null,
+          "metadata": {
+            "harness": "mini-swe-agent",
+            "mean_cost_usd": 1.8365,
+            "reasoning_effort": null,
+            "tasks_attempted": 113,
+            "tasks_passed_any": 28
+          },
+          "model": "gemini-3-1-pro-preview",
+          "organization": "Google",
+          "rank": 22,
+          "score": 9.73,
+          "score_unit": "% solve rate"
+        },
+        {
+          "date": null,
+          "metadata": {
+            "harness": "mini-swe-agent",
+            "mean_cost_usd": 4.2184,
+            "reasoning_effort": null,
+            "tasks_attempted": 113,
+            "tasks_passed_any": 21
+          },
+          "model": "deepseek-v4-pro",
+          "organization": "DeepSeek",
+          "rank": 23,
+          "score": 7.52,
+          "score_unit": "% solve rate"
+        },
+        {
+          "date": null,
+          "metadata": {
+            "harness": "mini-swe-agent",
+            "mean_cost_usd": 1.527,
+            "reasoning_effort": null,
+            "tasks_attempted": 113,
+            "tasks_passed_any": 17
+          },
+          "model": "gemini-3-flash-preview",
+          "organization": "Google",
+          "rank": 24,
+          "score": 5.14,
+          "score_unit": "% solve rate"
+        },
+        {
+          "date": null,
+          "metadata": {
+            "harness": "mini-swe-agent",
+            "mean_cost_usd": 4.2547,
+            "reasoning_effort": null,
+            "tasks_attempted": 113,
+            "tasks_passed_any": 11
+          },
+          "model": "qwen3-6-plus",
+          "organization": "Alibaba",
+          "rank": 25,
+          "score": 2.65,
+          "score_unit": "% solve rate"
+        },
+        {
+          "date": null,
+          "metadata": {
+            "harness": "mini-swe-agent",
+            "mean_cost_usd": 0.8383,
+            "reasoning_effort": null,
+            "tasks_attempted": 113,
+            "tasks_passed_any": 1
+          },
+          "model": "claude-haiku-4-5",
+          "organization": "Anthropic",
+          "rank": 26,
+          "score": 0.22,
+          "score_unit": "% solve rate"
+        },
+        {
+          "date": null,
+          "metadata": {
+            "harness": "mini-swe-agent",
+            "mean_cost_usd": 0.7044,
+            "reasoning_effort": null,
+            "tasks_attempted": 113,
+            "tasks_passed_any": 1
+          },
+          "model": "minimax-m2-7",
+          "organization": "MiniMax",
+          "rank": 27,
+          "score": 0.22,
+          "score_unit": "% solve rate"
         }
       ],
       "source_url": "https://deepswe.datacurve.ai/",
@@ -261,7 +426,7 @@
       "category": "Terminal/tool use",
       "description": "Agent performance on real terminal tasks: shell commands, debugging, coding, sysadmin, and multi-step CLI workflows.",
       "error": null,
-      "fetched_at": "2026-06-08T11:05:54Z",
+      "fetched_at": "2026-06-08T12:47:49Z",
       "id": "terminal_bench",
       "methodology_url": "https://www.tbench.ai/",
       "name": "Terminal-Bench",
@@ -420,7 +585,7 @@
       "category": "Browser/web research",
       "description": "Hard web-browsing questions requiring persistent search, source inspection, and concise verified answers.",
       "error": null,
-      "fetched_at": "2026-06-08T11:05:55Z",
+      "fetched_at": "2026-06-08T12:47:50Z",
       "id": "browsecomp",
       "methodology_url": "https://openai.com/index/browsecomp/",
       "name": "BrowseComp",
@@ -772,7 +937,7 @@
       "category": "Computer use",
       "description": "Open-ended GUI/computer-use tasks in real desktop environments across apps and workflows.",
       "error": null,
-      "fetched_at": "2026-06-08T11:05:56Z",
+      "fetched_at": "2026-06-08T12:47:51Z",
       "id": "osworld_verified",
       "methodology_url": "https://github.com/xlang-ai/OSWorld",
       "name": "OSWorld-Verified",
@@ -1174,379 +1339,439 @@
       "warning": null
     },
     {
-      "authenticity": "Useful for context retention and document reasoning, but public multiple-choice data is more trainable than live agent tasks.",
+      "authenticity": "Broad model coverage with current frontier models makes it a strong practical signal for long-context capability, though the exact task mix is less transparent than academic benchmarks.",
       "category": "Long-context reasoning",
-      "description": "Long-context reasoning over documents, multi-document QA, code/repo context, structured data, and dialogue history.",
+      "description": "Artificial Analysis long-context reasoning evaluation across 100+ models. Tests whether models can retain, retrieve, and reason over very long inputs.",
       "error": null,
-      "fetched_at": "2026-06-08T11:05:57Z",
-      "id": "longbench_v2",
-      "methodology_url": "https://github.com/THUDM/LongBench",
-      "name": "LongBench v2",
+      "fetched_at": "2026-06-08T12:47:52Z",
+      "id": "aa_lcr",
+      "methodology_url": "https://artificialanalysis.ai/",
+      "name": "AA-LCR (Long Context Reasoning)",
       "rows": [
         {
-          "date": "2025-03-25",
+          "date": null,
           "metadata": {
-            "context": "1M",
-            "params": "-"
+            "benchlm_slug": "gpt-5-2-codex",
+            "context_window": "400K",
+            "overall_score": 90,
+            "source_type": "Proprietary"
           },
-          "model": "Gemini-2.5-Pro",
-          "organization": "Google",
+          "model": "GPT-5.2-Codex",
+          "organization": "OpenAI",
           "rank": 1,
-          "score": 63.3,
-          "score_unit": "% overall"
+          "score": 75.7,
+          "score_unit": "% score"
         },
         {
-          "date": "2025-04-17",
+          "date": null,
           "metadata": {
-            "context": "1M",
-            "params": "-"
+            "benchlm_slug": "gpt-5-high",
+            "context_window": "128K",
+            "overall_score": 84,
+            "source_type": "Proprietary"
           },
-          "model": "Gemini-2.5-Flash",
-          "organization": "Google",
+          "model": "GPT-5 (high)",
+          "organization": "OpenAI",
           "rank": 2,
-          "score": 62.1,
-          "score_unit": "% overall"
+          "score": 75.6,
+          "score_unit": "% score"
         },
         {
-          "date": "2025-07-25",
+          "date": null,
           "metadata": {
-            "context": "256k",
-            "params": "235B"
+            "benchlm_slug": "gpt-5-1",
+            "context_window": "200K",
+            "overall_score": 82,
+            "source_type": "Proprietary"
           },
-          "model": "Qwen3-235B-A22B-Thinking-2507",
-          "organization": "Alibaba",
+          "model": "GPT-5.1",
+          "organization": "OpenAI",
           "rank": 3,
-          "score": 60.6,
-          "score_unit": "% overall"
+          "score": 75.0,
+          "score_unit": "% score"
         },
         {
-          "date": "2025-01-20",
+          "date": null,
           "metadata": {
-            "context": "128k",
-            "params": "671B"
+            "benchlm_slug": "gpt-5-5",
+            "context_window": "1M",
+            "overall_score": 89,
+            "source_type": "Proprietary"
           },
-          "model": "DeepSeek-R1",
-          "organization": "DeepSeek",
+          "model": "GPT-5.5",
+          "organization": "OpenAI",
           "rank": 4,
-          "score": 58.3,
-          "score_unit": "% overall"
+          "score": 74.3,
+          "score_unit": "% score"
         },
         {
-          "date": "2024-09-12",
+          "date": null,
           "metadata": {
-            "context": "128k",
-            "params": "-"
+            "benchlm_slug": "gpt-5-4",
+            "context_window": "1.05M",
+            "overall_score": 89,
+            "source_type": "Proprietary"
           },
-          "model": "o1-preview",
+          "model": "GPT-5.4",
           "organization": "OpenAI",
           "rank": 5,
-          "score": 57.7,
-          "score_unit": "% overall"
+          "score": 74.0,
+          "score_unit": "% score"
         },
         {
-          "date": "2025-05-28",
+          "date": null,
           "metadata": {
-            "context": "128k",
-            "params": "671B"
+            "benchlm_slug": "gpt-5-3-codex",
+            "context_window": "400K",
+            "overall_score": 92,
+            "source_type": "Proprietary"
           },
-          "model": "DeepSeek-R1-0528",
-          "organization": "DeepSeek",
+          "model": "GPT-5.3 Codex",
+          "organization": "OpenAI",
           "rank": 6,
-          "score": 56.7,
-          "score_unit": "% overall"
+          "score": 74.0,
+          "score_unit": "% score"
         },
         {
-          "date": "2025-01-21",
+          "date": null,
           "metadata": {
-            "context": "1M",
-            "params": "-"
+            "benchlm_slug": "claude-opus-4-5-thinking",
+            "context_window": "200K",
+            "overall_score": 0,
+            "source_type": "Proprietary"
           },
-          "model": "Gemini-2.0-Flash-Thinking",
-          "organization": "Google",
+          "model": "Claude Opus 4.5 Thinking",
+          "organization": "Anthropic",
           "rank": 7,
-          "score": 56.0,
-          "score_unit": "% overall"
+          "score": 74.0,
+          "score_unit": "% score"
         },
         {
-          "date": "N/A",
+          "date": null,
           "metadata": {
-            "context": "N/A",
-            "params": "N/A"
+            "benchlm_slug": "mimo-v2-5-pro",
+            "context_window": "1M",
+            "overall_score": 81,
+            "source_type": "Proprietary"
           },
-          "model": "Human",
-          "organization": null,
+          "model": "MiMo-V2.5-Pro",
+          "organization": "Xiaomi",
           "rank": 8,
-          "score": 53.7,
-          "score_unit": "% overall"
+          "score": 73.3,
+          "score_unit": "% score"
         },
         {
-          "date": "2025-01-15",
+          "date": null,
           "metadata": {
-            "context": "4M",
-            "params": "456B"
+            "benchlm_slug": "gpt-5-medium",
+            "context_window": "128K",
+            "overall_score": 84,
+            "source_type": "Proprietary"
           },
-          "model": "MiniMax-Text-01",
-          "organization": "MiniMax",
+          "model": "GPT-5 (medium)",
+          "organization": "OpenAI",
           "rank": 9,
-          "score": 52.9,
-          "score_unit": "% overall"
+          "score": 72.8,
+          "score_unit": "% score"
         },
         {
-          "date": "2025-07-28",
+          "date": null,
           "metadata": {
-            "context": "128k",
-            "params": "355B"
+            "benchlm_slug": "gemini-3-1-pro",
+            "context_window": "1M",
+            "overall_score": 89,
+            "source_type": "Proprietary"
           },
-          "model": "GLM-4.5  Z.ai & Tsinghua",
-          "organization": "Z.AI",
+          "model": "Gemini 3.1 Pro",
+          "organization": "Google",
           "rank": 10,
-          "score": 50.3,
-          "score_unit": "% overall"
+          "score": 72.7,
+          "score_unit": "% score"
         },
         {
-          "date": "2024-08-06",
+          "date": null,
           "metadata": {
-            "context": "128k",
-            "params": "-"
+            "benchlm_slug": "gpt-5-2",
+            "context_window": "400K",
+            "overall_score": 79,
+            "source_type": "Proprietary"
           },
-          "model": "GPT-4o",
+          "model": "GPT-5.2",
           "organization": "OpenAI",
           "rank": 11,
-          "score": 50.1,
-          "score_unit": "% overall"
+          "score": 72.7,
+          "score_unit": "% score"
         },
         {
-          "date": "2025-07-25",
+          "date": null,
           "metadata": {
-            "context": "256k",
-            "params": "30B"
+            "benchlm_slug": "gemini-3-pro",
+            "context_window": "2M",
+            "overall_score": 75,
+            "source_type": "Proprietary"
           },
-          "model": "Qwen3-30B-A3B-Thinking-2507",
-          "organization": "Alibaba",
+          "model": "Gemini 3 Pro",
+          "organization": "Google",
           "rank": 12,
-          "score": 50.1,
-          "score_unit": "% overall"
+          "score": 70.7,
+          "score_unit": "% score"
         },
         {
-          "date": "2024-12-06",
+          "date": null,
           "metadata": {
-            "context": "2M",
-            "params": "-"
+            "benchlm_slug": "claude-opus-4-6-thinking",
+            "context_window": "1M",
+            "overall_score": 0,
+            "source_type": "Proprietary"
           },
-          "model": "Gemini-Exp-1206",
-          "organization": "Google",
-          "rank": 13,
-          "score": 49.3,
-          "score_unit": "% overall"
-        },
-        {
-          "date": "2025-03-06",
-          "metadata": {
-            "context": "128k",
-            "params": "32B"
-          },
-          "model": "QwQ-32B",
-          "organization": "Alibaba",
-          "rank": 14,
-          "score": 48.9,
-          "score_unit": "% overall"
-        },
-        {
-          "date": "2025-07-28",
-          "metadata": {
-            "context": "128k",
-            "params": "106B"
-          },
-          "model": "GLM-4.5-Air  Z.ai & Tsinghua",
-          "organization": "Z.AI",
-          "rank": 15,
-          "score": 48.6,
-          "score_unit": "% overall"
-        },
-        {
-          "date": "2024-12-11",
-          "metadata": {
-            "context": "1M",
-            "params": "-"
-          },
-          "model": "Gemini-2.0-Flash",
-          "organization": "Google",
-          "rank": 16,
-          "score": 47.4,
-          "score_unit": "% overall"
-        },
-        {
-          "date": "2025-07-22",
-          "metadata": {
-            "context": "256k",
-            "params": "235B"
-          },
-          "model": "Qwen3-235B-A22B-Instruct-2507",
-          "organization": "Alibaba",
-          "rank": 17,
-          "score": 46.7,
-          "score_unit": "% overall"
-        },
-        {
-          "date": "2024-11-20",
-          "metadata": {
-            "context": "128k",
-            "params": "-"
-          },
-          "model": "GPT-4o",
-          "organization": "OpenAI",
-          "rank": 18,
-          "score": 46.0,
-          "score_unit": "% overall"
-        },
-        {
-          "date": "2025-07-11",
-          "metadata": {
-            "context": "128k",
-            "params": "1T"
-          },
-          "model": "Kimi-K2-Instruct",
-          "organization": "Moonshot AI",
-          "rank": 19,
-          "score": 44.9,
-          "score_unit": "% overall"
-        },
-        {
-          "date": "2024-10-11",
-          "metadata": {
-            "context": "128k",
-            "params": "-"
-          },
-          "model": "GLM-4-Plus Z.ai & Tsinghua",
-          "organization": "Z.AI",
-          "rank": 20,
-          "score": 44.3,
-          "score_unit": "% overall"
-        },
-        {
-          "date": "2024-09-19",
-          "metadata": {
-            "context": "128k",
-            "params": "72B"
-          },
-          "model": "Qwen2.5-72B",
-          "organization": "Alibaba",
-          "rank": 21,
-          "score": 42.1,
-          "score_unit": "% overall"
-        },
-        {
-          "date": "2024-10-22",
-          "metadata": {
-            "context": "200k",
-            "params": "-"
-          },
-          "model": "Claude 3.5 Sonnet",
+          "model": "Claude Opus 4.6 (Adaptive)",
           "organization": "Anthropic",
-          "rank": 22,
-          "score": 41.0,
-          "score_unit": "% overall"
+          "rank": 13,
+          "score": 70.7,
+          "score_unit": "% score"
         },
         {
-          "date": "2025-04-29",
+          "date": null,
           "metadata": {
-            "context": "128k",
-            "params": "235B"
+            "benchlm_slug": "claude-opus-4-7-adaptive",
+            "context_window": "1M",
+            "overall_score": 85,
+            "source_type": "Proprietary"
           },
-          "model": "Qwen3-235B-A22B",
+          "model": "Claude Opus 4.7 (Adaptive)",
+          "organization": "Anthropic",
+          "rank": 14,
+          "score": 70.3,
+          "score_unit": "% score"
+        },
+        {
+          "date": null,
+          "metadata": {
+            "benchlm_slug": "kimi-2-6",
+            "context_window": "256K",
+            "overall_score": 82,
+            "source_type": "Open Weight"
+          },
+          "model": "Kimi K2.6",
+          "organization": "Moonshot AI",
+          "rank": 15,
+          "score": 69.7,
+          "score_unit": "% score"
+        },
+        {
+          "date": null,
+          "metadata": {
+            "benchlm_slug": "qwen3-6-plus",
+            "context_window": "1M",
+            "overall_score": 67,
+            "source_type": "Proprietary"
+          },
+          "model": "Qwen3.6 Plus",
+          "organization": "Alibaba",
+          "rank": 16,
+          "score": 69.7,
+          "score_unit": "% score"
+        },
+        {
+          "date": null,
+          "metadata": {
+            "benchlm_slug": "muse-spark",
+            "context_window": "262K",
+            "overall_score": 70,
+            "source_type": "Proprietary"
+          },
+          "model": "Muse Spark",
+          "organization": "Meta",
+          "rank": 17,
+          "score": 69.7,
+          "score_unit": "% score"
+        },
+        {
+          "date": null,
+          "metadata": {
+            "benchlm_slug": "qwen3-6-max-preview",
+            "context_window": "256K",
+            "overall_score": 72,
+            "source_type": "Proprietary"
+          },
+          "model": "Qwen 3.6 Max (preview)",
+          "organization": "Alibaba",
+          "rank": 18,
+          "score": 69.7,
+          "score_unit": "% score"
+        },
+        {
+          "date": null,
+          "metadata": {
+            "benchlm_slug": "gemini-3-5-flash",
+            "context_window": "1M",
+            "overall_score": 83,
+            "source_type": "Proprietary"
+          },
+          "model": "Gemini 3.5 Flash",
+          "organization": "Google",
+          "rank": 19,
+          "score": 69.3,
+          "score_unit": "% score"
+        },
+        {
+          "date": null,
+          "metadata": {
+            "benchlm_slug": "o3",
+            "context_window": "200K",
+            "overall_score": 68,
+            "source_type": "Proprietary"
+          },
+          "model": "o3",
+          "organization": "OpenAI",
+          "rank": 20,
+          "score": 69.3,
+          "score_unit": "% score"
+        },
+        {
+          "date": null,
+          "metadata": {
+            "benchlm_slug": "gpt-5-4-mini",
+            "context_window": "400K",
+            "overall_score": 63,
+            "source_type": "Proprietary"
+          },
+          "model": "GPT-5.4 mini",
+          "organization": "OpenAI",
+          "rank": 21,
+          "score": 69.3,
+          "score_unit": "% score"
+        },
+        {
+          "date": null,
+          "metadata": {
+            "benchlm_slug": "qwen3-7-max",
+            "context_window": "1M",
+            "overall_score": 89,
+            "source_type": "Proprietary"
+          },
+          "model": "Qwen3.7 Max",
+          "organization": "Alibaba",
+          "rank": 22,
+          "score": 69.0,
+          "score_unit": "% score"
+        },
+        {
+          "date": null,
+          "metadata": {
+            "benchlm_slug": "qwen3-6-27b",
+            "context_window": "262K",
+            "overall_score": 70,
+            "source_type": "Open Weight"
+          },
+          "model": "Qwen3.6-27B",
           "organization": "Alibaba",
           "rank": 23,
-          "score": 40.4,
-          "score_unit": "% overall"
+          "score": 68.7,
+          "score_unit": "% score"
         },
         {
-          "date": "2025-04-29",
+          "date": null,
           "metadata": {
-            "context": "128k",
-            "params": "32B"
+            "benchlm_slug": "minimax-m2-7",
+            "context_window": "200K",
+            "overall_score": 54,
+            "source_type": "Open Weight"
           },
-          "model": "Qwen3-32B",
-          "organization": "Alibaba",
+          "model": "MiniMax M2.7",
+          "organization": "MiniMax",
           "rank": 24,
-          "score": 38.8,
-          "score_unit": "% overall"
+          "score": 68.7,
+          "score_unit": "% score"
         },
         {
-          "date": "2024-09-12",
+          "date": null,
           "metadata": {
-            "context": "128k",
-            "params": "-"
+            "benchlm_slug": "grok-4",
+            "context_window": "128K",
+            "overall_score": 65,
+            "source_type": "Proprietary"
           },
-          "model": "o1-mini",
-          "organization": "OpenAI",
+          "model": "Grok 4",
+          "organization": "xAI",
           "rank": 25,
-          "score": 37.8,
-          "score_unit": "% overall"
+          "score": 68.0,
+          "score_unit": "% score"
         },
         {
-          "date": "2024-11-24",
+          "date": null,
           "metadata": {
-            "context": "128k",
-            "params": "123B"
+            "benchlm_slug": "grok-4-1-fast-reasoning",
+            "context_window": "2M",
+            "overall_score": 0,
+            "source_type": "Proprietary"
           },
-          "model": "Mistral Large 24.11 Mistral AI",
-          "organization": "Mistral",
+          "model": "Grok 4.1 Fast (Reasoning)",
+          "organization": "xAI",
           "rank": 26,
-          "score": 34.4,
-          "score_unit": "% overall"
+          "score": 68.0,
+          "score_unit": "% score"
         },
         {
-          "date": "2025-04-29",
+          "date": null,
           "metadata": {
-            "context": "128k",
-            "params": "30B"
+            "benchlm_slug": "claude-opus-4-8",
+            "context_window": "1M",
+            "overall_score": 93,
+            "source_type": "Proprietary"
           },
-          "model": "Qwen3-30B-A3B",
-          "organization": "Alibaba",
+          "model": "Claude Opus 4.8",
+          "organization": "Anthropic",
           "rank": 27,
-          "score": 32.6,
-          "score_unit": "% overall"
+          "score": 67.7,
+          "score_unit": "% score"
         },
         {
-          "date": "2024-07-23",
+          "date": null,
           "metadata": {
-            "context": "128k",
-            "params": "70B"
+            "benchlm_slug": "gpt-5-1-codex-max",
+            "context_window": "400K",
+            "overall_score": 91,
+            "source_type": "Proprietary"
           },
-          "model": "Llama 3.1 70B",
-          "organization": "Meta",
+          "model": "GPT-5.1-Codex-Max",
+          "organization": "OpenAI",
           "rank": 28,
-          "score": 31.6,
-          "score_unit": "% overall"
+          "score": 67.3,
+          "score_unit": "% score"
         },
         {
-          "date": "2024-10-15",
+          "date": null,
           "metadata": {
-            "context": "128k",
-            "params": "70B"
+            "benchlm_slug": "qwen3-5-27b",
+            "context_window": "262K",
+            "overall_score": 64,
+            "source_type": "Open Weight"
           },
-          "model": "Nemotron 70B Nvidia",
-          "organization": null,
+          "model": "Qwen3.5-27B",
+          "organization": "Alibaba",
           "rank": 29,
-          "score": 31.0,
-          "score_unit": "% overall"
+          "score": 67.3,
+          "score_unit": "% score"
         },
         {
-          "date": "2025-01-23",
+          "date": null,
           "metadata": {
-            "context": "512k",
-            "params": "8B"
+            "benchlm_slug": "gpt-5-1-codex",
+            "context_window": "400K",
+            "overall_score": 0,
+            "source_type": "Proprietary"
           },
-          "model": "NExtLong 8B CAS",
-          "organization": null,
+          "model": "GPT-5.1-Codex",
+          "organization": "OpenAI",
           "rank": 30,
-          "score": 30.8,
-          "score_unit": "% overall"
+          "score": 67.3,
+          "score_unit": "% score"
         }
       ],
-      "source_url": "https://longbench2.github.io/",
+      "source_url": "https://benchlm.ai/benchmarks/lcr",
       "status": "ok",
-      "update_strategy": "Parse the official LongBench v2 leaderboard table from the GitHub Pages site.",
+      "update_strategy": "Parse BenchLM's leaderboard data for the AA-LCR benchmark; scores are sourced from Artificial Analysis evaluations.",
       "warning": null
     },
     {
@@ -1554,7 +1779,7 @@
       "category": "Writing preference",
       "description": "Human-preference arena ratings for text models, used here as a pragmatic proxy for prose and style quality.",
       "error": null,
-      "fetched_at": "2026-06-08T11:05:57Z",
+      "fetched_at": "2026-06-08T12:47:52Z",
       "id": "lmarena_text_style",
       "methodology_url": "https://arena.ai/",
       "name": "LMArena Text Style Control",
@@ -2016,10 +2241,10 @@
       "warning": null
     }
   ],
-  "generated_at": "2026-06-08T11:05:53Z",
+  "generated_at": "2026-06-08T12:47:48Z",
   "notes": [
     "If a source parser fails, the dashboard marks that benchmark as failed rather than silently fabricating data.",
     "Public benchmark rows often combine model + scaffold + settings. Treat them as model-selection signals, not absolute truth.",
-    "DeepSWE, Terminal-Bench, BrowseComp and OSWorld are the strongest fits for day-to-day agent/tool-use choices; LongBench and LMArena are supporting signals for long-context and writing tasks."
+    "DeepSWE, Terminal-Bench, BrowseComp and OSWorld are the strongest fits for day-to-day agent/tool-use choices; AA-LCR and LMArena are supporting signals for long-context and writing tasks."
   ]
 }
