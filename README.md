@@ -13,11 +13,12 @@ It deliberately avoids a single fake “best model” score. Instead, it shows a
 ## Core benchmark set
 
 1. **DeepSWE** — long-horizon software engineering agents.
-2. **Terminal-Bench** — terminal, shell, CLI and tool-use tasks.
-3. **BrowseComp** — browser/web research tasks.
-4. **OSWorld-Verified** — desktop/computer-use agents.
-5. **LongBench v2** — long-context document/repo reasoning.
-6. **LMArena Text Style Control** — human preference proxy for prose/style quality.
+2. **GDPval-AA** — agentic professional work across 44 occupations (1,320 real deliverables, Elo-scored by Artificial Analysis).
+3. **Terminal-Bench** — terminal, shell, CLI and tool-use tasks.
+4. **BrowseComp** — browser/web research tasks.
+5. **OSWorld-Verified** — desktop/computer-use agents.
+6. **LongBench v2** — long-context reasoning and retrieval (38 models from official leaderboard).
+7. **LMArena Text Style Control** — human preference proxy for prose/style quality.
 
 See [`docs/SOURCES.md`](docs/SOURCES.md) for source URLs and parser logic.
 

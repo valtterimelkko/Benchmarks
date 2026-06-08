@@ -6,8 +6,8 @@ import openpyxl
 from benchmark_dashboard.sources import (
     parse_benchlm_next_data,
     parse_deepswe_html,
-    parse_lmarena_rows,
     parse_longbench_html,
+    parse_lmarena_rows,
     parse_osworld_workbook,
     parse_terminal_html,
 )
@@ -21,6 +21,17 @@ def test_parse_deepswe_official_react_payload():
     assert rows[0].organization == "OpenAI"
     assert rows[0].metadata["tasks_passed_any"] == 98
     assert rows[1].organization == "Moonshot AI"
+
+
+def test_parse_deepswe_without_reasoning_effort():
+    html = '''[{model:"deepseek-v4-pro",harness:"mini-swe-agent",config:"default",source:"deep-swe",pass_rate:0.083,n_tasks_attempted:113,n_tasks_passed_any:9,mean_cost_usd:4.22},{model:"gpt-5-5",harness:"mini-swe-agent",reasoning_effort:"high",config:"default",source:"deep-swe",pass_rate:0.6195,n_tasks_attempted:113,n_tasks_passed_any:70,mean_cost_usd:4.47}]'''
+    rows = parse_deepswe_html(html)
+    assert len(rows) == 2
+    assert rows[0].model == "gpt-5-5 [high]"
+    assert rows[0].score == 61.95
+    assert rows[1].model == "deepseek-v4-pro"
+    assert rows[1].score == 8.3
+    assert rows[1].metadata["reasoning_effort"] is None
 
 
 def test_parse_terminal_leaderboard_table():
@@ -77,6 +88,34 @@ def test_parse_longbench_table_prefers_cot_overall_when_plain_missing():
     assert rows[0].organization == "Google"
     assert rows[0].score == 63.3
     assert rows[0].metadata["context"] == "1M"
+
+
+def test_parse_longbench_html_skips_human_row():
+    html = """
+    <table><tr><th>#</th><th>Model</th><th>Params</th><th>Context</th><th>Date</th><th>Overall (%)</th><th>w/ CoT</th></tr>
+    <tr><td>1</td><td>Gemini-2.5-Pro Google</td><td>-</td><td>1M</td><td>2025-03-25</td><td>63.3</td><td>-</td></tr>
+    <tr><td>-</td><td>Human</td><td>-</td><td>-</td><td>-</td><td>53.7</td><td>-</td></tr>
+    <tr><td>3</td><td>GPT-4o OpenAI</td><td>-</td><td>128K</td><td>2024-09-01</td><td>50.1</td><td>-</td></tr>
+    </table>
+    """
+    rows = parse_longbench_html(html)
+    assert len(rows) == 2
+    assert all(r.model.lower() != "human" for r in rows)
+    assert rows[0].score == 63.3
+
+
+def test_parse_benchlm_next_data_custom_score_unit():
+    next_data = {
+        "props": {"pageProps": {"leaderboard": [
+            {"model": "Claude Opus 4.8", "creator": "Anthropic", "score": 1890, "sourceType": "Proprietary"},
+            {"model": "GPT-5.5", "creator": "OpenAI", "score": 1769, "sourceType": "Proprietary"},
+        ]}}
+    }
+    html = f'<script id="__NEXT_DATA__" type="application/json">{json.dumps(next_data)}</script>'
+    rows = parse_benchlm_next_data(html, score_unit="Elo rating")
+    assert rows[0].score_unit == "Elo rating"
+    assert rows[0].model == "Claude Opus 4.8"
+    assert rows[0].score == 1890.0
 
 
 def test_parse_lmarena_rows_from_hf_dataset_response():

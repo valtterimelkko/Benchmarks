@@ -16,7 +16,7 @@ PUBLIC_PATH = ROOT / "public" / "index.html"
 DEFAULT_NOTES = [
     "If a source parser fails, the dashboard marks that benchmark as failed rather than silently fabricating data.",
     "Public benchmark rows often combine model + scaffold + settings. Treat them as model-selection signals, not absolute truth.",
-    "DeepSWE, Terminal-Bench, BrowseComp and OSWorld are the strongest fits for day-to-day agent/tool-use choices; LongBench and LMArena are supporting signals for long-context and writing tasks.",
+    "DeepSWE, Terminal-Bench, BrowseComp and OSWorld are the strongest fits for day-to-day agent/tool-use choices; LongBench v2 and LMArena are supporting signals for long-context and writing tasks.",
 ]
 
 

@@ -37,7 +37,7 @@ def render_dashboard(data: DashboardData) -> str:
               <td class="meta">{_esc(_row_metadata(row.metadata))}</td>
             </tr>
             """
-            for row in benchmark.rows[:12]
+            for row in benchmark.rows
         )
         if not rows_html:
             rows_html = f"<tr><td colspan='5' class='error'>{_esc(benchmark.error or 'No rows available')}</td></tr>"

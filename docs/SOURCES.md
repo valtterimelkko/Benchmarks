@@ -49,7 +49,29 @@ Maintenance warning:
 
 - The official page is not a simple HTML table. If Datacurve changes the client payload, update the regex or switch to a new official JSON endpoint if one appears.
 
-### 2. Terminal-Bench
+### 2. GDPval-AA
+
+- Dashboard ID: `gdpval_aa`
+- Source used for rows: `https://benchlm.ai/benchmarks/gdpvalAa`
+- Original benchmark/methodology: `https://openai.com/index/gdpval/`
+- Parser: `parse_benchlm_next_data()` with `score_unit="Elo rating"`
+
+Logic:
+
+- BenchLM exposes benchmark-specific leaderboard rows inside `__NEXT_DATA__.props.pageProps.leaderboard`.
+- GDPval-AA uses Elo ratings from head-to-head comparisons evaluated by Artificial Analysis.
+- 1,320 tasks created by professionals (average 14 years experience) across 44 occupations and 9 industries.
+- 114 models evaluated as of June 2026.
+
+Authenticity note:
+
+- Tasks were created by OpenAI, but scoring is done independently by Artificial Analysis via head-to-head Elo battles. This differs from AA-LCR (rejected earlier) which had estimated/cross-referenced scores. GDPval-AA Elo ratings come from actual model-vs-model comparisons.
+
+Maintenance warning:
+
+- If BenchLM changes its Next.js data shape, update `parse_benchlm_next_data()` or replace with the Artificial Analysis direct source at `artificialanalysis.ai/evaluations/gdpval-aa`.
+
+### 3. Terminal-Bench
 
 - Dashboard ID: `terminal_bench`
 - Primary source: `https://www.tbench.ai/leaderboard/terminal-bench/2.1`
@@ -66,7 +88,7 @@ Maintenance warning:
 
 - Terminal-Bench rows combine agent scaffold and model. Do not present this as pure model capability.
 
-### 3. BrowseComp
+### 4. BrowseComp
 
 - Dashboard ID: `browsecomp`
 - Source used for rows: `https://benchlm.ai/benchmarks/browseComp`
@@ -82,7 +104,7 @@ Maintenance warning:
 
 - If BenchLM changes its Next.js data shape, either update `parse_benchlm_next_data()` or replace with another reliable BrowseComp leaderboard source.
 
-### 4. OSWorld-Verified
+### 5. OSWorld-Verified
 
 - Dashboard ID: `osworld_verified`
 - Source: `https://os-world.github.io/static/data/osworld_verified_results.xlsx`
@@ -100,24 +122,27 @@ Maintenance warning:
 
 - The workbook has many repeated variants (different max steps / approach settings). This is intentional; future work could add grouping by model if desired.
 
-### 5. LongBench v2
+### 6. LongBench v2
 
 - Dashboard ID: `longbench_v2`
-- Source: `https://longbench2.github.io/`
-- Project: `https://github.com/THUDM/LongBench`
-- Parser: `parse_longbench_html()`
+- Primary source: `https://longbench2.github.io/`
+- Original benchmark paper: `https://arxiv.org/abs/2412.15204`
+- Fallback mirror: `https://benchlm.ai/benchmarks/longBenchV2`
+- Parser: `parse_longbench_html()` for official site; `parse_benchlm_next_data()` as fallback
 
 Logic:
 
-- Parse the official table embedded in the HTML page.
-- Use plain `Overall (%)` when present, otherwise use the adjacent `w/ CoT` overall score.
-- Keep context window and parameter count in metadata.
+- Fetch the official LongBench v2 project site and parse its HTML leaderboard table.
+- LongBench v2 tests whether models can use extended context windows for reasoning and retrieval. 38 models from the official leaderboard as of June 2026 (Gemini-2.5-Pro, Qwen3-235B, DeepSeek-R1, etc.).
+- Switching to the official source fixed staleness: the BenchLM mirror had only 11 models and showed Claude Opus 4.5 at the top, while the official site has current frontier models.
+- "Human" baseline row is filtered out.
+- Replaced AA-LCR earlier, which had questionable data quality (117 estimated/cross-referenced scores from Artificial Analysis, many rankings contradicted by the official source).
 
 Maintenance warning:
 
-- LongBench is a useful long-context/document reasoning signal, but it is public and multiple-choice, so contamination risk is higher than with live agentic tasks.
+- The official site uses a static HTML table that BeautifulSoup can parse. If the table structure changes, update `parse_longbench_html()` and check column index mappings (cells[1]=model, cells[2]=params, cells[3]=context, cells[4]=date, cells[5]=overall, cells[6]=w/CoT).
 
-### 6. LMArena Text Style Control
+### 7. LMArena Text Style Control
 
 - Dashboard ID: `lmarena_text_style`
 - Dataset: `https://huggingface.co/datasets/lmarena-ai/leaderboard-dataset`

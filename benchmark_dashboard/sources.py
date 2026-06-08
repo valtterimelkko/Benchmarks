@@ -87,7 +87,7 @@ def fetch_bytes(url: str) -> bytes:
 
 def parse_deepswe_html(html: str) -> list[BenchmarkRow]:
     pattern = re.compile(
-        r'\{model:"(?P<model>[^"]+)",harness:"(?P<harness>[^"]+)",reasoning_effort:"(?P<effort>[^"]+)".*?'
+        r'\{model:"(?P<model>[^"]+)",harness:"(?P<harness>[^"]+)"(?:,reasoning_effort:"(?P<effort>[^"]*)")?.*?'
         r'pass_rate:(?P<pass_rate>\d+(?:\.\d+)?).*?'
         r'n_tasks_attempted:(?P<attempted>\d+).*?'
         r'n_tasks_passed_any:(?P<passed>\d+).*?'
@@ -97,18 +97,19 @@ def parse_deepswe_html(html: str) -> list[BenchmarkRow]:
     rows: list[BenchmarkRow] = []
     for match in pattern.finditer(html):
         model = match.group("model")
-        effort = match.group("effort")
+        effort = match.group("effort") or ""
         score = round(float(match.group("pass_rate")) * 100, 2)
+        model_label = f"{model} [{effort}]" if effort else model
         rows.append(
             BenchmarkRow(
                 rank=0,
-                model=f"{model} [{effort}]",
+                model=model_label,
                 organization=infer_org(model),
                 score=score,
                 score_unit="% solve rate",
                 metadata={
                     "harness": match.group("harness"),
-                    "reasoning_effort": effort,
+                    "reasoning_effort": effort or None,
                     "tasks_attempted": int(match.group("attempted")),
                     "tasks_passed_any": int(match.group("passed")),
                     "mean_cost_usd": round(float(match.group("cost")), 4),
@@ -148,7 +149,7 @@ def parse_terminal_html(html: str) -> list[BenchmarkRow]:
     return rows
 
 
-def parse_benchlm_next_data(html: str) -> list[BenchmarkRow]:
+def parse_benchlm_next_data(html: str, *, score_unit: str = "% score") -> list[BenchmarkRow]:
     match = re.search(r'<script id="__NEXT_DATA__" type="application/json">(.*?)</script>', html, re.DOTALL)
     if not match:
         return []
@@ -165,7 +166,7 @@ def parse_benchlm_next_data(html: str) -> list[BenchmarkRow]:
                 model=clean_text(item.get("model")),
                 organization=normalise_org(item.get("creator")) or infer_org(item.get("model")),
                 score=round(score, 2),
-                score_unit="% score",
+                score_unit=score_unit,
                 metadata={
                     "source_type": item.get("sourceType"),
                     "context_window": item.get("contextWindow"),
@@ -225,7 +226,7 @@ def parse_longbench_html(html: str) -> list[BenchmarkRow]:
         if len(cells) < 7:
             continue
         model_cell = cells[1]
-        if not model_cell or model_cell.lower() == "model":
+        if not model_cell or model_cell.lower() in ("model", "human"):
             continue
         score = as_float(cells[5]) if cells[5] != "-" else None
         if score is None and len(cells) > 6:
@@ -377,6 +378,27 @@ def collect_terminal_bench() -> BenchmarkSnapshot:
     )
 
 
+def collect_gdpval_aa() -> BenchmarkSnapshot:
+    def fetcher() -> list[BenchmarkRow]:
+        rows = parse_benchlm_next_data(
+            fetch_text("https://benchlm.ai/benchmarks/gdpvalAa"),
+            score_unit="Elo rating",
+        )
+        return rows
+
+    return _snapshot(
+        id="gdpval_aa",
+        name="GDPval-AA",
+        category="Agentic professional work",
+        description="1,320 real professional deliverables across 44 occupations (legal briefs, engineering plans, nursing care plans, customer support). Head-to-head Elo scored by Artificial Analysis.",
+        source_url="https://benchlm.ai/benchmarks/gdpvalAa",
+        methodology_url="https://openai.com/index/gdpval/",
+        authenticity="Tasks are actual professional deliverables, not synthetic QA, making direct optimisation harder. Elo head-to-head scoring by independent evaluator Artificial Analysis avoids provider self-reporting. Tasks created by OpenAI in collaboration with industry professionals.",
+        update_strategy="Parse BenchLM's benchmark-specific Next.js data for GDPval-AA Elo leaderboard rows.",
+        fetcher=fetcher,
+    )
+
+
 def collect_browsecomp() -> BenchmarkSnapshot:
     return _snapshot(
         id="browsecomp",
@@ -405,17 +427,23 @@ def collect_osworld() -> BenchmarkSnapshot:
     )
 
 
-def collect_longbench() -> BenchmarkSnapshot:
+def collect_longbench_v2() -> BenchmarkSnapshot:
+    def fetcher() -> list[BenchmarkRow]:
+        rows = parse_longbench_html(fetch_text("https://longbench2.github.io/"))
+        if rows:
+            return rows
+        return parse_benchlm_next_data(fetch_text("https://benchlm.ai/benchmarks/longBenchV2"))
+
     return _snapshot(
         id="longbench_v2",
         name="LongBench v2",
         category="Long-context reasoning",
-        description="Long-context reasoning over documents, multi-document QA, code/repo context, structured data, and dialogue history.",
+        description="Long-context reasoning and retrieval benchmark testing whether models can use extended context windows across diverse task types. Sourced directly from the official leaderboard.",
         source_url="https://longbench2.github.io/",
-        methodology_url="https://github.com/THUDM/LongBench",
-        authenticity="Useful for context retention and document reasoning, but public multiple-choice data is more trainable than live agent tasks.",
-        update_strategy="Parse the official LongBench v2 leaderboard table from the GitHub Pages site.",
-        fetcher=lambda: parse_longbench_html(fetch_text("https://longbench2.github.io/")),
+        methodology_url="https://arxiv.org/abs/2412.15204",
+        authenticity="Official leaderboard with direct lab submissions. Tests real context utilisation, not just window size. Model set reflects academic submission cadence — frontier labs submit when ready, not on a fixed schedule.",
+        update_strategy="Parse official LongBench v2 HTML table from longbench2.github.io; fall back to BenchLM mirror if official site structure changes.",
+        fetcher=fetcher,
     )
 
 
@@ -443,10 +471,11 @@ def collect_lmarena_text() -> BenchmarkSnapshot:
 def collect_all() -> list[BenchmarkSnapshot]:
     collectors = [
         collect_deepswe,
+        collect_gdpval_aa,
         collect_terminal_bench,
         collect_browsecomp,
         collect_osworld,
-        collect_longbench,
+        collect_longbench_v2,
         collect_lmarena_text,
     ]
     return [collector() for collector in collectors]
