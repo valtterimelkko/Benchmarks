@@ -3,6 +3,7 @@ from __future__ import annotations
 import io
 import json
 import re
+import time
 from datetime import datetime, timezone
 from typing import Any, Callable
 
@@ -41,6 +42,60 @@ ORG_PATTERNS = [
 
 def now_iso() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+
+
+_FETCH_RETRY_DELAYS: tuple[float, ...] = (5.0, 15.0)
+
+
+def _find_col(headers: list[str], *candidates: str) -> int | None:
+    """Return column index for first matching candidate (exact then substring)."""
+    lh = [h.lower().strip() for h in headers]
+    for candidate in candidates:
+        c = candidate.lower()
+        if c in lh:
+            return lh.index(c)
+    for candidate in candidates:
+        c = candidate.lower()
+        for i, h in enumerate(lh):
+            if c in h:
+                return i
+    return None
+
+
+def _fetch_with_retry(
+    fetcher: Callable[[], list[BenchmarkRow]],
+    delays: tuple[float, ...] = _FETCH_RETRY_DELAYS,
+) -> list[BenchmarkRow]:
+    """Call fetcher up to len(delays)+1 times with exponential backoff on failure."""
+    last_exc: Exception | None = None
+    for attempt in range(len(delays) + 1):
+        try:
+            rows = fetcher()
+            if not rows:
+                raise ValueError("No parseable leaderboard rows found")
+            return rows
+        except Exception as exc:  # noqa: BLE001
+            last_exc = exc
+            if attempt < len(delays):
+                time.sleep(delays[attempt])
+    raise last_exc  # type: ignore[misc]
+
+
+def _validate_snapshot(
+    rows: list[BenchmarkRow],
+    min_rows: int,
+    score_range: tuple[float, float] | None,
+) -> str | None:
+    """Return a warning string if the snapshot looks suspicious, else None."""
+    issues: list[str] = []
+    if len(rows) < min_rows:
+        issues.append(f"Only {len(rows)} row(s) returned — expected ≥{min_rows}.")
+    if score_range is not None and rows:
+        lo, hi = score_range
+        top = rows[0].score
+        if not lo <= top <= hi:
+            issues.append(f"Top score {top} is outside expected range {lo}–{hi} — possible parser or source issue.")
+    return " ".join(issues) if issues else None
 
 
 def infer_org(model: str | None) -> str | None:
@@ -127,23 +182,48 @@ def parse_terminal_html(html: str) -> list[BenchmarkRow]:
     table = soup.find("table")
     if table is None:
         return []
+    all_trs = table.find_all("tr")
+    header_tr = next((tr for tr in all_trs if tr.find("th")), None)
+    if header_tr is None:
+        return []
+    headers = [clean_text(th.get_text()) for th in header_tr.find_all(["th", "td"])]
+    rank_col = _find_col(headers, "rank")
+    model_col = _find_col(headers, "model")
+    agent_col = _find_col(headers, "agent")
+    date_col = _find_col(headers, "date")
+    agent_org_col = _find_col(headers, "agent org")
+    model_org_col = _find_col(headers, "model org")
+    accuracy_col = _find_col(headers, "accuracy")
+    if rank_col is None or model_col is None or accuracy_col is None:
+        return []
     rows: list[BenchmarkRow] = []
-    for tr in table.find_all("tr"):
-        cells = [clean_text(td.get_text(" ", strip=True)) for td in tr.find_all("td")]
-        if len(cells) < 8 or not cells[1].isdigit():
+    for tr in all_trs:
+        if tr is header_tr:
             continue
-        score = as_float(cells[7])
+        cells = [clean_text(td.get_text(" ", strip=True)) for td in tr.find_all("td")]
+        required_idx = max(c for c in [rank_col, model_col, accuracy_col])
+        if len(cells) <= required_idx:
+            continue
+        rank_val = cells[rank_col]
+        if not rank_val.isdigit():
+            continue
+        score = as_float(cells[accuracy_col])
         if score is None:
             continue
+        model_val = cells[model_col]
         rows.append(
             BenchmarkRow(
-                rank=int(cells[1]),
-                model=cells[3],
-                organization=normalise_org(cells[6]) or infer_org(cells[3]),
+                rank=int(rank_val),
+                model=model_val,
+                organization=normalise_org(cells[model_org_col] if model_org_col is not None and model_org_col < len(cells) else "") or infer_org(model_val),
                 score=score,
                 score_unit="% accuracy",
-                date=cells[4] or None,
-                metadata={"agent": cells[2], "agent_org": cells[5], "raw_accuracy": cells[7]},
+                date=cells[date_col] if date_col is not None and date_col < len(cells) else None,
+                metadata={
+                    "agent": cells[agent_col] if agent_col is not None and agent_col < len(cells) else "",
+                    "agent_org": cells[agent_org_col] if agent_org_col is not None and agent_org_col < len(cells) else "",
+                    "raw_accuracy": cells[accuracy_col],
+                },
             )
         )
     return rows
@@ -220,21 +300,37 @@ def parse_longbench_html(html: str) -> list[BenchmarkRow]:
     table = soup.find("table")
     if table is None:
         return []
+    all_trs = table.find_all("tr")
+    header_tr = next((tr for tr in all_trs if tr.find("th")), None)
+    if header_tr is None:
+        return []
+    headers = [clean_text(th.get_text()) for th in header_tr.find_all(["th", "td"])]
+    model_col = _find_col(headers, "model")
+    params_col = _find_col(headers, "params")
+    context_col = _find_col(headers, "context")
+    date_col = _find_col(headers, "date")
+    overall_col = _find_col(headers, "overall")
+    cot_col = _find_col(headers, "w/ cot", "cot")
+    if model_col is None:
+        return []
     rows: list[BenchmarkRow] = []
-    for tr in table.find_all("tr"):
-        cells = [clean_text(td.get_text(" ", strip=True)) for td in tr.find_all("td")]
-        if len(cells) < 7:
+    for tr in all_trs:
+        if tr is header_tr:
             continue
-        model_cell = cells[1]
+        cells = [clean_text(td.get_text(" ", strip=True)) for td in tr.find_all("td")]
+        if model_col >= len(cells):
+            continue
+        model_cell = cells[model_col]
         if not model_cell or model_cell.lower() in ("model", "human"):
             continue
-        score = as_float(cells[5]) if cells[5] != "-" else None
-        if score is None and len(cells) > 6:
-            score = as_float(cells[6])
+        score: float | None = None
+        if overall_col is not None and overall_col < len(cells) and cells[overall_col] not in ("-", ""):
+            score = as_float(cells[overall_col])
+        if score is None and cot_col is not None and cot_col < len(cells):
+            score = as_float(cells[cot_col])
         if score is None:
             continue
         org = infer_org(model_cell)
-        # The official table appends provider names to many model labels.
         for candidate in ["Google", "Alibaba", "DeepSeek", "OpenAI", "Anthropic", "Meta", "Moonshot AI", "Z.AI", "Mistral"]:
             if candidate.lower() in model_cell.lower():
                 org = candidate
@@ -249,8 +345,11 @@ def parse_longbench_html(html: str) -> list[BenchmarkRow]:
                 organization=org,
                 score=round(score, 2),
                 score_unit="% overall",
-                date=cells[4] or None,
-                metadata={"params": cells[2], "context": cells[3]},
+                date=cells[date_col] if date_col is not None and date_col < len(cells) else None,
+                metadata={
+                    "params": cells[params_col] if params_col is not None and params_col < len(cells) else None,
+                    "context": cells[context_col] if context_col is not None and context_col < len(cells) else None,
+                },
             )
         )
     rows.sort(key=lambda row: row.score, reverse=True)
@@ -298,12 +397,13 @@ def _snapshot(
     authenticity: str,
     update_strategy: str,
     fetcher: Callable[[], list[BenchmarkRow]],
+    min_rows: int = 3,
+    score_range: tuple[float, float] | None = None,
 ) -> BenchmarkSnapshot:
     fetched_at = now_iso()
     try:
-        rows = fetcher()
-        if not rows:
-            raise ValueError("No parseable leaderboard rows found")
+        rows = _fetch_with_retry(fetcher)
+        warning = _validate_snapshot(rows, min_rows=min_rows, score_range=score_range)
         return BenchmarkSnapshot(
             id=id,
             name=name,
@@ -315,6 +415,7 @@ def _snapshot(
             update_strategy=update_strategy,
             fetched_at=fetched_at,
             status="ok",
+            warning=warning,
             rows=rows[:30],
         )
     except Exception as exc:  # noqa: BLE001 - stored for dashboard diagnostics
@@ -351,6 +452,8 @@ def collect_deepswe() -> BenchmarkSnapshot:
         authenticity="Original tasks plus behavioural verifiers make it a stronger signal than saturated issue-derived coding benchmarks, though public tasks can still become contaminated over time.",
         update_strategy="Fetch official Datacurve page and parse embedded leaderboard rows; fall back to BenchLM DeepSWE mirror if the official payload shape changes.",
         fetcher=fetcher,
+        min_rows=5,
+        score_range=(0.0, 100.0),
     )
 
 
@@ -375,6 +478,8 @@ def collect_terminal_bench() -> BenchmarkSnapshot:
         authenticity="Real terminal execution is close to practical agent work. Public tasks and scaffold differences still create overfitting and comparability risks.",
         update_strategy="Parse the official Terminal-Bench 2.1 table; if it becomes sparse/unavailable, use the official 2.0 table as a labelled fallback.",
         fetcher=fetcher,
+        min_rows=3,
+        score_range=(0.0, 100.0),
     )
 
 
@@ -396,6 +501,8 @@ def collect_gdpval_aa() -> BenchmarkSnapshot:
         authenticity="Tasks are actual professional deliverables, not synthetic QA, making direct optimisation harder. Elo head-to-head scoring by independent evaluator Artificial Analysis avoids provider self-reporting. Tasks created by OpenAI in collaboration with industry professionals.",
         update_strategy="Parse BenchLM's benchmark-specific Next.js data for GDPval-AA Elo leaderboard rows.",
         fetcher=fetcher,
+        min_rows=10,
+        score_range=(800.0, 2200.0),
     )
 
 
@@ -410,6 +517,8 @@ def collect_browsecomp() -> BenchmarkSnapshot:
         authenticity="Closer to real research than static QA, but public questions and mirror-based score collection mean contamination and provenance should be labelled clearly.",
         update_strategy="Parse BenchLM's benchmark-specific Next.js data for BrowseComp public leaderboard rows; link back to OpenAI's original benchmark methodology.",
         fetcher=lambda: parse_benchlm_next_data(fetch_text("https://benchlm.ai/benchmarks/browseComp")),
+        min_rows=5,
+        score_range=(0.0, 100.0),
     )
 
 
@@ -424,6 +533,8 @@ def collect_osworld() -> BenchmarkSnapshot:
         authenticity="Execution in real desktop environments makes simple memorisation less useful; environment drift and agent-scaffold differences still matter.",
         update_strategy="Download and parse the official OSWorld verified XLSX file from the project site.",
         fetcher=lambda: parse_osworld_workbook(fetch_bytes("https://os-world.github.io/static/data/osworld_verified_results.xlsx")),
+        min_rows=5,
+        score_range=(0.0, 100.0),
     )
 
 
@@ -444,6 +555,8 @@ def collect_longbench_v2() -> BenchmarkSnapshot:
         authenticity="Official leaderboard with direct lab submissions. Tests real context utilisation, not just window size. Model set reflects academic submission cadence — frontier labs submit when ready, not on a fixed schedule.",
         update_strategy="Parse official LongBench v2 HTML table from longbench2.github.io; fall back to BenchLM mirror if official site structure changes.",
         fetcher=fetcher,
+        min_rows=5,
+        score_range=(0.0, 100.0),
     )
 
 
@@ -465,6 +578,8 @@ def collect_lmarena_text() -> BenchmarkSnapshot:
         authenticity="Live human preference battles are harder to optimise directly than static tests, but they reflect popularity/style preferences rather than academic correctness.",
         update_strategy="Fetch the public Hugging Face dataset-server rows for the LMArena text_style_control latest split.",
         fetcher=fetcher,
+        min_rows=10,
+        score_range=(900.0, 2200.0),
     )
 
 
