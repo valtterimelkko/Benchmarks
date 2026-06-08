@@ -5,7 +5,7 @@
       "category": "Coding agents",
       "description": "Long-horizon software engineering tasks written from scratch across active repositories.",
       "error": null,
-      "fetched_at": "2026-06-08T12:47:48Z",
+      "fetched_at": "2026-06-08T13:19:51Z",
       "id": "deep_swe",
       "methodology_url": "https://deepswe.datacurve.ai/blog",
       "name": "DeepSWE",
@@ -426,7 +426,7 @@
       "category": "Terminal/tool use",
       "description": "Agent performance on real terminal tasks: shell commands, debugging, coding, sysadmin, and multi-step CLI workflows.",
       "error": null,
-      "fetched_at": "2026-06-08T12:47:49Z",
+      "fetched_at": "2026-06-08T13:19:52Z",
       "id": "terminal_bench",
       "methodology_url": "https://www.tbench.ai/",
       "name": "Terminal-Bench",
@@ -585,7 +585,7 @@
       "category": "Browser/web research",
       "description": "Hard web-browsing questions requiring persistent search, source inspection, and concise verified answers.",
       "error": null,
-      "fetched_at": "2026-06-08T12:47:50Z",
+      "fetched_at": "2026-06-08T13:19:53Z",
       "id": "browsecomp",
       "methodology_url": "https://openai.com/index/browsecomp/",
       "name": "BrowseComp",
@@ -763,7 +763,7 @@
           "metadata": {
             "benchlm_slug": "step-3-7-flash",
             "context_window": "256K",
-            "overall_score": 72,
+            "overall_score": 71,
             "source_type": "Open Weight"
           },
           "model": "Step 3.7 Flash",
@@ -805,7 +805,7 @@
           "metadata": {
             "benchlm_slug": "gpt-5-2",
             "context_window": "400K",
-            "overall_score": 79,
+            "overall_score": 78,
             "source_type": "Proprietary"
           },
           "model": "GPT-5.2",
@@ -925,6 +925,20 @@
           "rank": 24,
           "score": 52.0,
           "score_unit": "% score"
+        },
+        {
+          "date": null,
+          "metadata": {
+            "benchlm_slug": "nemotron-3-ultra",
+            "context_window": "1M",
+            "overall_score": 63,
+            "source_type": "Open Weight"
+          },
+          "model": "Nemotron 3 Ultra",
+          "organization": "NVIDIA",
+          "rank": 25,
+          "score": 44.4,
+          "score_unit": "% score"
         }
       ],
       "source_url": "https://benchlm.ai/benchmarks/browseComp",
@@ -937,7 +951,7 @@
       "category": "Computer use",
       "description": "Open-ended GUI/computer-use tasks in real desktop environments across apps and workflows.",
       "error": null,
-      "fetched_at": "2026-06-08T12:47:51Z",
+      "fetched_at": "2026-06-08T13:19:53Z",
       "id": "osworld_verified",
       "methodology_url": "https://github.com/xlang-ai/OSWorld",
       "name": "OSWorld-Verified",
@@ -1343,7 +1357,7 @@
       "category": "Long-context reasoning",
       "description": "Artificial Analysis long-context reasoning evaluation across 100+ models. Tests whether models can retain, retrieve, and reason over very long inputs.",
       "error": null,
-      "fetched_at": "2026-06-08T12:47:52Z",
+      "fetched_at": "2026-06-08T13:19:54Z",
       "id": "aa_lcr",
       "methodology_url": "https://artificialanalysis.ai/",
       "name": "AA-LCR (Long Context Reasoning)",
@@ -1479,7 +1493,7 @@
           "metadata": {
             "benchlm_slug": "gemini-3-1-pro",
             "context_window": "1M",
-            "overall_score": 89,
+            "overall_score": 90,
             "source_type": "Proprietary"
           },
           "model": "Gemini 3.1 Pro",
@@ -1493,7 +1507,7 @@
           "metadata": {
             "benchlm_slug": "gpt-5-2",
             "context_window": "400K",
-            "overall_score": 79,
+            "overall_score": 78,
             "source_type": "Proprietary"
           },
           "model": "GPT-5.2",
@@ -1605,7 +1619,7 @@
           "metadata": {
             "benchlm_slug": "gemini-3-5-flash",
             "context_window": "1M",
-            "overall_score": 83,
+            "overall_score": 84,
             "source_type": "Proprietary"
           },
           "model": "Gemini 3.5 Flash",
@@ -1633,7 +1647,7 @@
           "metadata": {
             "benchlm_slug": "gpt-5-4-mini",
             "context_window": "400K",
-            "overall_score": 63,
+            "overall_score": 62,
             "source_type": "Proprietary"
           },
           "model": "GPT-5.4 mini",
@@ -1647,7 +1661,7 @@
           "metadata": {
             "benchlm_slug": "qwen3-7-max",
             "context_window": "1M",
-            "overall_score": 89,
+            "overall_score": 90,
             "source_type": "Proprietary"
           },
           "model": "Qwen3.7 Max",
@@ -1731,7 +1745,7 @@
           "metadata": {
             "benchlm_slug": "gpt-5-1-codex-max",
             "context_window": "400K",
-            "overall_score": 91,
+            "overall_score": 90,
             "source_type": "Proprietary"
           },
           "model": "GPT-5.1-Codex-Max",
@@ -1779,7 +1793,7 @@
       "category": "Writing preference",
       "description": "Human-preference arena ratings for text models, used here as a pragmatic proxy for prose and style quality.",
       "error": null,
-      "fetched_at": "2026-06-08T12:47:52Z",
+      "fetched_at": "2026-06-08T13:19:54Z",
       "id": "lmarena_text_style",
       "methodology_url": "https://arena.ai/",
       "name": "LMArena Text Style Control",
@@ -2241,7 +2255,7 @@
       "warning": null
     }
   ],
-  "generated_at": "2026-06-08T12:47:48Z",
+  "generated_at": "2026-06-08T13:19:51Z",
   "notes": [
     "If a source parser fails, the dashboard marks that benchmark as failed rather than silently fabricating data.",
     "Public benchmark rows often combine model + scaffold + settings. Treat them as model-selection signals, not absolute truth.",
