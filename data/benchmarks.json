@@ -5,7 +5,7 @@
       "category": "Coding agents",
       "description": "Long-horizon software engineering tasks written from scratch across active repositories.",
       "error": null,
-      "fetched_at": "2026-06-08T14:36:44Z",
+      "fetched_at": "2026-06-08T14:38:29Z",
       "id": "deep_swe",
       "methodology_url": "https://deepswe.datacurve.ai/blog",
       "name": "DeepSWE",
@@ -426,7 +426,7 @@
       "category": "Agentic professional work",
       "description": "1,320 real professional deliverables across 44 occupations (legal briefs, engineering plans, nursing care plans, customer support). Head-to-head Elo scored by Artificial Analysis.",
       "error": null,
-      "fetched_at": "2026-06-08T14:36:44Z",
+      "fetched_at": "2026-06-08T14:38:30Z",
       "id": "gdpval_aa",
       "methodology_url": "https://openai.com/index/gdpval/",
       "name": "GDPval-AA",
@@ -862,7 +862,7 @@
       "category": "Terminal/tool use",
       "description": "Agent performance on real terminal tasks: shell commands, debugging, coding, sysadmin, and multi-step CLI workflows.",
       "error": null,
-      "fetched_at": "2026-06-08T14:36:44Z",
+      "fetched_at": "2026-06-08T14:38:30Z",
       "id": "terminal_bench",
       "methodology_url": "https://www.tbench.ai/",
       "name": "Terminal-Bench",
@@ -1021,7 +1021,7 @@
       "category": "Browser/web research",
       "description": "Hard web-browsing questions requiring persistent search, source inspection, and concise verified answers.",
       "error": null,
-      "fetched_at": "2026-06-08T14:36:45Z",
+      "fetched_at": "2026-06-08T14:38:31Z",
       "id": "browsecomp",
       "methodology_url": "https://openai.com/index/browsecomp/",
       "name": "BrowseComp",
@@ -1387,7 +1387,7 @@
       "category": "Computer use",
       "description": "Open-ended GUI/computer-use tasks in real desktop environments across apps and workflows.",
       "error": null,
-      "fetched_at": "2026-06-08T14:36:45Z",
+      "fetched_at": "2026-06-08T14:38:32Z",
       "id": "osworld_verified",
       "methodology_url": "https://github.com/xlang-ai/OSWorld",
       "name": "OSWorld-Verified",
@@ -1793,7 +1793,7 @@
       "category": "Long-context reasoning",
       "description": "Long-context reasoning and retrieval benchmark testing whether models can use extended context windows across diverse task types. Sourced directly from the official leaderboard.",
       "error": null,
-      "fetched_at": "2026-06-08T14:36:46Z",
+      "fetched_at": "2026-06-08T14:38:33Z",
       "id": "longbench_v2",
       "methodology_url": "https://arxiv.org/abs/2412.15204",
       "name": "LongBench v2",
@@ -2169,7 +2169,7 @@
       "category": "Writing preference",
       "description": "Human-preference arena ratings for text models, used here as a pragmatic proxy for prose and style quality.",
       "error": null,
-      "fetched_at": "2026-06-08T14:36:46Z",
+      "fetched_at": "2026-06-08T14:38:33Z",
       "id": "lmarena_text_style",
       "methodology_url": "https://arena.ai/",
       "name": "LMArena Text Style Control",
@@ -2631,10 +2631,10 @@
       "warning": null
     }
   ],
-  "generated_at": "2026-06-08T14:36:44Z",
+  "generated_at": "2026-06-08T14:38:29Z",
   "notes": [
     "If a source parser fails, the dashboard marks that benchmark as failed rather than silently fabricating data.",
     "Public benchmark rows often combine model + scaffold + settings. Treat them as model-selection signals, not absolute truth.",
-    "DeepSWE, Terminal-Bench, BrowseComp and OSWorld are the strongest fits for day-to-day agent/tool-use choices; LongBench v2 and LMArena are supporting signals for long-context and writing tasks."
+    "DeepSWE, GDPval-AA, Terminal-Bench, BrowseComp and OSWorld are the strongest fits for day-to-day agent/tool-use choices; LongBench v2 and LMArena are supporting signals for long-context and writing tasks."
   ]
 }
