@@ -5,7 +5,7 @@
       "category": "Coding agents",
       "description": "Long-horizon software engineering tasks written from scratch across active repositories.",
       "error": null,
-      "fetched_at": "2026-06-08T14:38:29Z",
+      "fetched_at": "2026-06-08T15:32:16Z",
       "id": "deep_swe",
       "methodology_url": "https://deepswe.datacurve.ai/blog",
       "name": "DeepSWE",
@@ -426,7 +426,7 @@
       "category": "Agentic professional work",
       "description": "1,320 real professional deliverables across 44 occupations (legal briefs, engineering plans, nursing care plans, customer support). Head-to-head Elo scored by Artificial Analysis.",
       "error": null,
-      "fetched_at": "2026-06-08T14:38:30Z",
+      "fetched_at": "2026-06-08T15:32:16Z",
       "id": "gdpval_aa",
       "methodology_url": "https://openai.com/index/gdpval/",
       "name": "GDPval-AA",
@@ -862,7 +862,7 @@
       "category": "Terminal/tool use",
       "description": "Agent performance on real terminal tasks: shell commands, debugging, coding, sysadmin, and multi-step CLI workflows.",
       "error": null,
-      "fetched_at": "2026-06-08T14:38:30Z",
+      "fetched_at": "2026-06-08T15:32:17Z",
       "id": "terminal_bench",
       "methodology_url": "https://www.tbench.ai/",
       "name": "Terminal-Bench",
@@ -1021,7 +1021,7 @@
       "category": "Browser/web research",
       "description": "Hard web-browsing questions requiring persistent search, source inspection, and concise verified answers.",
       "error": null,
-      "fetched_at": "2026-06-08T14:38:31Z",
+      "fetched_at": "2026-06-08T15:32:19Z",
       "id": "browsecomp",
       "methodology_url": "https://openai.com/index/browsecomp/",
       "name": "BrowseComp",
@@ -1387,7 +1387,7 @@
       "category": "Computer use",
       "description": "Open-ended GUI/computer-use tasks in real desktop environments across apps and workflows.",
       "error": null,
-      "fetched_at": "2026-06-08T14:38:32Z",
+      "fetched_at": "2026-06-08T15:32:19Z",
       "id": "osworld_verified",
       "methodology_url": "https://github.com/xlang-ai/OSWorld",
       "name": "OSWorld-Verified",
@@ -1793,95 +1793,11 @@
       "category": "Long-context reasoning",
       "description": "Long-context reasoning and retrieval benchmark testing whether models can use extended context windows across diverse task types. Sourced directly from the official leaderboard.",
       "error": null,
-      "fetched_at": "2026-06-08T14:38:33Z",
+      "fetched_at": "2026-06-08T15:32:19Z",
       "id": "longbench_v2",
       "methodology_url": "https://arxiv.org/abs/2412.15204",
       "name": "LongBench v2",
       "rows": [
-        {
-          "date": "2025-03-25",
-          "metadata": {
-            "context": "1M",
-            "params": "-"
-          },
-          "model": "Gemini-2.5-Pro",
-          "organization": "Google",
-          "rank": 1,
-          "score": 63.3,
-          "score_unit": "% overall"
-        },
-        {
-          "date": "2025-04-17",
-          "metadata": {
-            "context": "1M",
-            "params": "-"
-          },
-          "model": "Gemini-2.5-Flash",
-          "organization": "Google",
-          "rank": 2,
-          "score": 62.1,
-          "score_unit": "% overall"
-        },
-        {
-          "date": "2025-07-25",
-          "metadata": {
-            "context": "256k",
-            "params": "235B"
-          },
-          "model": "Qwen3-235B-A22B-Thinking-2507",
-          "organization": "Alibaba",
-          "rank": 3,
-          "score": 60.6,
-          "score_unit": "% overall"
-        },
-        {
-          "date": "2025-01-20",
-          "metadata": {
-            "context": "128k",
-            "params": "671B"
-          },
-          "model": "DeepSeek-R1",
-          "organization": "DeepSeek",
-          "rank": 4,
-          "score": 58.3,
-          "score_unit": "% overall"
-        },
-        {
-          "date": "2024-09-12",
-          "metadata": {
-            "context": "128k",
-            "params": "-"
-          },
-          "model": "o1-preview",
-          "organization": "OpenAI",
-          "rank": 5,
-          "score": 57.7,
-          "score_unit": "% overall"
-        },
-        {
-          "date": "2025-05-28",
-          "metadata": {
-            "context": "128k",
-            "params": "671B"
-          },
-          "model": "DeepSeek-R1-0528",
-          "organization": "DeepSeek",
-          "rank": 6,
-          "score": 56.7,
-          "score_unit": "% overall"
-        },
-        {
-          "date": "2025-01-21",
-          "metadata": {
-            "context": "1M",
-            "params": "-"
-          },
-          "model": "Gemini-2.0-Flash-Thinking",
-          "organization": "Google",
-          "rank": 7,
-          "score": 56.0,
-          "score_unit": "% overall"
-        },
         {
           "date": "2025-01-15",
           "metadata": {
@@ -1890,20 +1806,8 @@
           },
           "model": "MiniMax-Text-01",
           "organization": "MiniMax",
-          "rank": 8,
+          "rank": 1,
           "score": 52.9,
-          "score_unit": "% overall"
-        },
-        {
-          "date": "2025-07-28",
-          "metadata": {
-            "context": "128k",
-            "params": "355B"
-          },
-          "model": "GLM-4.5  Z.ai & Tsinghua",
-          "organization": "Z.AI",
-          "rank": 9,
-          "score": 50.3,
           "score_unit": "% overall"
         },
         {
@@ -1914,19 +1818,7 @@
           },
           "model": "GPT-4o",
           "organization": "OpenAI",
-          "rank": 10,
-          "score": 50.1,
-          "score_unit": "% overall"
-        },
-        {
-          "date": "2025-07-25",
-          "metadata": {
-            "context": "256k",
-            "params": "30B"
-          },
-          "model": "Qwen3-30B-A3B-Thinking-2507",
-          "organization": "Alibaba",
-          "rank": 11,
+          "rank": 2,
           "score": 50.1,
           "score_unit": "% overall"
         },
@@ -1938,32 +1830,8 @@
           },
           "model": "Gemini-Exp-1206",
           "organization": "Google",
-          "rank": 12,
+          "rank": 3,
           "score": 49.3,
-          "score_unit": "% overall"
-        },
-        {
-          "date": "2025-03-06",
-          "metadata": {
-            "context": "128k",
-            "params": "32B"
-          },
-          "model": "QwQ-32B",
-          "organization": "Alibaba",
-          "rank": 13,
-          "score": 48.9,
-          "score_unit": "% overall"
-        },
-        {
-          "date": "2025-07-28",
-          "metadata": {
-            "context": "128k",
-            "params": "106B"
-          },
-          "model": "GLM-4.5-Air  Z.ai & Tsinghua",
-          "organization": "Z.AI",
-          "rank": 14,
-          "score": 48.6,
           "score_unit": "% overall"
         },
         {
@@ -1974,7 +1842,7 @@
           },
           "model": "Gemini-2.0-Flash",
           "organization": "Google",
-          "rank": 15,
+          "rank": 4,
           "score": 47.4,
           "score_unit": "% overall"
         },
@@ -1986,7 +1854,7 @@
           },
           "model": "Qwen3-235B-A22B-Instruct-2507",
           "organization": "Alibaba",
-          "rank": 16,
+          "rank": 5,
           "score": 46.7,
           "score_unit": "% overall"
         },
@@ -1998,7 +1866,7 @@
           },
           "model": "GPT-4o",
           "organization": "OpenAI",
-          "rank": 17,
+          "rank": 6,
           "score": 46.0,
           "score_unit": "% overall"
         },
@@ -2010,7 +1878,7 @@
           },
           "model": "Kimi-K2-Instruct",
           "organization": "Moonshot AI",
-          "rank": 18,
+          "rank": 7,
           "score": 44.9,
           "score_unit": "% overall"
         },
@@ -2022,7 +1890,7 @@
           },
           "model": "GLM-4-Plus Z.ai & Tsinghua",
           "organization": "Z.AI",
-          "rank": 19,
+          "rank": 8,
           "score": 44.3,
           "score_unit": "% overall"
         },
@@ -2034,7 +1902,7 @@
           },
           "model": "Qwen2.5-72B",
           "organization": "Alibaba",
-          "rank": 20,
+          "rank": 9,
           "score": 42.1,
           "score_unit": "% overall"
         },
@@ -2046,7 +1914,7 @@
           },
           "model": "Claude 3.5 Sonnet",
           "organization": "Anthropic",
-          "rank": 21,
+          "rank": 10,
           "score": 41.0,
           "score_unit": "% overall"
         },
@@ -2058,7 +1926,7 @@
           },
           "model": "Qwen3-235B-A22B",
           "organization": "Alibaba",
-          "rank": 22,
+          "rank": 11,
           "score": 40.4,
           "score_unit": "% overall"
         },
@@ -2070,7 +1938,7 @@
           },
           "model": "Qwen3-32B",
           "organization": "Alibaba",
-          "rank": 23,
+          "rank": 12,
           "score": 38.8,
           "score_unit": "% overall"
         },
@@ -2082,7 +1950,7 @@
           },
           "model": "o1-mini",
           "organization": "OpenAI",
-          "rank": 24,
+          "rank": 13,
           "score": 37.8,
           "score_unit": "% overall"
         },
@@ -2094,7 +1962,7 @@
           },
           "model": "Mistral Large 24.11 Mistral AI",
           "organization": "Mistral",
-          "rank": 25,
+          "rank": 14,
           "score": 34.4,
           "score_unit": "% overall"
         },
@@ -2106,7 +1974,7 @@
           },
           "model": "Qwen3-30B-A3B",
           "organization": "Alibaba",
-          "rank": 26,
+          "rank": 15,
           "score": 32.6,
           "score_unit": "% overall"
         },
@@ -2118,7 +1986,7 @@
           },
           "model": "Llama 3.1 70B",
           "organization": "Meta",
-          "rank": 27,
+          "rank": 16,
           "score": 31.6,
           "score_unit": "% overall"
         },
@@ -2130,7 +1998,7 @@
           },
           "model": "Nemotron 70B Nvidia",
           "organization": null,
-          "rank": 28,
+          "rank": 17,
           "score": 31.0,
           "score_unit": "% overall"
         },
@@ -2142,7 +2010,7 @@
           },
           "model": "NExtLong 8B CAS",
           "organization": null,
-          "rank": 29,
+          "rank": 18,
           "score": 30.8,
           "score_unit": "% overall"
         },
@@ -2154,8 +2022,92 @@
           },
           "model": "GLM-4-9B Z.ai & Tsinghua",
           "organization": "Z.AI",
-          "rank": 30,
+          "rank": 19,
           "score": 30.2,
+          "score_unit": "% overall"
+        },
+        {
+          "date": "2024-09-19",
+          "metadata": {
+            "context": "128k",
+            "params": "7B"
+          },
+          "model": "Qwen2.5-7B",
+          "organization": "Alibaba",
+          "rank": 20,
+          "score": 30.0,
+          "score_unit": "% overall"
+        },
+        {
+          "date": "2024-07-23",
+          "metadata": {
+            "context": "128k",
+            "params": "8B"
+          },
+          "model": "Llama 3.1 8B",
+          "organization": "Meta",
+          "rank": 21,
+          "score": 30.0,
+          "score_unit": "% overall"
+        },
+        {
+          "date": "2024-12-06",
+          "metadata": {
+            "context": "128k",
+            "params": "70B"
+          },
+          "model": "Llama 3.3 70B",
+          "organization": "Meta",
+          "rank": 22,
+          "score": 29.8,
+          "score_unit": "% overall"
+        },
+        {
+          "date": "2024-07-18",
+          "metadata": {
+            "context": "128k",
+            "params": "-"
+          },
+          "model": "GPT-4o mini",
+          "organization": "OpenAI",
+          "rank": 23,
+          "score": 29.3,
+          "score_unit": "% overall"
+        },
+        {
+          "date": "2024-08-30",
+          "metadata": {
+            "context": "128k",
+            "params": "104B"
+          },
+          "model": "Command R+ Cohere",
+          "organization": null,
+          "rank": 24,
+          "score": 27.8,
+          "score_unit": "% overall"
+        },
+        {
+          "date": "2024-07-24",
+          "metadata": {
+            "context": "128k",
+            "params": "123B"
+          },
+          "model": "Mistral Large 2 Mistral AI",
+          "organization": "Mistral",
+          "rank": 25,
+          "score": 26.6,
+          "score_unit": "% overall"
+        },
+        {
+          "date": "N/A",
+          "metadata": {
+            "context": "N/A",
+            "params": "N/A"
+          },
+          "model": "Random",
+          "organization": null,
+          "rank": 26,
+          "score": 25.0,
           "score_unit": "% overall"
         }
       ],
@@ -2169,7 +2121,7 @@
       "category": "Writing preference",
       "description": "Human-preference arena ratings for text models, used here as a pragmatic proxy for prose and style quality.",
       "error": null,
-      "fetched_at": "2026-06-08T14:38:33Z",
+      "fetched_at": "2026-06-08T15:32:20Z",
       "id": "lmarena_text_style",
       "methodology_url": "https://arena.ai/",
       "name": "LMArena Text Style Control",
@@ -2631,7 +2583,7 @@
       "warning": null
     }
   ],
-  "generated_at": "2026-06-08T14:38:29Z",
+  "generated_at": "2026-06-08T15:32:16Z",
   "notes": [
     "If a source parser fails, the dashboard marks that benchmark as failed rather than silently fabricating data.",
     "Public benchmark rows often combine model + scaffold + settings. Treat them as model-selection signals, not absolute truth.",
