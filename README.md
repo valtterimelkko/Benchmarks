@@ -1,118 +1,105 @@
-# Benchmarks — private LLM/agent benchmark dashboard
+# Benchmarks
 
-This repository powers the private benchmark dashboard at:
+A small, practical benchmark dashboard for people who regularly switch between LLMs and coding agents.
 
-- Planned public URL behind Authelia/Caddy: `https://benchmarks.letsautomate.work`
-- Internal service URL from the Caddy container: `http://benchmarks-dashboard:8766`
-- Local files: `/root/benchmarks`
+This project started from a very specific frustration: repeatedly doing ad hoc searches like _"which model is best on this benchmark now?"_ and then trying to translate generic leaderboard results into real work decisions. The goal here is to keep one page that updates weekly and tracks the benchmark families that are most relevant to hands-on agent use rather than abstract prestige alone.
 
-The dashboard exists to help Valtteri choose which LLM model to use for practical agent work: coding, custom CLI generation, terminal/tool use, browser research, computer use, long-context reading/summarisation, and writing.
+## Why this exists
 
-It deliberately avoids a single fake “best model” score. Instead, it shows a small set of benchmarks that map to real work patterns and keeps source/update caveats visible.
+I use AI systems across several recurring workflows:
 
-## Core benchmark set
+- coding agents working over real repositories
+- terminal and CLI-heavy tool use
+- browser research and web navigation
+- desktop / computer-use tasks
+- long-context reading and summarisation
+- writing and style-sensitive drafting
 
-1. **DeepSWE** — long-horizon software engineering agents.
-2. **GDPval-AA** — agentic professional work across 44 occupations (1,320 real deliverables, Elo-scored by Artificial Analysis).
-3. **Terminal-Bench** — terminal, shell, CLI and tool-use tasks.
-4. **BrowseComp** — browser/web research tasks.
-5. **OSWorld-Verified** — desktop/computer-use agents.
-6. **LongBench v2** — long-context reasoning and retrieval (38 models from official leaderboard).
-7. **LMArena Text Style Control** — human preference proxy for prose/style quality.
+Most public leaderboard summaries flatten these into one vague notion of “best model”. This dashboard takes a different approach:
 
-See [`docs/SOURCES.md`](docs/SOURCES.md) for source URLs and parser logic.
+- it focuses on a small set of benchmarks that map more closely to real tasks
+- it keeps source caveats visible
+- it updates automatically on a schedule
+- it produces a static artifact that others can fork, adapt, or extend
+
+If your workflow looks similar, you can use this repo as-is. If not, it is meant to be easy to fork and reshape around your own benchmark mix.
+
+## What it tracks
+
+The current dashboard includes:
+
+1. **DeepSWE** — long-horizon software engineering agents
+2. **GDPval-AA** — agentic professional work across real deliverables
+3. **Terminal-Bench** — shell, terminal, and tool-use tasks
+4. **BrowseComp** — browser/web research tasks
+5. **OSWorld-Verified** — desktop/computer-use agents
+6. **LongBench v2** — long-context retrieval and reasoning
+7. **LMArena Text Style Control** — human preference proxy for writing/style
+
+These were chosen because they say more about the kinds of work I actually do than the most easily optimised headline benchmarks.
+
+## Repository structure
+
+```text
+benchmark_dashboard/   Python package for fetching, parsing, and rendering
+data/                  Normalised benchmark snapshot JSON
+public/                Rendered static dashboard
+systemd/               Example service and timer units
+docs/                  Sources, deployment notes, troubleshooting, maintainer docs
+scripts/               Small helper scripts
+tests/                 Parser/render regression tests
+```
 
 ## How it works
 
 ```text
-systemd timer (weekly)
-  -> python -m benchmark_dashboard.update --commit
-       -> fetch benchmark sources
-       -> parse into normalised rows
-       -> write data/benchmarks.json
-       -> render public/index.html
-       -> commit + push changed snapshot files
-
-systemd server (persistent)
-  -> docker run caddy:latest caddy file-server --listen :8766 --root /srv
-       -> container joins n8n-docker-caddy_default as benchmarks-dashboard
-       -> main Caddy container reverse-proxies to http://benchmarks-dashboard:8766
-       -> Authelia protects the subdomain
+weekly timer
+  -> fetch benchmark sources
+  -> parse and normalise rows
+  -> write data/benchmarks.json
+  -> render public/index.html
+  -> optionally commit updated snapshots
 ```
 
-The dashboard server does **not** publish a host port. It is only reachable on the internal Docker network used by Caddy, which avoids direct public exposure and avoids host firewall issues.
+The output is a simple static dashboard, so the repo is easy to self-host behind any static web server.
 
-## Important operational constraint
+## Quick start
 
-**Do not restart Caddy from an agent session unless explicitly approved.** Reloading/restarting Caddy can interrupt active access to Pi. This repo includes Caddy configuration instructions, but Caddy should be restarted or reloaded manually by the user.
+Install dependencies:
 
-## Commands
+```bash
+pip install -r requirements.txt
+```
 
 Run tests:
 
 ```bash
-cd /root/benchmarks
 python3 -m pytest -q
 ```
 
-Fetch and render once without git commit:
+Fetch sources and rebuild the dashboard once:
 
 ```bash
-cd /root/benchmarks
 python3 -m benchmark_dashboard.update
 ```
 
-Fetch, render, commit and push if changed:
+Serve the generated site locally:
 
 ```bash
-cd /root/benchmarks
-python3 -m benchmark_dashboard.update --commit
-```
-
-Serve locally for testing without systemd, if needed:
-
-```bash
-cd /root/benchmarks
 python3 -m benchmark_dashboard.server --host 127.0.0.1 --port 8766
 ```
 
-From the Caddy container, check the systemd-managed container:
+## Documentation map
 
-```bash
-docker exec n8n-docker-caddy-caddy-1 curl -fsS http://benchmarks-dashboard:8766/ | grep 'LLM Agent Benchmark Dashboard'
-```
+- [`docs/SOURCES.md`](docs/SOURCES.md) — where each benchmark comes from and how parsing works
+- [`docs/TROUBLESHOOTING.md`](docs/TROUBLESHOOTING.md) — common parser/source failures
+- [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) — example deployment notes
+- [`docs/MAINTAINER-RUNBOOK.md`](docs/MAINTAINER-RUNBOOK.md) — maintainer-oriented operational notes from the original private setup
 
-## Systemd units
+## Notes for public users
 
-Installed units should be:
+This repository was originally built for a private self-hosted setup, so some docs still include environment-specific examples. Those are best treated as implementation references rather than required architecture.
 
-- `/etc/systemd/system/benchmarks-dashboard.service`
-- `/etc/systemd/system/benchmarks-dashboard-update.service`
-- `/etc/systemd/system/benchmarks-dashboard-update.timer`
+## License
 
-Check status:
-
-```bash
-systemctl status benchmarks-dashboard.service
-systemctl status benchmarks-dashboard-update.timer
-systemctl list-timers benchmarks-dashboard-update.timer
-```
-
-View logs:
-
-```bash
-journalctl -u benchmarks-dashboard.service -n 100 --no-pager
-journalctl -u benchmarks-dashboard-update.service -n 100 --no-pager
-```
-
-## Robustness behaviour
-
-The updater refuses to overwrite an existing dashboard if fewer than three benchmark sources succeed. This prevents a broad network outage or upstream HTML change from replacing a good dashboard with mostly failed cards.
-
-Individual benchmark failures are still shown when enough other sources succeed, so parser/source breakage is visible.
-
-## Repository and backup
-
-This folder is a git repository and is pushed to the private GitHub repo `valtterimelkko/Benchmarks`. Weekly update commits include `data/benchmarks.json` and `public/index.html` when they change.
-
-Do not commit secrets, credentials, raw cache dumps, or `.herenow/state.json`. See `.gitignore`.
+MIT
