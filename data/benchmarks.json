@@ -5,7 +5,7 @@
       "category": "Coding agents",
       "description": "Long-horizon software engineering tasks written from scratch across active repositories.",
       "error": null,
-      "fetched_at": "2026-06-08T15:32:16Z",
+      "fetched_at": "2026-06-15T07:41:37Z",
       "id": "deep_swe",
       "methodology_url": "https://deepswe.datacurve.ai/blog",
       "name": "DeepSWE",
@@ -299,6 +299,21 @@
           "date": null,
           "metadata": {
             "harness": "mini-swe-agent",
+            "mean_cost_usd": 2.1211,
+            "reasoning_effort": null,
+            "tasks_attempted": 113,
+            "tasks_passed_any": 47
+          },
+          "model": "qwen3-7-max",
+          "organization": "Alibaba",
+          "rank": 20,
+          "score": 17.7,
+          "score_unit": "% solve rate"
+        },
+        {
+          "date": null,
+          "metadata": {
+            "harness": "mini-swe-agent",
             "mean_cost_usd": 7.4641,
             "reasoning_effort": null,
             "tasks_attempted": 113,
@@ -306,7 +321,7 @@
           },
           "model": "glm-5-1",
           "organization": "Z.AI",
-          "rank": 20,
+          "rank": 21,
           "score": 17.52,
           "score_unit": "% solve rate"
         },
@@ -321,7 +336,7 @@
           },
           "model": "grok-build-0-1",
           "organization": "xAI",
-          "rank": 21,
+          "rank": 22,
           "score": 13.08,
           "score_unit": "% solve rate"
         },
@@ -336,7 +351,7 @@
           },
           "model": "gemini-3-1-pro-preview",
           "organization": "Google",
-          "rank": 22,
+          "rank": 23,
           "score": 9.73,
           "score_unit": "% solve rate"
         },
@@ -351,7 +366,7 @@
           },
           "model": "deepseek-v4-pro",
           "organization": "DeepSeek",
-          "rank": 23,
+          "rank": 24,
           "score": 7.52,
           "score_unit": "% solve rate"
         },
@@ -366,7 +381,7 @@
           },
           "model": "gemini-3-flash-preview",
           "organization": "Google",
-          "rank": 24,
+          "rank": 25,
           "score": 5.14,
           "score_unit": "% solve rate"
         },
@@ -381,7 +396,7 @@
           },
           "model": "qwen3-6-plus",
           "organization": "Alibaba",
-          "rank": 25,
+          "rank": 26,
           "score": 2.65,
           "score_unit": "% solve rate"
         },
@@ -396,7 +411,7 @@
           },
           "model": "claude-haiku-4-5",
           "organization": "Anthropic",
-          "rank": 26,
+          "rank": 27,
           "score": 0.22,
           "score_unit": "% solve rate"
         },
@@ -411,7 +426,7 @@
           },
           "model": "minimax-m2-7",
           "organization": "MiniMax",
-          "rank": 27,
+          "rank": 28,
           "score": 0.22,
           "score_unit": "% solve rate"
         }
@@ -426,7 +441,7 @@
       "category": "Agentic professional work",
       "description": "1,320 real professional deliverables across 44 occupations (legal briefs, engineering plans, nursing care plans, customer support). Head-to-head Elo scored by Artificial Analysis.",
       "error": null,
-      "fetched_at": "2026-06-08T15:32:16Z",
+      "fetched_at": "2026-06-15T07:41:37Z",
       "id": "gdpval_aa",
       "methodology_url": "https://openai.com/index/gdpval/",
       "name": "GDPval-AA",
@@ -434,14 +449,42 @@
         {
           "date": null,
           "metadata": {
+            "benchlm_slug": "claude-mythos-5",
+            "context_window": "1M+",
+            "overall_score": 99,
+            "source_type": "Proprietary"
+          },
+          "model": "Claude Mythos 5",
+          "organization": "Anthropic",
+          "rank": 1,
+          "score": 1932.0,
+          "score_unit": "Elo rating"
+        },
+        {
+          "date": null,
+          "metadata": {
+            "benchlm_slug": "claude-fable",
+            "context_window": "1M+",
+            "overall_score": 96,
+            "source_type": "Proprietary"
+          },
+          "model": "Claude Fable 5",
+          "organization": "Anthropic",
+          "rank": 2,
+          "score": 1932.0,
+          "score_unit": "Elo rating"
+        },
+        {
+          "date": null,
+          "metadata": {
             "benchlm_slug": "claude-opus-4-8",
             "context_window": "1M",
-            "overall_score": 93,
+            "overall_score": 92,
             "source_type": "Proprietary"
           },
           "model": "Claude Opus 4.8",
           "organization": "Anthropic",
-          "rank": 1,
+          "rank": 3,
           "score": 1890.0,
           "score_unit": "Elo rating"
         },
@@ -450,12 +493,12 @@
           "metadata": {
             "benchlm_slug": "gpt-5-5",
             "context_window": "1M",
-            "overall_score": 89,
+            "overall_score": 88,
             "source_type": "Proprietary"
           },
           "model": "GPT-5.5",
           "organization": "OpenAI",
-          "rank": 2,
+          "rank": 4,
           "score": 1769.0,
           "score_unit": "Elo rating"
         },
@@ -464,13 +507,27 @@
           "metadata": {
             "benchlm_slug": "claude-opus-4-7-adaptive",
             "context_window": "1M",
-            "overall_score": 85,
+            "overall_score": 84,
             "source_type": "Proprietary"
           },
           "model": "Claude Opus 4.7 (Adaptive)",
           "organization": "Anthropic",
-          "rank": 3,
+          "rank": 5,
           "score": 1753.0,
+          "score_unit": "Elo rating"
+        },
+        {
+          "date": null,
+          "metadata": {
+            "benchlm_slug": "gpt-5-4",
+            "context_window": "1.05M",
+            "overall_score": 88,
+            "source_type": "Proprietary"
+          },
+          "model": "GPT-5.4",
+          "organization": "OpenAI",
+          "rank": 6,
+          "score": 1674.0,
           "score_unit": "Elo rating"
         },
         {
@@ -483,22 +540,22 @@
           },
           "model": "Claude Opus 4.7",
           "organization": "Anthropic",
-          "rank": 4,
-          "score": 1677.0,
+          "rank": 7,
+          "score": 1672.0,
           "score_unit": "Elo rating"
         },
         {
           "date": null,
           "metadata": {
-            "benchlm_slug": "gpt-5-4",
-            "context_window": "1.05M",
-            "overall_score": 89,
-            "source_type": "Proprietary"
+            "benchlm_slug": "minimax-m3",
+            "context_window": "1M",
+            "overall_score": 76,
+            "source_type": "Open Weight"
           },
-          "model": "GPT-5.4",
-          "organization": "OpenAI",
-          "rank": 5,
-          "score": 1674.0,
+          "model": "MiniMax M3",
+          "organization": "MiniMax",
+          "rank": 8,
+          "score": 1670.0,
           "score_unit": "Elo rating"
         },
         {
@@ -506,12 +563,12 @@
           "metadata": {
             "benchlm_slug": "gemini-3-5-flash",
             "context_window": "1M",
-            "overall_score": 84,
+            "overall_score": 83,
             "source_type": "Proprietary"
           },
           "model": "Gemini 3.5 Flash",
           "organization": "Google",
-          "rank": 6,
+          "rank": 9,
           "score": 1656.0,
           "score_unit": "Elo rating"
         },
@@ -525,7 +582,7 @@
           },
           "model": "Claude Opus 4.6 (Adaptive)",
           "organization": "Anthropic",
-          "rank": 7,
+          "rank": 10,
           "score": 1619.0,
           "score_unit": "Elo rating"
         },
@@ -534,13 +591,13 @@
           "metadata": {
             "benchlm_slug": "claude-sonnet-4-6",
             "context_window": "200K",
-            "overall_score": 81,
+            "overall_score": 80,
             "source_type": "Proprietary"
           },
           "model": "Claude Sonnet 4.6",
           "organization": "Anthropic",
-          "rank": 8,
-          "score": 1599.0,
+          "rank": 11,
+          "score": 1596.0,
           "score_unit": "Elo rating"
         },
         {
@@ -548,13 +605,13 @@
           "metadata": {
             "benchlm_slug": "claude-opus-4-6",
             "context_window": "1M",
-            "overall_score": 87,
+            "overall_score": 86,
             "source_type": "Proprietary"
           },
           "model": "Claude Opus 4.6",
           "organization": "Anthropic",
-          "rank": 9,
-          "score": 1591.0,
+          "rank": 12,
+          "score": 1589.0,
           "score_unit": "Elo rating"
         },
         {
@@ -562,12 +619,12 @@
           "metadata": {
             "benchlm_slug": "mimo-v2-5-pro",
             "context_window": "1M",
-            "overall_score": 81,
+            "overall_score": 80,
             "source_type": "Proprietary"
           },
           "model": "MiMo-V2.5-Pro",
           "organization": "Xiaomi",
-          "rank": 10,
+          "rank": 13,
           "score": 1571.0,
           "score_unit": "Elo rating"
         },
@@ -581,7 +638,7 @@
           },
           "model": "DeepSeek V4 Pro (High)",
           "organization": "DeepSeek",
-          "rank": 11,
+          "rank": 14,
           "score": 1558.0,
           "score_unit": "Elo rating"
         },
@@ -595,7 +652,7 @@
           },
           "model": "DeepSeek V4 Pro (Max)",
           "organization": "DeepSeek",
-          "rank": 12,
+          "rank": 15,
           "score": 1554.0,
           "score_unit": "Elo rating"
         },
@@ -604,13 +661,27 @@
           "metadata": {
             "benchlm_slug": "qwen3-7-max",
             "context_window": "1M",
-            "overall_score": 90,
+            "overall_score": 89,
             "source_type": "Proprietary"
           },
           "model": "Qwen3.7 Max",
           "organization": "Alibaba",
-          "rank": 13,
-          "score": 1546.0,
+          "rank": 16,
+          "score": 1543.0,
+          "score_unit": "Elo rating"
+        },
+        {
+          "date": null,
+          "metadata": {
+            "benchlm_slug": "qwen3-7-plus",
+            "context_window": "1M",
+            "overall_score": 86,
+            "source_type": "Proprietary"
+          },
+          "model": "Qwen3.7 Plus",
+          "organization": "Alibaba",
+          "rank": 17,
+          "score": 1518.0,
           "score_unit": "Elo rating"
         },
         {
@@ -618,12 +689,12 @@
           "metadata": {
             "benchlm_slug": "minimax-m2-7",
             "context_window": "200K",
-            "overall_score": 54,
+            "overall_score": 53,
             "source_type": "Open Weight"
           },
           "model": "MiniMax M2.7",
           "organization": "MiniMax",
-          "rank": 14,
+          "rank": 18,
           "score": 1505.0,
           "score_unit": "Elo rating"
         },
@@ -637,22 +708,8 @@
           },
           "model": "Qwen 3.6 Max (preview)",
           "organization": "Alibaba",
-          "rank": 15,
+          "rank": 19,
           "score": 1504.0,
-          "score_unit": "Elo rating"
-        },
-        {
-          "date": null,
-          "metadata": {
-            "benchlm_slug": "glm-5-turbo",
-            "context_window": "200K",
-            "overall_score": 0,
-            "source_type": "Proprietary"
-          },
-          "model": "GLM-5-Turbo",
-          "organization": "Z.AI",
-          "rank": 16,
-          "score": 1497.0,
           "score_unit": "Elo rating"
         },
         {
@@ -665,22 +722,22 @@
           },
           "model": "Grok 4.3",
           "organization": "xAI",
-          "rank": 17,
+          "rank": 20,
           "score": 1495.0,
           "score_unit": "Elo rating"
         },
         {
           "date": null,
           "metadata": {
-            "benchlm_slug": "gpt-5-3-codex",
-            "context_window": "400K",
-            "overall_score": 92,
+            "benchlm_slug": "glm-5-turbo",
+            "context_window": "200K",
+            "overall_score": 0,
             "source_type": "Proprietary"
           },
-          "model": "GPT-5.3 Codex",
-          "organization": "OpenAI",
-          "rank": 18,
-          "score": 1482.0,
+          "model": "GLM-5-Turbo",
+          "organization": "Z.AI",
+          "rank": 21,
+          "score": 1493.0,
           "score_unit": "Elo rating"
         },
         {
@@ -688,13 +745,27 @@
           "metadata": {
             "benchlm_slug": "kimi-2-6",
             "context_window": "256K",
-            "overall_score": 82,
+            "overall_score": 81,
             "source_type": "Open Weight"
           },
           "model": "Kimi K2.6",
           "organization": "Moonshot AI",
-          "rank": 19,
+          "rank": 22,
           "score": 1481.0,
+          "score_unit": "Elo rating"
+        },
+        {
+          "date": null,
+          "metadata": {
+            "benchlm_slug": "gpt-5-3-codex",
+            "context_window": "400K",
+            "overall_score": 91,
+            "source_type": "Proprietary"
+          },
+          "model": "GPT-5.3 Codex",
+          "organization": "OpenAI",
+          "rank": 23,
+          "score": 1480.0,
           "score_unit": "Elo rating"
         },
         {
@@ -707,7 +778,7 @@
           },
           "model": "GPT-5.2",
           "organization": "OpenAI",
-          "rank": 20,
+          "rank": 24,
           "score": 1467.0,
           "score_unit": "Elo rating"
         },
@@ -721,8 +792,8 @@
           },
           "model": "Claude Opus 4.5 Thinking",
           "organization": "Anthropic",
-          "rank": 21,
-          "score": 1452.0,
+          "rank": 25,
+          "score": 1446.0,
           "score_unit": "Elo rating"
         },
         {
@@ -735,7 +806,7 @@
           },
           "model": "GPT-5.4 mini",
           "organization": "OpenAI",
-          "rank": 22,
+          "rank": 26,
           "score": 1438.0,
           "score_unit": "Elo rating"
         },
@@ -749,8 +820,8 @@
           },
           "model": "Claude Opus 4.5",
           "organization": "Anthropic",
-          "rank": 23,
-          "score": 1419.0,
+          "rank": 27,
+          "score": 1418.0,
           "score_unit": "Elo rating"
         },
         {
@@ -758,12 +829,12 @@
           "metadata": {
             "benchlm_slug": "muse-spark",
             "context_window": "262K",
-            "overall_score": 70,
+            "overall_score": 69,
             "source_type": "Proprietary"
           },
           "model": "Muse Spark",
           "organization": "Meta",
-          "rank": 24,
+          "rank": 28,
           "score": 1417.0,
           "score_unit": "Elo rating"
         },
@@ -777,7 +848,7 @@
           },
           "model": "DeepSeek V4 Flash (High)",
           "organization": "DeepSeek",
-          "rank": 25,
+          "rank": 29,
           "score": 1414.0,
           "score_unit": "Elo rating"
         },
@@ -791,64 +862,8 @@
           },
           "model": "MiMo-V2-Pro",
           "organization": "Xiaomi",
-          "rank": 26,
-          "score": 1406.0,
-          "score_unit": "Elo rating"
-        },
-        {
-          "date": null,
-          "metadata": {
-            "benchlm_slug": "qwen3-6-27b",
-            "context_window": "262K",
-            "overall_score": 70,
-            "source_type": "Open Weight"
-          },
-          "model": "Qwen3.6-27B",
-          "organization": "Alibaba",
-          "rank": 27,
-          "score": 1403.0,
-          "score_unit": "Elo rating"
-        },
-        {
-          "date": null,
-          "metadata": {
-            "benchlm_slug": "glm-5",
-            "context_window": "200K",
-            "overall_score": 67,
-            "source_type": "Open Weight"
-          },
-          "model": "GLM-5",
-          "organization": "Z.AI",
-          "rank": 28,
-          "score": 1395.0,
-          "score_unit": "Elo rating"
-        },
-        {
-          "date": null,
-          "metadata": {
-            "benchlm_slug": "deepseek-v4-flash-max",
-            "context_window": "1M",
-            "overall_score": 73,
-            "source_type": "Open Weight"
-          },
-          "model": "DeepSeek V4 Flash (Max)",
-          "organization": "DeepSeek",
-          "rank": 29,
-          "score": 1388.0,
-          "score_unit": "Elo rating"
-        },
-        {
-          "date": null,
-          "metadata": {
-            "benchlm_slug": "qwen3-6-plus",
-            "context_window": "1M",
-            "overall_score": 67,
-            "source_type": "Proprietary"
-          },
-          "model": "Qwen3.6 Plus",
-          "organization": "Alibaba",
           "rank": 30,
-          "score": 1354.0,
+          "score": 1405.0,
           "score_unit": "Elo rating"
         }
       ],
@@ -862,7 +877,7 @@
       "category": "Terminal/tool use",
       "description": "Agent performance on real terminal tasks: shell commands, debugging, coding, sysadmin, and multi-step CLI workflows.",
       "error": null,
-      "fetched_at": "2026-06-08T15:32:17Z",
+      "fetched_at": "2026-06-15T07:41:38Z",
       "id": "terminal_bench",
       "methodology_url": "https://www.tbench.ai/",
       "name": "Terminal-Bench",
@@ -1021,7 +1036,7 @@
       "category": "Browser/web research",
       "description": "Hard web-browsing questions requiring persistent search, source inspection, and concise verified answers.",
       "error": null,
-      "fetched_at": "2026-06-08T15:32:19Z",
+      "fetched_at": "2026-06-15T07:41:39Z",
       "id": "browsecomp",
       "methodology_url": "https://openai.com/index/browsecomp/",
       "name": "BrowseComp",
@@ -1045,7 +1060,7 @@
           "metadata": {
             "benchlm_slug": "gpt-5-4-pro",
             "context_window": "1.05M",
-            "overall_score": 90,
+            "overall_score": 89,
             "source_type": "Proprietary"
           },
           "model": "GPT-5.4 Pro",
@@ -1057,14 +1072,28 @@
         {
           "date": null,
           "metadata": {
-            "benchlm_slug": "claude-mythos-preview",
-            "context_window": "1M",
+            "benchlm_slug": "claude-mythos-5",
+            "context_window": "1M+",
             "overall_score": 99,
             "source_type": "Proprietary"
           },
-          "model": "Claude Mythos Preview",
+          "model": "Claude Mythos 5",
           "organization": "Anthropic",
           "rank": 3,
+          "score": 88.0,
+          "score_unit": "% score"
+        },
+        {
+          "date": null,
+          "metadata": {
+            "benchlm_slug": "claude-fable",
+            "context_window": "1M+",
+            "overall_score": 96,
+            "source_type": "Proprietary"
+          },
+          "model": "Claude Fable 5",
+          "organization": "Anthropic",
+          "rank": 4,
           "score": 86.9,
           "score_unit": "% score"
         },
@@ -1073,12 +1102,12 @@
           "metadata": {
             "benchlm_slug": "gpt-5-5",
             "context_window": "1M",
-            "overall_score": 89,
+            "overall_score": 88,
             "source_type": "Proprietary"
           },
           "model": "GPT-5.5",
           "organization": "OpenAI",
-          "rank": 4,
+          "rank": 5,
           "score": 84.4,
           "score_unit": "% score"
         },
@@ -1087,12 +1116,12 @@
           "metadata": {
             "benchlm_slug": "claude-opus-4-8",
             "context_window": "1M",
-            "overall_score": 93,
+            "overall_score": 92,
             "source_type": "Proprietary"
           },
           "model": "Claude Opus 4.8",
           "organization": "Anthropic",
-          "rank": 5,
+          "rank": 6,
           "score": 84.3,
           "score_unit": "% score"
         },
@@ -1101,12 +1130,12 @@
           "metadata": {
             "benchlm_slug": "claude-opus-4-6",
             "context_window": "1M",
-            "overall_score": 87,
+            "overall_score": 86,
             "source_type": "Proprietary"
           },
           "model": "Claude Opus 4.6",
           "organization": "Anthropic",
-          "rank": 6,
+          "rank": 7,
           "score": 83.7,
           "score_unit": "% score"
         },
@@ -1120,7 +1149,7 @@
           },
           "model": "MiniMax M3",
           "organization": "MiniMax",
-          "rank": 7,
+          "rank": 8,
           "score": 83.52,
           "score_unit": "% score"
         },
@@ -1134,7 +1163,7 @@
           },
           "model": "DeepSeek V4 Pro (Max)",
           "organization": "DeepSeek",
-          "rank": 8,
+          "rank": 9,
           "score": 83.4,
           "score_unit": "% score"
         },
@@ -1143,12 +1172,12 @@
           "metadata": {
             "benchlm_slug": "kimi-2-6",
             "context_window": "256K",
-            "overall_score": 82,
+            "overall_score": 81,
             "source_type": "Open Weight"
           },
           "model": "Kimi K2.6",
           "organization": "Moonshot AI",
-          "rank": 9,
+          "rank": 10,
           "score": 83.2,
           "score_unit": "% score"
         },
@@ -1157,12 +1186,12 @@
           "metadata": {
             "benchlm_slug": "gpt-5-4",
             "context_window": "1.05M",
-            "overall_score": 89,
+            "overall_score": 88,
             "source_type": "Proprietary"
           },
           "model": "GPT-5.4",
           "organization": "OpenAI",
-          "rank": 10,
+          "rank": 11,
           "score": 82.7,
           "score_unit": "% score"
         },
@@ -1176,7 +1205,7 @@
           },
           "model": "DeepSeek V4 Pro (High)",
           "organization": "DeepSeek",
-          "rank": 11,
+          "rank": 12,
           "score": 80.4,
           "score_unit": "% score"
         },
@@ -1185,12 +1214,12 @@
           "metadata": {
             "benchlm_slug": "claude-opus-4-7-adaptive",
             "context_window": "1M",
-            "overall_score": 85,
+            "overall_score": 84,
             "source_type": "Proprietary"
           },
           "model": "Claude Opus 4.7 (Adaptive)",
           "organization": "Anthropic",
-          "rank": 12,
+          "rank": 13,
           "score": 79.3,
           "score_unit": "% score"
         },
@@ -1204,7 +1233,7 @@
           },
           "model": "Step 3.7 Flash",
           "organization": "StepFun",
-          "rank": 13,
+          "rank": 14,
           "score": 75.82,
           "score_unit": "% score"
         },
@@ -1213,12 +1242,12 @@
           "metadata": {
             "benchlm_slug": "deepseek-v4-flash-max",
             "context_window": "1M",
-            "overall_score": 73,
+            "overall_score": 72,
             "source_type": "Open Weight"
           },
           "model": "DeepSeek V4 Flash (Max)",
           "organization": "DeepSeek",
-          "rank": 14,
+          "rank": 15,
           "score": 73.2,
           "score_unit": "% score"
         },
@@ -1232,7 +1261,7 @@
           },
           "model": "GLM-5.1",
           "organization": "Z.AI",
-          "rank": 15,
+          "rank": 16,
           "score": 68.0,
           "score_unit": "% score"
         },
@@ -1246,7 +1275,7 @@
           },
           "model": "GPT-5.2",
           "organization": "OpenAI",
-          "rank": 16,
+          "rank": 17,
           "score": 65.8,
           "score_unit": "% score"
         },
@@ -1260,7 +1289,7 @@
           },
           "model": "Qwen3.5-122B-A10B",
           "organization": "Alibaba",
-          "rank": 17,
+          "rank": 18,
           "score": 63.8,
           "score_unit": "% score"
         },
@@ -1269,12 +1298,12 @@
           "metadata": {
             "benchlm_slug": "qwen3-5-397b",
             "context_window": "128K",
-            "overall_score": 64,
+            "overall_score": 63,
             "source_type": "Open Weight"
           },
           "model": "Qwen3.5 397B",
           "organization": "Alibaba",
-          "rank": 18,
+          "rank": 19,
           "score": 62.0,
           "score_unit": "% score"
         },
@@ -1283,12 +1312,12 @@
           "metadata": {
             "benchlm_slug": "qwen3-5-27b",
             "context_window": "262K",
-            "overall_score": 64,
+            "overall_score": 63,
             "source_type": "Open Weight"
           },
           "model": "Qwen3.5-27B",
           "organization": "Alibaba",
-          "rank": 19,
+          "rank": 20,
           "score": 61.0,
           "score_unit": "% score"
         },
@@ -1297,12 +1326,12 @@
           "metadata": {
             "benchlm_slug": "qwen3-5-35b-a3b",
             "context_window": "262K",
-            "overall_score": 59,
+            "overall_score": 58,
             "source_type": "Open Weight"
           },
           "model": "Qwen3.5-35B-A3B",
           "organization": "Alibaba",
-          "rank": 20,
+          "rank": 21,
           "score": 61.0,
           "score_unit": "% score"
         },
@@ -1316,7 +1345,7 @@
           },
           "model": "Kimi K2.5 (Reasoning)",
           "organization": "Moonshot AI",
-          "rank": 21,
+          "rank": 22,
           "score": 60.6,
           "score_unit": "% score"
         },
@@ -1325,12 +1354,12 @@
           "metadata": {
             "benchlm_slug": "kimi-k2-5",
             "context_window": "256K",
-            "overall_score": 64,
+            "overall_score": 63,
             "source_type": "Open Weight"
           },
           "model": "Kimi K2.5",
           "organization": "Moonshot AI",
-          "rank": 22,
+          "rank": 23,
           "score": 60.6,
           "score_unit": "% score"
         },
@@ -1344,7 +1373,7 @@
           },
           "model": "DeepSeek V4 Flash (High)",
           "organization": "DeepSeek",
-          "rank": 23,
+          "rank": 24,
           "score": 53.5,
           "score_unit": "% score"
         },
@@ -1358,7 +1387,7 @@
           },
           "model": "GLM-4.7",
           "organization": "Z.AI",
-          "rank": 24,
+          "rank": 25,
           "score": 52.0,
           "score_unit": "% score"
         },
@@ -1372,7 +1401,7 @@
           },
           "model": "Nemotron 3 Ultra",
           "organization": "NVIDIA",
-          "rank": 25,
+          "rank": 26,
           "score": 44.4,
           "score_unit": "% score"
         }
@@ -1387,7 +1416,7 @@
       "category": "Computer use",
       "description": "Open-ended GUI/computer-use tasks in real desktop environments across apps and workflows.",
       "error": null,
-      "fetched_at": "2026-06-08T15:32:19Z",
+      "fetched_at": "2026-06-15T07:41:39Z",
       "id": "osworld_verified",
       "methodology_url": "https://github.com/xlang-ai/OSWorld",
       "name": "OSWorld-Verified",
@@ -1471,6 +1500,19 @@
           "score_unit": "% success rate"
         },
         {
+          "date": "46181",
+          "metadata": {
+            "approach_type": "General model",
+            "max_steps": 100,
+            "success_total": "269.18 / 358"
+          },
+          "model": "MiniMax M3",
+          "organization": "MiniMax",
+          "rank": 7,
+          "score": 75.19,
+          "score_unit": "% success rate"
+        },
+        {
           "date": "46078",
           "metadata": {
             "approach_type": "Agentic framework",
@@ -1479,7 +1521,7 @@
           },
           "model": "HIPPO Agent w/ Opus 4.5",
           "organization": "Lenovo",
-          "rank": 7,
+          "rank": 8,
           "score": 74.48,
           "score_unit": "% success rate"
         },
@@ -1492,7 +1534,7 @@
           },
           "model": "Qwen 3.7 Plus",
           "organization": "Qwen Team, Alibaba Group",
-          "rank": 8,
+          "rank": 9,
           "score": 73.3,
           "score_unit": "% success rate"
         },
@@ -1505,7 +1547,7 @@
           },
           "model": "Kimi K2.6",
           "organization": "Moonshot AI",
-          "rank": 9,
+          "rank": 10,
           "score": 73.06,
           "score_unit": "% success rate"
         },
@@ -1518,7 +1560,7 @@
           },
           "model": "agent s3 w/ Opus 4.5 + GPT-5 bBoN (N=10)",
           "organization": "Simular",
-          "rank": 10,
+          "rank": 11,
           "score": 72.58,
           "score_unit": "% success rate"
         },
@@ -1531,7 +1573,7 @@
           },
           "model": "claude-sonnet-4-6",
           "organization": "Anthropic",
-          "rank": 11,
+          "rank": 12,
           "score": 72.11,
           "score_unit": "% success rate"
         },
@@ -1544,7 +1586,7 @@
           },
           "model": "agent s3 w/ GPT-5 bBoN (N=10)",
           "organization": "Simular",
-          "rank": 12,
+          "rank": 13,
           "score": 69.9,
           "score_unit": "% success rate"
         },
@@ -1557,7 +1599,7 @@
           },
           "model": "agent s3 w/ Opus 4.5 bBoN (N=1)",
           "organization": "Simular",
-          "rank": 13,
+          "rank": 14,
           "score": 67.46,
           "score_unit": "% success rate"
         },
@@ -1570,7 +1612,7 @@
           },
           "model": "UiPath Screen Agent w/ Opus 4.5",
           "organization": "UiPath",
-          "rank": 14,
+          "rank": 15,
           "score": 67.14,
           "score_unit": "% success rate"
         },
@@ -1583,7 +1625,7 @@
           },
           "model": "agent s3 w/ Opus 4.5 bBoN (N=1)",
           "organization": "Simular",
-          "rank": 15,
+          "rank": 16,
           "score": 66.54,
           "score_unit": "% success rate"
         },
@@ -1596,7 +1638,7 @@
           },
           "model": "agent s3 w/ Opus 4.5 bBoN (N=1)",
           "organization": "Simular",
-          "rank": 16,
+          "rank": 17,
           "score": 66.48,
           "score_unit": "% success rate"
         },
@@ -1609,7 +1651,7 @@
           },
           "model": "OS-Symphony w/ GPT-5",
           "organization": "Shanghai AI Laboratory",
-          "rank": 17,
+          "rank": 18,
           "score": 65.77,
           "score_unit": "% success rate"
         },
@@ -1622,7 +1664,7 @@
           },
           "model": "agent s3 w/ GPT-5 bBoN (N=1)",
           "organization": "Simular",
-          "rank": 18,
+          "rank": 19,
           "score": 65.58,
           "score_unit": "% success rate"
         },
@@ -1635,7 +1677,7 @@
           },
           "model": "agent s3 w/ Opus 4.5 bBoN (N=1)",
           "organization": "Simular",
-          "rank": 19,
+          "rank": 20,
           "score": 65.16,
           "score_unit": "% success rate"
         },
@@ -1648,7 +1690,7 @@
           },
           "model": "UiPath Screen Agent w/ Opus 4.5",
           "organization": "UiPath",
-          "rank": 20,
+          "rank": 21,
           "score": 64.4,
           "score_unit": "% success rate"
         },
@@ -1661,7 +1703,7 @@
           },
           "model": "agent s3 w/ GPT-5 bBoN (N=1)",
           "organization": "Simular",
-          "rank": 21,
+          "rank": 22,
           "score": 64.38,
           "score_unit": "% success rate"
         },
@@ -1674,7 +1716,7 @@
           },
           "model": "agent s3 w/ Opus 4.5 bBoN (N=1)",
           "organization": "Simular",
-          "rank": 22,
+          "rank": 23,
           "score": 64.35,
           "score_unit": "% success rate"
         },
@@ -1687,7 +1729,7 @@
           },
           "model": "GBOX Agent",
           "organization": "GBOX.AI",
-          "rank": 23,
+          "rank": 24,
           "score": 64.22,
           "score_unit": "% success rate"
         },
@@ -1700,7 +1742,7 @@
           },
           "model": "agent s3 w/ GPT-5 bBoN (N=1)",
           "organization": "Simular",
-          "rank": 24,
+          "rank": 25,
           "score": 63.52,
           "score_unit": "% success rate"
         },
@@ -1713,7 +1755,7 @@
           },
           "model": "agent s3 w/ GPT-5 bBoN (N=1)",
           "organization": "Simular",
-          "rank": 25,
+          "rank": 26,
           "score": 63.52,
           "score_unit": "% success rate"
         },
@@ -1726,7 +1768,7 @@
           },
           "model": "GTA1 w/ GPT-5",
           "organization": "Salesforce & The Australian National University & The University of Hong Kong",
-          "rank": 26,
+          "rank": 27,
           "score": 63.41,
           "score_unit": "% success rate"
         },
@@ -1739,7 +1781,7 @@
           },
           "model": "Kimi K2.5",
           "organization": "Moonshot AI",
-          "rank": 27,
+          "rank": 28,
           "score": 63.3,
           "score_unit": "% success rate"
         },
@@ -1752,7 +1794,7 @@
           },
           "model": "claude-sonnet-4-5-20250929",
           "organization": "Anthropic",
-          "rank": 28,
+          "rank": 29,
           "score": 62.88,
           "score_unit": "% success rate"
         },
@@ -1765,21 +1807,8 @@
           },
           "model": "Agentic-Lybic-Maestro",
           "organization": "Lybic",
-          "rank": 29,
-          "score": 61.93,
-          "score_unit": "% success rate"
-        },
-        {
-          "date": "45934",
-          "metadata": {
-            "approach_type": "Agentic framework",
-            "max_steps": 100,
-            "success_total": "223.38/361"
-          },
-          "model": "agent s3 w/ GPT-5 bBoN (N=1)",
-          "organization": "Simular",
           "rank": 30,
-          "score": 61.88,
+          "score": 61.93,
           "score_unit": "% success rate"
         }
       ],
@@ -1793,7 +1822,7 @@
       "category": "Long-context reasoning",
       "description": "Long-context reasoning and retrieval benchmark testing whether models can use extended context windows across diverse task types. Sourced directly from the official leaderboard.",
       "error": null,
-      "fetched_at": "2026-06-08T15:32:19Z",
+      "fetched_at": "2026-06-15T07:41:39Z",
       "id": "longbench_v2",
       "methodology_url": "https://arxiv.org/abs/2412.15204",
       "name": "LongBench v2",
@@ -2120,470 +2149,19 @@
       "authenticity": "Live human preference battles are harder to optimise directly than static tests, but they reflect popularity/style preferences rather than academic correctness.",
       "category": "Writing preference",
       "description": "Human-preference arena ratings for text models, used here as a pragmatic proxy for prose and style quality.",
-      "error": null,
-      "fetched_at": "2026-06-08T15:32:20Z",
+      "error": "HTTPError: 501 Server Error: Not Implemented for url: https://datasets-server.huggingface.co/rows?dataset=lmarena-ai%2Fleaderboard-dataset&config=text_style_control&split=latest&offset=0&length=50",
+      "fetched_at": "2026-06-15T07:41:40Z",
       "id": "lmarena_text_style",
       "methodology_url": "https://arena.ai/",
       "name": "LMArena Text Style Control",
-      "rows": [
-        {
-          "date": "2026-05-27",
-          "metadata": {
-            "category": "overall",
-            "license": "Proprietary",
-            "rating_lower": 1497.908027964492,
-            "rating_upper": 1506.4270487931553,
-            "votes": 34186.0
-          },
-          "model": "claude-opus-4-6-thinking",
-          "organization": "Anthropic",
-          "rank": 1,
-          "score": 1502.17,
-          "score_unit": "Arena rating"
-        },
-        {
-          "date": "2026-05-27",
-          "metadata": {
-            "category": "overall",
-            "license": "Proprietary",
-            "rating_lower": 1494.4596624468295,
-            "rating_upper": 1504.9321827201352,
-            "votes": 19973.0
-          },
-          "model": "claude-opus-4-7-thinking",
-          "organization": "Anthropic",
-          "rank": 2,
-          "score": 1499.7,
-          "score_unit": "Arena rating"
-        },
-        {
-          "date": "2026-05-27",
-          "metadata": {
-            "category": "overall",
-            "license": "Proprietary",
-            "rating_lower": 1494.221964217637,
-            "rating_upper": 1502.535312606525,
-            "votes": 36512.0
-          },
-          "model": "claude-opus-4-6",
-          "organization": "Anthropic",
-          "rank": 3,
-          "score": 1498.38,
-          "score_unit": "Arena rating"
-        },
-        {
-          "date": "2026-05-27",
-          "metadata": {
-            "category": "overall",
-            "license": "Proprietary",
-            "rating_lower": 1488.3760178211005,
-            "rating_upper": 1498.8996310808725,
-            "votes": 20724.0
-          },
-          "model": "claude-opus-4-7",
-          "organization": "Anthropic",
-          "rank": 4,
-          "score": 1493.64,
-          "score_unit": "Arena rating"
-        },
-        {
-          "date": "2026-05-27",
-          "metadata": {
-            "category": "overall",
-            "license": "Proprietary",
-            "rating_lower": 1482.96744617115,
-            "rating_upper": 1494.9785290872035,
-            "votes": 12228.0
-          },
-          "model": "muse-spark",
-          "organization": "meta",
-          "rank": 5,
-          "score": 1488.97,
-          "score_unit": "Arena rating"
-        },
-        {
-          "date": "2026-05-27",
-          "metadata": {
-            "category": "overall",
-            "license": "Proprietary",
-            "rating_lower": 1483.3827525217912,
-            "rating_upper": 1491.5162111861969,
-            "votes": 43742.0
-          },
-          "model": "gemini-3.1-pro-preview",
-          "organization": "Google",
-          "rank": 6,
-          "score": 1487.45,
-          "score_unit": "Arena rating"
-        },
-        {
-          "date": "2026-05-27",
-          "metadata": {
-            "category": "overall",
-            "license": "Proprietary",
-            "rating_lower": 1482.1091208644905,
-            "rating_upper": 1489.8392400473313,
-            "votes": 41332.0
-          },
-          "model": "gemini-3-pro",
-          "organization": "Google",
-          "rank": 7,
-          "score": 1485.97,
-          "score_unit": "Arena rating"
-        },
-        {
-          "date": "2026-05-27",
-          "metadata": {
-            "category": "overall",
-            "license": "Proprietary",
-            "rating_lower": 1476.7084212230689,
-            "rating_upper": 1487.9440110938763,
-            "votes": 16573.0
-          },
-          "model": "gpt-5.5-high",
-          "organization": "OpenAI",
-          "rank": 8,
-          "score": 1482.33,
-          "score_unit": "Arena rating"
-        },
-        {
-          "date": "2026-05-27",
-          "metadata": {
-            "category": "overall",
-            "license": "Proprietary",
-            "rating_lower": 1475.7491167061185,
-            "rating_upper": 1485.1018640603831,
-            "votes": 28246.0
-          },
-          "model": "gpt-5.4-high",
-          "organization": "OpenAI",
-          "rank": 9,
-          "score": 1480.43,
-          "score_unit": "Arena rating"
-        },
-        {
-          "date": "2026-05-27",
-          "metadata": {
-            "category": "overall",
-            "license": "Proprietary",
-            "rating_lower": 1472.3367114025896,
-            "rating_upper": 1485.8245028235053,
-            "votes": 9045.0
-          },
-          "model": "gemini-3.5-flash",
-          "organization": "Google",
-          "rank": 10,
-          "score": 1479.08,
-          "score_unit": "Arena rating"
-        },
-        {
-          "date": "2026-05-27",
-          "metadata": {
-            "category": "overall",
-            "license": "Proprietary",
-            "rating_lower": 1470.7809580886496,
-            "rating_upper": 1482.0299632965248,
-            "votes": 16852.0
-          },
-          "model": "gpt-5.5",
-          "organization": "OpenAI",
-          "rank": 11,
-          "score": 1476.41,
-          "score_unit": "Arena rating"
-        },
-        {
-          "date": "2026-05-27",
-          "metadata": {
-            "category": "overall",
-            "license": "Proprietary",
-            "rating_lower": 1472.0925852202645,
-            "rating_upper": 1480.572648315641,
-            "votes": 32280.0
-          },
-          "model": "gpt-5.2-chat-latest-20260210",
-          "organization": "OpenAI",
-          "rank": 12,
-          "score": 1476.33,
-          "score_unit": "Arena rating"
-        },
-        {
-          "date": "2026-05-27",
-          "metadata": {
-            "category": "overall",
-            "license": "Proprietary",
-            "rating_lower": 1471.4381593680562,
-            "rating_upper": 1480.982075747545,
-            "votes": 24468.0
-          },
-          "model": "grok-4.20-beta1",
-          "organization": "xai",
-          "rank": 13,
-          "score": 1476.21,
-          "score_unit": "Arena rating"
-        },
-        {
-          "date": "2026-05-27",
-          "metadata": {
-            "category": "overall",
-            "license": "Proprietary",
-            "rating_lower": 1470.5694114508935,
-            "rating_upper": 1479.651142728005,
-            "votes": 29068.0
-          },
-          "model": "grok-4.20-beta-0309-reasoning",
-          "organization": "xai",
-          "rank": 14,
-          "score": 1475.11,
-          "score_unit": "Arena rating"
-        },
-        {
-          "date": "2026-05-27",
-          "metadata": {
-            "category": "overall",
-            "license": "Proprietary",
-            "rating_lower": 1464.728417958788,
-            "rating_upper": 1484.7083916288902,
-            "votes": 3755.0
-          },
-          "model": "qwen3.7-max-preview",
-          "organization": "Alibaba",
-          "rank": 15,
-          "score": 1474.72,
-          "score_unit": "Arena rating"
-        },
-        {
-          "date": "2026-05-27",
-          "metadata": {
-            "category": "overall",
-            "license": "MIT",
-            "rating_lower": 1468.0284291814085,
-            "rating_upper": 1479.6754595273524,
-            "votes": 13957.0
-          },
-          "model": "glm-5.1",
-          "organization": "zai",
-          "rank": 16,
-          "score": 1473.85,
-          "score_unit": "Arena rating"
-        },
-        {
-          "date": "2026-05-27",
-          "metadata": {
-            "category": "overall",
-            "license": "Proprietary",
-            "rating_lower": 1468.5396825129574,
-            "rating_upper": 1478.951547063209,
-            "votes": 24925.0
-          },
-          "model": "gpt-5.5-instant",
-          "organization": "OpenAI",
-          "rank": 17,
-          "score": 1473.75,
-          "score_unit": "Arena rating"
-        },
-        {
-          "date": "2026-05-27",
-          "metadata": {
-            "category": "overall",
-            "license": "Proprietary",
-            "rating_lower": 1468.8195717156677,
-            "rating_upper": 1477.671725263118,
-            "votes": 30732.0
-          },
-          "model": "gemini-3-flash",
-          "organization": "Google",
-          "rank": 18,
-          "score": 1473.25,
-          "score_unit": "Arena rating"
-        },
-        {
-          "date": "2026-05-27",
-          "metadata": {
-            "category": "overall",
-            "license": "Proprietary",
-            "rating_lower": 1468.690507247813,
-            "rating_upper": 1476.4931141934358,
-            "votes": 37130.0
-          },
-          "model": "claude-opus-4-5-20251101-thinking-32k",
-          "organization": "Anthropic",
-          "rank": 19,
-          "score": 1472.59,
-          "score_unit": "Arena rating"
-        },
-        {
-          "date": "2026-05-27",
-          "metadata": {
-            "category": "overall",
-            "license": "Proprietary",
-            "rating_lower": 1467.6612970145914,
-            "rating_upper": 1476.832453254228,
-            "votes": 28630.0
-          },
-          "model": "grok-4.20-multi-agent-beta-0309",
-          "organization": "xai",
-          "rank": 20,
-          "score": 1472.25,
-          "score_unit": "Arena rating"
-        },
-        {
-          "date": "2026-05-27",
-          "metadata": {
-            "category": "overall",
-            "license": "Proprietary",
-            "rating_lower": 1464.6032561813495,
-            "rating_upper": 1476.3063997574134,
-            "votes": 14675.0
-          },
-          "model": "ernie-5.1",
-          "organization": "baidu",
-          "rank": 21,
-          "score": 1470.45,
-          "score_unit": "Arena rating"
-        },
-        {
-          "date": "2026-05-27",
-          "metadata": {
-            "category": "overall",
-            "license": "Proprietary",
-            "rating_lower": 1464.9951225383481,
-            "rating_upper": 1474.0919138086565,
-            "votes": 27474.0
-          },
-          "model": "claude-sonnet-4-6",
-          "organization": "Anthropic",
-          "rank": 22,
-          "score": 1469.54,
-          "score_unit": "Arena rating"
-        },
-        {
-          "date": "2026-05-27",
-          "metadata": {
-            "category": "overall",
-            "license": "Proprietary",
-            "rating_lower": 1464.7280042114319,
-            "rating_upper": 1473.9481939202426,
-            "votes": 29672.0
-          },
-          "model": "gpt-5.4",
-          "organization": "OpenAI",
-          "rank": 23,
-          "score": 1469.34,
-          "score_unit": "Arena rating"
-        },
-        {
-          "date": "2026-05-27",
-          "metadata": {
-            "category": "overall",
-            "license": "Proprietary",
-            "rating_lower": 1465.763804154227,
-            "rating_upper": 1472.3573048486937,
-            "votes": 66107.0
-          },
-          "model": "claude-opus-4-5-20251101",
-          "organization": "Anthropic",
-          "rank": 24,
-          "score": 1469.06,
-          "score_unit": "Arena rating"
-        },
-        {
-          "date": "2026-05-27",
-          "metadata": {
-            "category": "overall",
-            "license": "Proprietary",
-            "rating_lower": 1463.1366623431059,
-            "rating_upper": 1469.7270831193403,
-            "votes": 63569.0
-          },
-          "model": "grok-4.1-thinking",
-          "organization": "xai",
-          "rank": 25,
-          "score": 1466.43,
-          "score_unit": "Arena rating"
-        },
-        {
-          "date": "2026-05-27",
-          "metadata": {
-            "category": "overall",
-            "license": "Proprietary",
-            "rating_lower": 1460.4614552768576,
-            "rating_upper": 1470.6244048387846,
-            "votes": 20212.0
-          },
-          "model": "qwen3.5-max-preview",
-          "organization": "Alibaba",
-          "rank": 26,
-          "score": 1465.54,
-          "score_unit": "Arena rating"
-        },
-        {
-          "date": "2026-05-27",
-          "metadata": {
-            "category": "overall",
-            "license": "MIT",
-            "rating_lower": 1459.0778467159294,
-            "rating_upper": 1470.456633288866,
-            "votes": 15722.0
-          },
-          "model": "mimo-v2.5-pro",
-          "organization": "xiaomi",
-          "rank": 27,
-          "score": 1464.77,
-          "score_unit": "Arena rating"
-        },
-        {
-          "date": "2026-05-27",
-          "metadata": {
-            "category": "overall",
-            "license": "Modified MIT",
-            "rating_lower": 1456.8274113718962,
-            "rating_upper": 1467.9619239909623,
-            "votes": 15765.0
-          },
-          "model": "kimi-k2.6",
-          "organization": "Moonshot AI",
-          "rank": 28,
-          "score": 1462.39,
-          "score_unit": "Arena rating"
-        },
-        {
-          "date": "2026-05-27",
-          "metadata": {
-            "category": "overall",
-            "license": "Proprietary",
-            "rating_lower": 1457.9315003083675,
-            "rating_upper": 1464.9290361645533,
-            "votes": 52876.0
-          },
-          "model": "gemini-3-flash (thinking-minimal)",
-          "organization": "Google",
-          "rank": 29,
-          "score": 1461.43,
-          "score_unit": "Arena rating"
-        },
-        {
-          "date": "2026-05-27",
-          "metadata": {
-            "category": "overall",
-            "license": "Proprietary",
-            "rating_lower": 1456.8352652058907,
-            "rating_upper": 1463.393655214779,
-            "votes": 65655.0
-          },
-          "model": "grok-4.1",
-          "organization": "xai",
-          "rank": 30,
-          "score": 1460.11,
-          "score_unit": "Arena rating"
-        }
-      ],
+      "rows": [],
       "source_url": "https://huggingface.co/datasets/lmarena-ai/leaderboard-dataset",
-      "status": "ok",
+      "status": "failed",
       "update_strategy": "Fetch the public Hugging Face dataset-server rows for the LMArena text_style_control latest split.",
       "warning": null
     }
   ],
-  "generated_at": "2026-06-08T15:32:16Z",
+  "generated_at": "2026-06-15T07:41:37Z",
   "notes": [
     "If a source parser fails, the dashboard marks that benchmark as failed rather than silently fabricating data.",
     "Public benchmark rows often combine model + scaffold + settings. Treat them as model-selection signals, not absolute truth.",
