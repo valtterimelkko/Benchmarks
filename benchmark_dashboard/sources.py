@@ -680,6 +680,12 @@ _HF_LLB2_REQUIRED_COLS = {
 _HF_LLB2_MIN_LIKES = 50
 _HF_LLB2_BENCH_COLS = ["IFEval", "BBH", "MATH Lvl 5", "GPQA", "MUSR", "MMLU-PRO"]
 
+# ── BigCodeBench ───────────────────────────────────────────────────────────────
+
+_HF_BCB_DATASET = "bigcode%2Fbigcodebench-results"
+_HF_BCB_PARQUET_API = f"https://datasets-server.huggingface.co/parquet?dataset={_HF_BCB_DATASET}"
+_HF_BCB_REQUIRED_COLS = {"model", "size", "instruct"}
+
 
 def _fetch_hf_llb2_parquet() -> bytes:
     """Discover the current Parquet URL via the datasets-server API and download it."""
@@ -692,6 +698,70 @@ def _fetch_hf_llb2_parquet() -> bytes:
     resp = requests.get(url, timeout=120, headers={"User-Agent": USER_AGENT})
     resp.raise_for_status()
     return resp.content
+
+
+def _fetch_bigcodebench_parquet() -> bytes:
+    """Discover the current BigCodeBench Parquet URL via datasets-server API and download it."""
+    meta = requests.get(_HF_BCB_PARQUET_API, timeout=TIMEOUT, headers={"User-Agent": USER_AGENT})
+    meta.raise_for_status()
+    files = meta.json().get("parquet_files", [])
+    if not files:
+        raise ValueError("No Parquet files listed by datasets-server for bigcode/bigcodebench-results")
+    url = files[0]["url"]
+    resp = requests.get(url, timeout=60, headers={"User-Agent": USER_AGENT})
+    resp.raise_for_status()
+    return resp.content
+
+
+def parse_bigcodebench_parquet(
+    content: bytes,
+    params_min: float,
+    params_max: float,
+    limit: int = 10,
+) -> list[BenchmarkRow]:
+    """Parse BigCodeBench results Parquet and return top-N instruct models in a param range."""
+    df = pd.read_parquet(io.BytesIO(content))
+    missing = _HF_BCB_REQUIRED_COLS - set(df.columns)
+    if missing:
+        raise ValueError(f"BigCodeBench Parquet schema changed — missing columns: {missing}")
+
+    df = df[
+        df["size"].notna()
+        & (df["size"] > params_min)
+        & (df["size"] <= params_max)
+        & df["instruct"].notna()
+    ]
+    df = df.sort_values("instruct", ascending=False).head(limit).reset_index(drop=True)
+
+    rows: list[BenchmarkRow] = []
+    for _, row in df.iterrows():
+        model_name = clean_text(row.get("model", ""))
+        if not model_name:
+            continue
+        instruct_score = as_float(row.get("instruct"))
+        if instruct_score is None:
+            continue
+        meta: dict[str, Any] = {}
+        complete_score = as_float(row.get("complete"))
+        if complete_score is not None:
+            meta["bcb_complete"] = round(complete_score, 1)
+        params = as_float(row.get("size"))
+        if params is not None:
+            meta["params_b"] = round(params, 1)
+        if row.get("moe"):
+            meta["moe"] = True
+        rows.append(
+            BenchmarkRow(
+                rank=len(rows) + 1,
+                model=model_name,
+                organization=infer_org(model_name),
+                score=round(instruct_score, 1),
+                score_unit="% instruct",
+                date=clean_text(row.get("date", "")) or None,
+                metadata=meta,
+            )
+        )
+    return rows
 
 
 def parse_hf_llm_leaderboard_parquet(
@@ -802,10 +872,17 @@ def collect_hf_local_under10b() -> BenchmarkSnapshot:
         params_min=0.0,
         params_max=10.0,
         description=(
-            "Top 10 open-weight models under 10B parameters by composite HF Open LLM Leaderboard 2 "
-            "score (IFEval + BBH + MATH Lvl 5 + GPQA + MUSR + MMLU-PRO). Runnable on a laptop GPU "
-            "or Apple Silicon. Note: rankings reflect only models submitted to the leaderboard — "
-            "very new models may not appear until the community submits them."
+            "Best general-capability open-weight models under 10 billion parameters, ranked by the "
+            "HF Open LLM Leaderboard 2 composite score. The composite averages six standardised "
+            "benchmarks: IFEval (can the model follow precise, verifiable instructions?), BBH "
+            "(multi-step reasoning across 23 challenging BIG-Bench Hard tasks), MATH Lvl 5 "
+            "(competition-level mathematics at AMC/AIME difficulty), GPQA (graduate-level science "
+            "questions written by PhD researchers), MUSR (multi-step soft reasoning over long "
+            "narratives), and MMLU-PRO (expert professional knowledge across 14 domains). These "
+            "rankings reflect general academic capability, not task-specific tuning — a high score "
+            "means the model is broadly capable. Runnable on a laptop GPU or Apple Silicon. "
+            "Rankings cover only models submitted to the leaderboard; very new releases may appear "
+            "after community or lab submission."
         ),
     )
 
@@ -817,10 +894,95 @@ def collect_hf_local_10to20b() -> BenchmarkSnapshot:
         params_min=10.0,
         params_max=20.0,
         description=(
-            "Top 10 open-weight models in the 10–20B parameter range by composite HF Open LLM "
-            "Leaderboard 2 score (IFEval + BBH + MATH Lvl 5 + GPQA + MUSR + MMLU-PRO). Runnable "
-            "on a single consumer GPU with 16–24 GB VRAM. Note: rankings reflect only models "
-            "submitted to the leaderboard — very new models may not appear until submitted."
+            "Best general-capability open-weight models in the 10–20 billion parameter range, "
+            "ranked by the HF Open LLM Leaderboard 2 composite score. The composite averages six "
+            "standardised benchmarks: IFEval (can the model follow precise, verifiable "
+            "instructions?), BBH (multi-step reasoning across 23 challenging BIG-Bench Hard tasks), "
+            "MATH Lvl 5 (competition-level mathematics at AMC/AIME difficulty), GPQA "
+            "(graduate-level science questions written by PhD researchers), MUSR (multi-step soft "
+            "reasoning over long narratives), and MMLU-PRO (expert professional knowledge across 14 "
+            "domains). These rankings reflect general academic capability, not task-specific tuning "
+            "— a high score means the model is broadly capable. Runnable on a single consumer GPU "
+            "with 16–24 GB VRAM. Rankings cover only models submitted to the leaderboard; very new "
+            "releases may appear after community or lab submission."
+        ),
+    )
+
+
+def _collect_bcb(
+    *,
+    id: str,
+    name: str,
+    params_min: float,
+    params_max: float,
+    description: str,
+) -> BenchmarkSnapshot:
+    def fetcher() -> list[BenchmarkRow]:
+        return parse_bigcodebench_parquet(
+            _fetch_bigcodebench_parquet(), params_min=params_min, params_max=params_max
+        )
+
+    return _snapshot(
+        id=id,
+        name=name,
+        category="Local inference",
+        description=description,
+        source_url="https://huggingface.co/spaces/bigcode/bigcodebench-leaderboard",
+        methodology_url="https://bigcodebench.github.io/",
+        authenticity=(
+            "BigCodeBench tasks are directly executable — each solution is verified by running it "
+            "against real library calls, not text matching. Curated by the BigCode team "
+            "(independent open-source researchers behind The Stack and StarCoder), not by model "
+            "providers. Models are submitted by the community. The task corpus is static so "
+            "contamination risk increases as newer models may have seen these tasks in training."
+        ),
+        update_strategy=(
+            "Download BigCodeBench results Parquet via datasets-server /parquet API (URL discovered "
+            "dynamically each run). Filter: parameter range, non-null instruct score. Sort by "
+            "instruct score descending, top 10."
+        ),
+        fetcher=fetcher,
+        min_rows=3,
+        score_range=(0.0, 100.0),
+    )
+
+
+def collect_bigcodebench_under10b() -> BenchmarkSnapshot:
+    return _collect_bcb(
+        id="bigcodebench_under10b",
+        name="Local coding < 10B",
+        params_min=0.0,
+        params_max=10.0,
+        description=(
+            "Best coding-capable open-weight models under 10 billion parameters, ranked by "
+            "BigCodeBench Instruct score. BigCodeBench tests 1,140 practical coding tasks that "
+            "require calling real Python libraries (NumPy, pandas, requests, PIL, and 130+ others) "
+            "— significantly harder than classic HumanEval because tasks demand multi-library "
+            "orchestration, not just pattern completion. The Instruct split used for ranking "
+            "evaluates models on natural-language coding instructions, mirroring how developers "
+            "actually prompt models. The Complete split (docstring prompts) score is shown as a "
+            "secondary note. Runnable on a laptop GPU or Apple Silicon; coding-focused scores "
+            "complement the general-capability HF LLB2 ranking."
+        ),
+    )
+
+
+def collect_bigcodebench_10to20b() -> BenchmarkSnapshot:
+    return _collect_bcb(
+        id="bigcodebench_10to20b",
+        name="Local coding 10–20B",
+        params_min=10.0,
+        params_max=20.0,
+        description=(
+            "Best coding-capable open-weight models in the 10–20 billion parameter range, ranked "
+            "by BigCodeBench Instruct score. BigCodeBench tests 1,140 practical coding tasks that "
+            "require calling real Python libraries (NumPy, pandas, requests, PIL, and 130+ others) "
+            "— significantly harder than classic HumanEval because tasks demand multi-library "
+            "orchestration, not just pattern completion. The Instruct split used for ranking "
+            "evaluates models on natural-language coding instructions, mirroring how developers "
+            "actually prompt models. The Complete split (docstring prompts) score is shown as a "
+            "secondary note. Runnable on a single consumer GPU with 16–24 GB VRAM; coding-focused "
+            "scores complement the general-capability HF LLB2 ranking."
         ),
     )
 
@@ -836,5 +998,7 @@ def collect_all() -> list[BenchmarkSnapshot]:
         collect_lmarena_text,
         collect_hf_local_under10b,
         collect_hf_local_10to20b,
+        collect_bigcodebench_under10b,
+        collect_bigcodebench_10to20b,
     ]
     return [collector() for collector in collectors]

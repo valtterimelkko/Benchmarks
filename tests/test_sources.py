@@ -13,6 +13,7 @@ from benchmark_dashboard.sources import (
     _validate_snapshot,
     parse_aa_gdpval_table,
     parse_benchlm_next_data,
+    parse_bigcodebench_parquet,
     parse_deepswe_html,
     parse_hf_llm_leaderboard_parquet,
     parse_longbench_html,
@@ -455,3 +456,111 @@ def test_parse_hf_llb2_parquet_raises_on_missing_columns():
     df.to_parquet(buf, index=False)
     with pytest.raises(ValueError, match="missing columns"):
         parse_hf_llm_leaderboard_parquet(buf.getvalue(), params_min=0.0, params_max=10.0)
+
+
+# ── BigCodeBench Parquet parser ───────────────────────────────────────────────
+
+def _make_bcb_parquet(rows: list[dict]) -> bytes:
+    df = pd.DataFrame(rows)
+    buf = io.BytesIO()
+    df.to_parquet(buf, index=False)
+    return buf.getvalue()
+
+
+def _bcb_row(**overrides) -> dict:
+    base = {
+        "model": "SomeOrg/SomeModel-7B-Instruct",
+        "link": "https://huggingface.co/SomeOrg/SomeModel-7B-Instruct",
+        "moe": False,
+        "size": 7.0,
+        "act_param": None,
+        "type": "Instruct",
+        "complete": 38.5,
+        "instruct": 36.0,
+        "date": "2024-09-01",
+        "prefill": None,
+    }
+    return {**base, **overrides}
+
+
+_BCB_SAMPLE_ROWS = [
+    _bcb_row(model="Qwen/Qwen2.5-Coder-7B-Instruct", size=7.6, instruct=40.4, complete=43.1, date="2024-09-01"),
+    _bcb_row(model="OpenCoder-8B-Instruct", size=8.0, instruct=43.2, complete=46.8, date="2024-11-01"),
+    _bcb_row(model="google/codegemma-7b-it", size=7.0, instruct=29.4, complete=36.7, date="2024-04-01"),
+    # Should be excluded: size is above 10B range
+    _bcb_row(model="Qwen/Qwen2.5-Coder-14B-Instruct", size=14.8, instruct=48.2, complete=53.0, date="2024-09-01"),
+    # Should be excluded: instruct is null (base model)
+    _bcb_row(model="deepseek-ai/deepseek-coder-6.7b-base", size=6.7, instruct=None, complete=35.0, date="2024-01-01"),
+    # 10-20B range
+    _bcb_row(model="microsoft/phi-4", size=14.7, instruct=45.5, complete=50.2, moe=False, date="2024-12-01"),
+    _bcb_row(model="Qwen/Qwen2.5-14B-Instruct", size=14.7, instruct=39.8, complete=44.3, moe=False, date="2024-09-01"),
+    # MoE model in 10-20B by active params but larger total — should appear if size fits
+    _bcb_row(model="SomeMoEOrg/MoE-10B-Instruct", size=10.5, instruct=37.0, complete=40.0, moe=True, date="2025-01-01"),
+]
+
+
+def test_parse_bigcodebench_parquet_under10b_top_order():
+    content = _make_bcb_parquet(_BCB_SAMPLE_ROWS)
+    rows = parse_bigcodebench_parquet(content, params_min=0.0, params_max=10.0)
+    # Under 10B with instruct scores: OpenCoder-8B (43.2), Qwen2.5-Coder-7B (40.4), codegemma (29.4)
+    assert len(rows) == 3
+    assert rows[0].model == "OpenCoder-8B-Instruct"
+    assert rows[0].score == 43.2
+    assert rows[0].rank == 1
+    assert rows[1].model == "Qwen/Qwen2.5-Coder-7B-Instruct"
+    assert rows[1].score == 40.4
+    assert rows[2].model == "google/codegemma-7b-it"
+
+
+def test_parse_bigcodebench_parquet_excludes_null_instruct_and_out_of_range():
+    content = _make_bcb_parquet(_BCB_SAMPLE_ROWS)
+    rows = parse_bigcodebench_parquet(content, params_min=0.0, params_max=10.0)
+    model_names = [r.model for r in rows]
+    assert "deepseek-ai/deepseek-coder-6.7b-base" not in model_names  # null instruct
+    assert "Qwen/Qwen2.5-Coder-14B-Instruct" not in model_names        # out of range
+
+
+def test_parse_bigcodebench_parquet_10to20b_range():
+    content = _make_bcb_parquet(_BCB_SAMPLE_ROWS)
+    rows = parse_bigcodebench_parquet(content, params_min=10.0, params_max=20.0)
+    model_names = [r.model for r in rows]
+    assert "microsoft/phi-4" in model_names
+    assert "Qwen/Qwen2.5-Coder-14B-Instruct" in model_names
+    # Qwen2.5-Coder-14B-Instruct (48.2) > phi-4 (45.5) — it's in 10-20B range
+    assert rows[0].model == "Qwen/Qwen2.5-Coder-14B-Instruct"
+    assert rows[0].score == 48.2
+    # under-10B models must not appear
+    assert "OpenCoder-8B-Instruct" not in model_names
+
+
+def test_parse_bigcodebench_parquet_metadata_fields():
+    content = _make_bcb_parquet(_BCB_SAMPLE_ROWS)
+    rows = parse_bigcodebench_parquet(content, params_min=0.0, params_max=10.0)
+    top = rows[0]  # OpenCoder-8B-Instruct
+    assert top.metadata["bcb_complete"] == 46.8
+    assert top.metadata["params_b"] == 8.0
+    assert top.score_unit == "% instruct"
+    assert top.metadata.get("moe") is None  # not MoE
+
+
+def test_parse_bigcodebench_parquet_moe_flag_in_metadata():
+    content = _make_bcb_parquet(_BCB_SAMPLE_ROWS)
+    rows = parse_bigcodebench_parquet(content, params_min=10.0, params_max=20.0)
+    moe_rows = [r for r in rows if r.model == "SomeMoEOrg/MoE-10B-Instruct"]
+    assert len(moe_rows) == 1
+    assert moe_rows[0].metadata.get("moe") is True
+
+
+def test_parse_bigcodebench_parquet_respects_limit():
+    content = _make_bcb_parquet(_BCB_SAMPLE_ROWS)
+    rows = parse_bigcodebench_parquet(content, params_min=0.0, params_max=10.0, limit=2)
+    assert len(rows) == 2
+    assert rows[0].model == "OpenCoder-8B-Instruct"
+
+
+def test_parse_bigcodebench_parquet_raises_on_missing_columns():
+    df = pd.DataFrame([{"model": "SomeModel", "size": 7.0}])  # missing "instruct"
+    buf = io.BytesIO()
+    df.to_parquet(buf, index=False)
+    with pytest.raises(ValueError, match="missing columns"):
+        parse_bigcodebench_parquet(buf.getvalue(), params_min=0.0, params_max=10.0)

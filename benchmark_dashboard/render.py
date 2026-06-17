@@ -24,6 +24,10 @@ def _row_metadata(metadata: dict) -> str:
             interesting.append(f"{key}: {value}")
     if "params_b" in metadata:
         interesting.append(f"{metadata['params_b']}B params")
+    if "bcb_complete" in metadata:
+        interesting.append(f"complete: {metadata['bcb_complete']}%")
+    if metadata.get("moe"):
+        interesting.append("MoE")
     return " · ".join(interesting)
 
 
