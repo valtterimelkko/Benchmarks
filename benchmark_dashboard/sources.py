@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 from typing import Any, Callable
 
 import openpyxl
+import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 
@@ -656,6 +657,168 @@ def collect_lmarena_text() -> BenchmarkSnapshot:
     )
 
 
+# ── HF Open LLM Leaderboard 2 ─────────────────────────────────────────────────
+
+_HF_LLB2_DATASET = "open-llm-leaderboard%2Fcontents"
+_HF_LLB2_PARQUET_API = f"https://datasets-server.huggingface.co/parquet?dataset={_HF_LLB2_DATASET}"
+
+# Columns we expect; validated on load so schema drift causes a clear failure.
+_HF_LLB2_REQUIRED_COLS = {
+    "#Params (B)",
+    "Average ⬆️",
+    "fullname",
+    "Flagged",
+    "Merged",
+    "Available on the hub",
+    "Weight type",
+    "Type",
+}
+_HF_LLB2_BENCH_COLS = ["IFEval", "BBH", "MATH Lvl 5", "GPQA", "MUSR", "MMLU-PRO"]
+
+
+def _fetch_hf_llb2_parquet() -> bytes:
+    """Discover the current Parquet URL via the datasets-server API and download it."""
+    meta = requests.get(_HF_LLB2_PARQUET_API, timeout=TIMEOUT, headers={"User-Agent": USER_AGENT})
+    meta.raise_for_status()
+    files = meta.json().get("parquet_files", [])
+    if not files:
+        raise ValueError("No Parquet files listed by datasets-server for open-llm-leaderboard/contents")
+    url = files[0]["url"]
+    resp = requests.get(url, timeout=120, headers={"User-Agent": USER_AGENT})
+    resp.raise_for_status()
+    return resp.content
+
+
+def parse_hf_llm_leaderboard_parquet(
+    content: bytes,
+    params_min: float,
+    params_max: float,
+    limit: int = 10,
+) -> list[BenchmarkRow]:
+    """Parse HF Open LLM Leaderboard 2 Parquet bytes and return top-N models in a param range."""
+    df = pd.read_parquet(io.BytesIO(content))
+    missing = _HF_LLB2_REQUIRED_COLS - set(df.columns)
+    if missing:
+        raise ValueError(f"HF LLB2 Parquet schema changed — missing columns: {missing}")
+
+    # Exclude merge models: both the Merged flag AND the Type label (inconsistently applied).
+    is_merge_type = df["Type"].str.contains("merge", case=False, na=False)
+    # Exclude quantized repacks — bnb-4bit/bnb-8bit/gguf variants report inflated param counts.
+    _QUANT_PATTERNS = ("bnb-4bit", "bnb-8bit", "-gguf", ".gguf", "-4bit", "-8bit")
+    is_quantized = df["fullname"].str.lower().str.contains(
+        "|".join(_QUANT_PATTERNS), regex=True, na=False
+    )
+    df = df[
+        (df["#Params (B)"] > params_min)
+        & (df["#Params (B)"] <= params_max)
+        & (df["Flagged"] == False)  # noqa: E712
+        & (df["Merged"] == False)  # noqa: E712
+        & (~is_merge_type)
+        & (~is_quantized)
+        & (df["Available on the hub"] == True)  # noqa: E712
+        & (df["Weight type"] == "Original")
+    ]
+    df = df.sort_values("Average ⬆️", ascending=False).head(limit).reset_index(drop=True)
+
+    rows: list[BenchmarkRow] = []
+    for idx, row in df.iterrows():
+        fullname = clean_text(row.get("fullname", ""))
+        org = fullname.split("/")[0] if "/" in fullname else None
+        avg = as_float(row.get("Average ⬆️"))
+        if avg is None:
+            continue
+        bench_meta: dict[str, Any] = {}
+        for col in _HF_LLB2_BENCH_COLS:
+            val = as_float(row.get(col))
+            if val is not None:
+                bench_meta[col] = round(val, 1)
+        bench_meta["params_b"] = round(float(row["#Params (B)"]), 1)
+        bench_meta["type"] = clean_text(row.get("Type", ""))
+        upload_date = clean_text(row.get("Upload To Hub Date", "")) or None
+        rows.append(
+            BenchmarkRow(
+                rank=len(rows) + 1,
+                model=fullname,
+                organization=normalise_org(org) or infer_org(fullname),
+                score=round(avg, 2),
+                score_unit="avg %",
+                date=upload_date,
+                metadata=bench_meta,
+            )
+        )
+    return rows
+
+
+def _collect_hf_local(
+    *,
+    id: str,
+    name: str,
+    params_min: float,
+    params_max: float,
+    description: str,
+) -> BenchmarkSnapshot:
+    def fetcher() -> list[BenchmarkRow]:
+        return parse_hf_llm_leaderboard_parquet(
+            _fetch_hf_llb2_parquet(), params_min=params_min, params_max=params_max
+        )
+
+    return _snapshot(
+        id=id,
+        name=name,
+        category="Local inference",
+        description=description,
+        source_url="https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard",
+        methodology_url="https://huggingface.co/docs/leaderboards/en/open_llm_leaderboard/about",
+        authenticity=(
+            "HF Open LLM Leaderboard 2 uses six standardised benchmarks (IFEval, BBH, MATH Lvl 5, "
+            "GPQA, MUSR, MMLU-PRO) with a public evaluation harness. Flagged, merged, adapter, and "
+            "quantized-repack models are excluded. The leaderboard is gameable if labs train "
+            "specifically on these test sets, so treat rankings as a discovery signal for "
+            "well-rounded models, not absolute truth."
+        ),
+        update_strategy=(
+            "Download the official HF LLB2 Parquet file via the datasets-server /parquet API (URL "
+            "discovered dynamically each run so file renames are handled automatically). Filter: "
+            "param range, Flagged=False, Merged=False, Type not containing 'merge', "
+            "Weight type=Original, no quantized-repack suffixes (bnb-4bit, gguf, etc). "
+            "Sort by composite Average score, top 10."
+        ),
+        fetcher=fetcher,
+        min_rows=5,
+        score_range=(0.0, 100.0),
+    )
+
+
+def collect_hf_local_under10b() -> BenchmarkSnapshot:
+    return _collect_hf_local(
+        id="hf_local_under10b",
+        name="Local models < 10B",
+        params_min=0.0,
+        params_max=10.0,
+        description=(
+            "Top 10 open-weight models under 10B parameters by composite HF Open LLM Leaderboard 2 "
+            "score (IFEval + BBH + MATH Lvl 5 + GPQA + MUSR + MMLU-PRO). Runnable on a laptop GPU "
+            "or Apple Silicon. Note: rankings reflect only models submitted to the leaderboard — "
+            "very new models may not appear until the community submits them."
+        ),
+    )
+
+
+def collect_hf_local_10to20b() -> BenchmarkSnapshot:
+    return _collect_hf_local(
+        id="hf_local_10to20b",
+        name="Local models 10–20B",
+        params_min=10.0,
+        params_max=20.0,
+        description=(
+            "Top 10 open-weight models in the 10–20B parameter range by composite HF Open LLM "
+            "Leaderboard 2 score (IFEval + BBH + MATH Lvl 5 + GPQA + MUSR + MMLU-PRO). Runnable "
+            "on a single consumer GPU with 16–24 GB VRAM. Note: rankings reflect only models "
+            "submitted to the leaderboard — very new models may not appear until submitted."
+        ),
+    )
+
+
 def collect_all() -> list[BenchmarkSnapshot]:
     collectors = [
         collect_deepswe,
@@ -665,5 +828,7 @@ def collect_all() -> list[BenchmarkSnapshot]:
         collect_osworld,
         collect_longbench_v2,
         collect_lmarena_text,
+        collect_hf_local_under10b,
+        collect_hf_local_10to20b,
     ]
     return [collector() for collector in collectors]

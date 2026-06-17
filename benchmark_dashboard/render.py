@@ -17,6 +17,13 @@ def _row_metadata(metadata: dict) -> str:
         value = metadata.get(key)
         if value not in (None, "", []):
             interesting.append(f"{key.replace('_', ' ')}: {value}")
+    # HF LLB2 per-benchmark scores
+    for key in ["IFEval", "BBH", "MATH Lvl 5", "GPQA", "MUSR", "MMLU-PRO"]:
+        value = metadata.get(key)
+        if value is not None:
+            interesting.append(f"{key}: {value}")
+    if "params_b" in metadata:
+        interesting.append(f"{metadata['params_b']}B params")
     return " · ".join(interesting)
 
 

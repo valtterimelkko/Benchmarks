@@ -1,4 +1,6 @@
 requests
 beautifulsoup4
 openpyxl
+pyarrow
+pandas
 pytest

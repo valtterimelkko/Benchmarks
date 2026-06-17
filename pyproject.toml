@@ -3,7 +3,7 @@ name = "benchmarks-dashboard"
 version = "0.1.0"
 description = "Private weekly LLM/agent benchmark dashboard"
 requires-python = ">=3.12"
-dependencies = ["requests", "beautifulsoup4", "openpyxl"]
+dependencies = ["requests", "beautifulsoup4", "openpyxl", "pyarrow", "pandas"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

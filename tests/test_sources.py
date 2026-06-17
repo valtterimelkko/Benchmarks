@@ -3,6 +3,7 @@ import json
 from unittest.mock import MagicMock, patch
 
 import openpyxl
+import pandas as pd
 import pytest
 
 from benchmark_dashboard.models import BenchmarkRow
@@ -13,6 +14,7 @@ from benchmark_dashboard.sources import (
     parse_aa_gdpval_table,
     parse_benchlm_next_data,
     parse_deepswe_html,
+    parse_hf_llm_leaderboard_parquet,
     parse_longbench_html,
     parse_lmarena_rows,
     parse_osworld_workbook,
@@ -327,3 +329,123 @@ def test_validate_snapshot_passes_for_valid_data():
 def test_validate_snapshot_no_range_check_when_none():
     warning = _validate_snapshot(_make_rows(10, score=9999.0), min_rows=5, score_range=None)
     assert warning is None
+
+
+# ── HF Open LLM Leaderboard 2 Parquet parser ─────────────────────────────────
+
+def _make_llb2_parquet(rows: list[dict]) -> bytes:
+    """Build a minimal in-memory Parquet file matching the HF LLB2 schema."""
+    df = pd.DataFrame(rows)
+    buf = io.BytesIO()
+    df.to_parquet(buf, index=False)
+    return buf.getvalue()
+
+
+def _llb2_row(**overrides) -> dict:
+    """Build a minimal valid HF LLB2 row with sensible defaults."""
+    base = {
+        "fullname": "org/Model-7B",
+        "#Params (B)": 7.0,
+        "Average ⬆️": 40.0,
+        "IFEval": 60.0, "BBH": 38.0, "MATH Lvl 5": 20.0,
+        "GPQA": 12.0, "MUSR": 35.0, "MMLU-PRO": 38.0,
+        "Flagged": False, "Merged": False,
+        "Available on the hub": True,
+        "Weight type": "Original",
+        "Type": "💬 chat models (RLHF, DPO, IFT, ...)",
+        "Upload To Hub Date": "2025-01-01",
+    }
+    return {**base, **overrides}
+
+
+_LLB2_SAMPLE_ROWS = [
+    _llb2_row(fullname="Qwen/Qwen3-8B", **{"#Params (B)": 8.2, "Average ⬆️": 52.3,
+        "IFEval": 78.1, "BBH": 48.2, "MATH Lvl 5": 31.0, "GPQA": 18.5, "MUSR": 42.1, "MMLU-PRO": 52.0,
+        "Upload To Hub Date": "2025-06-01"}),
+    _llb2_row(fullname="microsoft/Phi-4-mini-instruct", **{"#Params (B)": 3.8, "Average ⬆️": 49.7,
+        "IFEval": 74.0, "BBH": 45.1, "MATH Lvl 5": 28.9, "GPQA": 16.2, "MUSR": 40.0, "MMLU-PRO": 49.5,
+        "Upload To Hub Date": "2025-04-01"}),
+    # Should be excluded: Flagged=True
+    _llb2_row(fullname="flagged/BadModel-7B", **{"#Params (B)": 7.0, "Average ⬆️": 99.0,
+        "IFEval": 99.0, "BBH": 99.0, "MATH Lvl 5": 99.0, "GPQA": 99.0, "MUSR": 99.0, "MMLU-PRO": 99.0,
+        "Flagged": True}),
+    # Should be excluded: Merged=True
+    _llb2_row(fullname="merged/MegaMerge-8B", **{"#Params (B)": 8.0, "Average ⬆️": 95.0,
+        "IFEval": 95.0, "BBH": 95.0, "MATH Lvl 5": 95.0, "GPQA": 95.0, "MUSR": 95.0, "MMLU-PRO": 95.0,
+        "Merged": True}),
+    # Should be excluded: Type contains 'merge' even though Merged=False (leaderboard inconsistency)
+    _llb2_row(fullname="FINGU-AI/Chocolatine-Fusion-8B", **{"#Params (B)": 8.4, "Average ⬆️": 90.0,
+        "IFEval": 90.0, "BBH": 90.0, "MATH Lvl 5": 90.0, "GPQA": 90.0, "MUSR": 90.0, "MMLU-PRO": 90.0,
+        "Type": "🤝 base merges and moerges", "Merged": False}),
+    # Should be excluded: quantized repack (bnb-4bit)
+    _llb2_row(fullname="unsloth/phi-4-bnb-4bit", **{"#Params (B)": 8.1, "Average ⬆️": 88.0,
+        "IFEval": 88.0, "BBH": 88.0, "MATH Lvl 5": 88.0, "GPQA": 88.0, "MUSR": 88.0, "MMLU-PRO": 88.0}),
+    # Should be excluded: Adapter weight type
+    _llb2_row(fullname="org/Adapter-7B", **{"#Params (B)": 7.0, "Average ⬆️": 85.0,
+        "IFEval": 85.0, "BBH": 85.0, "MATH Lvl 5": 85.0, "GPQA": 85.0, "MUSR": 85.0, "MMLU-PRO": 85.0,
+        "Weight type": "Adapter"}),
+    _llb2_row(fullname="meta-llama/Llama-3.1-8B-Instruct", **{"#Params (B)": 8.0, "Average ⬆️": 44.1,
+        "IFEval": 68.0, "BBH": 40.2, "MATH Lvl 5": 22.0, "GPQA": 12.0, "MUSR": 36.5, "MMLU-PRO": 40.0,
+        "Upload To Hub Date": "2024-07-01"}),
+    _llb2_row(fullname="google/gemma-4-12b", **{"#Params (B)": 12.0, "Average ⬆️": 58.4,
+        "IFEval": 82.0, "BBH": 54.0, "MATH Lvl 5": 38.0, "GPQA": 22.0, "MUSR": 48.0, "MMLU-PRO": 60.0,
+        "Upload To Hub Date": "2025-07-01"}),
+]
+
+
+def test_parse_hf_llb2_parquet_under10b_top_order():
+    content = _make_llb2_parquet(_LLB2_SAMPLE_ROWS)
+    rows = parse_hf_llm_leaderboard_parquet(content, params_min=0.0, params_max=10.0)
+    # Clean models under 10B: Qwen3-8B (52.3), Phi-4-mini (49.7), Llama-3.1-8B (44.1)
+    # All others excluded by Flagged/Merged/merge-type/bnb-4bit/Adapter filters
+    assert len(rows) == 3
+    assert rows[0].model == "Qwen/Qwen3-8B"
+    assert rows[0].score == 52.3
+    assert rows[0].rank == 1
+    assert rows[1].model == "microsoft/Phi-4-mini-instruct"
+    assert rows[2].model == "meta-llama/Llama-3.1-8B-Instruct"
+
+
+def test_parse_hf_llb2_parquet_excludes_flagged_merged_mergetype_quantized_adapter():
+    content = _make_llb2_parquet(_LLB2_SAMPLE_ROWS)
+    rows = parse_hf_llm_leaderboard_parquet(content, params_min=0.0, params_max=10.0)
+    model_names = [r.model for r in rows]
+    assert "flagged/BadModel-7B" not in model_names          # Flagged=True
+    assert "merged/MegaMerge-8B" not in model_names          # Merged=True
+    assert "FINGU-AI/Chocolatine-Fusion-8B" not in model_names  # Type contains 'merge'
+    assert "unsloth/phi-4-bnb-4bit" not in model_names       # quantized repack
+    assert "org/Adapter-7B" not in model_names               # Weight type=Adapter
+
+
+def test_parse_hf_llb2_parquet_10to20b_range():
+    content = _make_llb2_parquet(_LLB2_SAMPLE_ROWS)
+    rows = parse_hf_llm_leaderboard_parquet(content, params_min=10.0, params_max=20.0)
+    assert len(rows) == 1
+    assert rows[0].model == "google/gemma-4-12b"
+    assert rows[0].score == 58.4
+
+
+def test_parse_hf_llb2_parquet_metadata_contains_bench_scores():
+    content = _make_llb2_parquet(_LLB2_SAMPLE_ROWS)
+    rows = parse_hf_llm_leaderboard_parquet(content, params_min=0.0, params_max=10.0)
+    top = rows[0]
+    assert top.metadata["IFEval"] == 78.1
+    assert top.metadata["GPQA"] == 18.5
+    assert top.metadata["params_b"] == 8.2
+    assert top.score_unit == "avg %"
+
+
+def test_parse_hf_llb2_parquet_respects_limit():
+    content = _make_llb2_parquet(_LLB2_SAMPLE_ROWS)
+    rows = parse_hf_llm_leaderboard_parquet(content, params_min=0.0, params_max=10.0, limit=2)
+    assert len(rows) == 2
+    assert rows[0].model == "Qwen/Qwen3-8B"
+
+
+def test_parse_hf_llb2_parquet_raises_on_missing_columns():
+    # A Parquet that has only a subset of required columns should raise clearly
+    df = pd.DataFrame([{"fullname": "x/Model", "#Params (B)": 7.0, "Average ⬆️": 50.0}])
+    buf = io.BytesIO()
+    df.to_parquet(buf, index=False)
+    with pytest.raises(ValueError, match="missing columns"):
+        parse_hf_llm_leaderboard_parquet(buf.getvalue(), params_min=0.0, params_max=10.0)
