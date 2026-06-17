@@ -358,6 +358,48 @@ def parse_longbench_html(html: str) -> list[BenchmarkRow]:
     return rows
 
 
+def parse_aa_gdpval_table(html: str) -> list[BenchmarkRow]:
+    """Parse the Artificial Analysis GDPval-AA Elo table.
+
+    Expected columns: (blank rank) | Creator | Name | Elo | CI | Release Date
+    Negative Elo values use U+2212 MINUS SIGN (e.g. '−16'), not a plain hyphen.
+    """
+    soup = BeautifulSoup(html, "html.parser")
+    table = soup.find("table")
+    if table is None:
+        return []
+    rows: list[BenchmarkRow] = []
+    for tr in table.find_all("tr")[1:]:  # skip header row
+        cells = [clean_text(td.get_text(" ", strip=True)) for td in tr.find_all("td")]
+        if len(cells) < 4:
+            continue
+        rank_str = cells[0]
+        if not rank_str.isdigit():
+            continue
+        creator, name = cells[1], cells[2]
+        score = as_float(cells[3].replace("−", "-"))  # normalise typographic minus
+        if score is None:
+            continue
+        ci_str = cells[4] if len(cells) > 4 else ""
+        date_str = cells[5] if len(cells) > 5 else None
+        ci_parts = re.findall(r"[+-]?\d+", ci_str)
+        rows.append(
+            BenchmarkRow(
+                rank=int(rank_str),
+                model=name,
+                organization=normalise_org(creator) or infer_org(name),
+                score=round(score, 1),
+                score_unit="Elo rating",
+                date=date_str or None,
+                metadata={
+                    "ci_lower": int(ci_parts[0]) if len(ci_parts) >= 1 else None,
+                    "ci_upper": int(ci_parts[1]) if len(ci_parts) >= 2 else None,
+                },
+            )
+        )
+    return rows
+
+
 def parse_lmarena_rows(payload: dict[str, Any]) -> list[BenchmarkRow]:
     rows: list[BenchmarkRow] = []
     for wrapper in payload.get("rows", []):
@@ -485,24 +527,29 @@ def collect_terminal_bench() -> BenchmarkSnapshot:
 
 def collect_gdpval_aa() -> BenchmarkSnapshot:
     def fetcher() -> list[BenchmarkRow]:
-        rows = parse_benchlm_next_data(
+        try:
+            rows = parse_aa_gdpval_table(fetch_text("https://artificialanalysis.ai/evaluations/gdpval-aa"))
+            if rows:
+                return rows
+        except Exception:  # noqa: BLE001
+            pass
+        return parse_benchlm_next_data(
             fetch_text("https://benchlm.ai/benchmarks/gdpvalAa"),
             score_unit="Elo rating",
         )
-        return rows
 
     return _snapshot(
         id="gdpval_aa",
         name="GDPval-AA",
         category="Agentic professional work",
         description="1,320 real professional deliverables across 44 occupations (legal briefs, engineering plans, nursing care plans, customer support). Head-to-head Elo scored by Artificial Analysis.",
-        source_url="https://benchlm.ai/benchmarks/gdpvalAa",
+        source_url="https://artificialanalysis.ai/evaluations/gdpval-aa",
         methodology_url="https://openai.com/index/gdpval/",
         authenticity="Tasks are actual professional deliverables, not synthetic QA, making direct optimisation harder. Elo head-to-head scoring by independent evaluator Artificial Analysis avoids provider self-reporting. Tasks created by OpenAI in collaboration with industry professionals.",
-        update_strategy="Parse BenchLM's benchmark-specific Next.js data for GDPval-AA Elo leaderboard rows.",
+        update_strategy="Parse Artificial Analysis HTML table directly (they run the evaluation); fall back to BenchLM mirror if the official page structure changes.",
         fetcher=fetcher,
         min_rows=10,
-        score_range=(800.0, 2200.0),
+        score_range=(500.0, 2500.0),
     )
 
 
@@ -514,7 +561,7 @@ def collect_browsecomp() -> BenchmarkSnapshot:
         description="Hard web-browsing questions requiring persistent search, source inspection, and concise verified answers.",
         source_url="https://benchlm.ai/benchmarks/browseComp",
         methodology_url="https://openai.com/index/browsecomp/",
-        authenticity="Closer to real research than static QA, but public questions and mirror-based score collection mean contamination and provenance should be labelled clearly.",
+        authenticity="Closer to real research than static QA, but the fixed 1,266-question corpus is now public and the benchmark is approaching saturation for frontier models (~88–90% cluster). Use as a supporting signal rather than a primary differentiator.",
         update_strategy="Parse BenchLM's benchmark-specific Next.js data for BrowseComp public leaderboard rows; link back to OpenAI's original benchmark methodology.",
         fetcher=lambda: parse_benchlm_next_data(fetch_text("https://benchlm.ai/benchmarks/browseComp")),
         min_rows=5,
@@ -523,6 +570,18 @@ def collect_browsecomp() -> BenchmarkSnapshot:
 
 
 def collect_osworld() -> BenchmarkSnapshot:
+    def fetcher() -> list[BenchmarkRow]:
+        try:
+            rows = parse_osworld_workbook(fetch_bytes("https://os-world.github.io/static/data/osworld_verified_results.xlsx"))
+            if rows:
+                return rows
+        except Exception:  # noqa: BLE001
+            pass
+        return parse_benchlm_next_data(
+            fetch_text("https://benchlm.ai/benchmarks/osWorldVerified"),
+            score_unit="% success rate",
+        )
+
     return _snapshot(
         id="osworld_verified",
         name="OSWorld-Verified",
@@ -531,8 +590,8 @@ def collect_osworld() -> BenchmarkSnapshot:
         source_url="https://os-world.github.io/",
         methodology_url="https://github.com/xlang-ai/OSWorld",
         authenticity="Execution in real desktop environments makes simple memorisation less useful; environment drift and agent-scaffold differences still matter.",
-        update_strategy="Download and parse the official OSWorld verified XLSX file from the project site.",
-        fetcher=lambda: parse_osworld_workbook(fetch_bytes("https://os-world.github.io/static/data/osworld_verified_results.xlsx")),
+        update_strategy="Download official OSWorld-Verified XLSX from os-world.github.io; fall back to BenchLM mirror if the file path changes.",
+        fetcher=fetcher,
         min_rows=5,
         score_range=(0.0, 100.0),
     )
@@ -560,23 +619,37 @@ def collect_longbench_v2() -> BenchmarkSnapshot:
     )
 
 
-def collect_lmarena_text() -> BenchmarkSnapshot:
-    url = "https://datasets-server.huggingface.co/rows?dataset=lmarena-ai%2Fleaderboard-dataset&config=text_style_control&split=latest&offset=0&length=50"
+_LMARENA_HF_BASE = "https://datasets-server.huggingface.co/rows?dataset=lmarena-ai%2Fleaderboard-dataset&split=latest&offset=0&length=50"
+# HF dataset configs in preference order; the first one that returns rows wins.
+_LMARENA_CONFIGS = ("text", "text_style_control")
 
+
+def collect_lmarena_text() -> BenchmarkSnapshot:
     def fetcher() -> list[BenchmarkRow]:
-        response = requests.get(url, timeout=TIMEOUT, headers={"User-Agent": USER_AGENT})
-        response.raise_for_status()
-        return parse_lmarena_rows(response.json())
+        last_exc: Exception | None = None
+        for config in _LMARENA_CONFIGS:
+            try:
+                url = f"{_LMARENA_HF_BASE}&config={config}"
+                response = requests.get(url, timeout=TIMEOUT, headers={"User-Agent": USER_AGENT})
+                response.raise_for_status()
+                rows = parse_lmarena_rows(response.json())
+                if rows:
+                    return rows
+            except Exception as exc:  # noqa: BLE001
+                last_exc = exc
+        if last_exc is not None:
+            raise last_exc
+        return []
 
     return _snapshot(
         id="lmarena_text_style",
-        name="LMArena Text Style Control",
+        name="LMArena Text",
         category="Writing preference",
         description="Human-preference arena ratings for text models, used here as a pragmatic proxy for prose and style quality.",
         source_url="https://huggingface.co/datasets/lmarena-ai/leaderboard-dataset",
         methodology_url="https://arena.ai/",
         authenticity="Live human preference battles are harder to optimise directly than static tests, but they reflect popularity/style preferences rather than academic correctness.",
-        update_strategy="Fetch the public Hugging Face dataset-server rows for the LMArena text_style_control latest split.",
+        update_strategy="Fetch the public Hugging Face dataset-server rows for the LMArena text latest split (falls back to text_style_control if the primary config is unavailable).",
         fetcher=fetcher,
         min_rows=10,
         score_range=(900.0, 2200.0),

@@ -10,6 +10,7 @@ from benchmark_dashboard.sources import (
     _fetch_with_retry,
     _find_col,
     _validate_snapshot,
+    parse_aa_gdpval_table,
     parse_benchlm_next_data,
     parse_deepswe_html,
     parse_longbench_html,
@@ -131,6 +132,65 @@ def test_parse_lmarena_rows_from_hf_dataset_response():
     assert rows[0].organization == "Anthropic"
     assert rows[0].score == 1499.3
     assert rows[0].metadata["votes"] == 34186
+
+
+# ── Artificial Analysis GDPval-AA table ──────────────────────────────────────
+
+_AA_TABLE_HTML = """
+<table>
+  <thead><tr><th></th><th>Creator</th><th>Name</th><th>Elo</th><th>CI</th><th>Release Date</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>Anthropic</td><td>Claude Fable 5 (Max Effort)</td><td>1794</td><td>-26 / +26</td><td>Jun 2026</td></tr>
+    <tr><td>2</td><td>OpenAI</td><td>GPT-5.5 Pro</td><td>1320</td><td>-18 / +18</td><td>May 2026</td></tr>
+    <tr><td>3</td><td>Meta</td><td>Llama 4 Maverick</td><td>−16</td><td>-38 / +38</td><td>Apr 2025</td></tr>
+  </tbody>
+</table>
+"""
+
+
+def test_parse_aa_gdpval_table_basic():
+    rows = parse_aa_gdpval_table(_AA_TABLE_HTML)
+    assert len(rows) == 3
+    assert rows[0].rank == 1
+    assert rows[0].model == "Claude Fable 5 (Max Effort)"
+    assert rows[0].organization == "Anthropic"
+    assert rows[0].score == 1794.0
+    assert rows[0].score_unit == "Elo rating"
+    assert rows[0].date == "Jun 2026"
+    assert rows[0].metadata["ci_lower"] == -26
+    assert rows[0].metadata["ci_upper"] == 26
+    assert rows[1].organization == "OpenAI"
+    assert rows[1].score == 1320.0
+
+
+def test_parse_aa_gdpval_table_negative_elo_via_typographic_minus():
+    rows = parse_aa_gdpval_table(_AA_TABLE_HTML)
+    bottom = rows[2]
+    assert bottom.rank == 3
+    assert bottom.model == "Llama 4 Maverick"
+    assert bottom.score == -16.0
+    assert bottom.organization == "Meta"
+
+
+def test_parse_aa_gdpval_table_missing_ci_and_date():
+    html = """
+    <table>
+      <thead><tr><th></th><th>Creator</th><th>Name</th><th>Elo</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>xAI</td><td>Grok 4</td><td>1550</td></tr>
+      </tbody>
+    </table>
+    """
+    rows = parse_aa_gdpval_table(html)
+    assert len(rows) == 1
+    assert rows[0].score == 1550.0
+    assert rows[0].metadata["ci_lower"] is None
+    assert rows[0].metadata["ci_upper"] is None
+    assert rows[0].date is None
+
+
+def test_parse_aa_gdpval_table_returns_empty_for_no_table():
+    assert parse_aa_gdpval_table("<html><body>no table here</body></html>") == []
 
 
 # ── Retry logic ──────────────────────────────────────────────────────────────
