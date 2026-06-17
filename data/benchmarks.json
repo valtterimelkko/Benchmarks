@@ -5,7 +5,7 @@
       "category": "Coding agents",
       "description": "Long-horizon software engineering tasks written from scratch across active repositories.",
       "error": null,
-      "fetched_at": "2026-06-17T09:37:39Z",
+      "fetched_at": "2026-06-17T10:24:07Z",
       "id": "deep_swe",
       "methodology_url": "https://deepswe.datacurve.ai/blog",
       "name": "DeepSWE",
@@ -441,7 +441,7 @@
       "category": "Agentic professional work",
       "description": "1,320 real professional deliverables across 44 occupations (legal briefs, engineering plans, nursing care plans, customer support). Head-to-head Elo scored by Artificial Analysis.",
       "error": null,
-      "fetched_at": "2026-06-17T09:37:39Z",
+      "fetched_at": "2026-06-17T10:24:08Z",
       "id": "gdpval_aa",
       "methodology_url": "https://openai.com/index/gdpval/",
       "name": "GDPval-AA",
@@ -817,7 +817,7 @@
       "category": "Terminal/tool use",
       "description": "Agent performance on real terminal tasks: shell commands, debugging, coding, sysadmin, and multi-step CLI workflows.",
       "error": null,
-      "fetched_at": "2026-06-17T09:37:39Z",
+      "fetched_at": "2026-06-17T10:24:08Z",
       "id": "terminal_bench",
       "methodology_url": "https://www.tbench.ai/",
       "name": "Terminal-Bench",
@@ -976,7 +976,7 @@
       "category": "Browser/web research",
       "description": "Hard web-browsing questions requiring persistent search, source inspection, and concise verified answers.",
       "error": null,
-      "fetched_at": "2026-06-17T09:37:41Z",
+      "fetched_at": "2026-06-17T10:24:09Z",
       "id": "browsecomp",
       "methodology_url": "https://openai.com/index/browsecomp/",
       "name": "BrowseComp",
@@ -1356,7 +1356,7 @@
       "category": "Computer use",
       "description": "Open-ended GUI/computer-use tasks in real desktop environments across apps and workflows.",
       "error": null,
-      "fetched_at": "2026-06-17T09:37:41Z",
+      "fetched_at": "2026-06-17T10:24:09Z",
       "id": "osworld_verified",
       "methodology_url": "https://github.com/xlang-ai/OSWorld",
       "name": "OSWorld-Verified",
@@ -1762,7 +1762,7 @@
       "category": "Long-context reasoning",
       "description": "Long-context reasoning and retrieval benchmark testing whether models can use extended context windows across diverse task types. Sourced directly from the official leaderboard.",
       "error": null,
-      "fetched_at": "2026-06-17T09:37:42Z",
+      "fetched_at": "2026-06-17T10:24:10Z",
       "id": "longbench_v2",
       "methodology_url": "https://arxiv.org/abs/2412.15204",
       "name": "LongBench v2",
@@ -2090,7 +2090,7 @@
       "category": "Writing preference",
       "description": "Human-preference arena ratings for text models, used here as a pragmatic proxy for prose and style quality.",
       "error": null,
-      "fetched_at": "2026-06-17T09:37:42Z",
+      "fetched_at": "2026-06-17T10:24:10Z",
       "id": "lmarena_text_style",
       "methodology_url": "https://arena.ai/",
       "name": "LMArena Text",
@@ -2550,9 +2550,401 @@
       "status": "ok",
       "update_strategy": "Fetch the public Hugging Face dataset-server rows for the LMArena text latest split (falls back to text_style_control if the primary config is unavailable).",
       "warning": null
+    },
+    {
+      "authenticity": "HF Open LLM Leaderboard 2 uses six standardised benchmarks (IFEval, BBH, MATH Lvl 5, GPQA, MUSR, MMLU-PRO) with a public evaluation harness. Flagged and merged models are excluded. The leaderboard is gameable if labs train specifically on these test sets, so treat rankings as a discovery signal for well-rounded models, not absolute truth.",
+      "category": "Local inference",
+      "description": "Top 10 open-weight models under 10B parameters by composite HF Open LLM Leaderboard 2 score. Runnable on a laptop GPU or Apple Silicon. Excludes flagged and merged models.",
+      "error": null,
+      "fetched_at": "2026-06-17T10:24:11Z",
+      "id": "hf_local_under10b",
+      "methodology_url": "https://huggingface.co/docs/leaderboards/en/open_llm_leaderboard/about",
+      "name": "Local models < 10B",
+      "rows": [
+        {
+          "date": "2025-02-02",
+          "metadata": {
+            "BBH": 48.6,
+            "GPQA": 16.2,
+            "IFEval": 69.5,
+            "MATH Lvl 5": 38.5,
+            "MMLU-PRO": 47.4,
+            "MUSR": 22.0,
+            "params_b": 8.4,
+            "type": "🤝 base merges and moerges"
+          },
+          "model": "FINGU-AI/Chocolatine-Fusion-14B",
+          "organization": "FINGU-AI",
+          "rank": 1,
+          "score": 40.36,
+          "score_unit": "avg %"
+        },
+        {
+          "date": "2025-01-08",
+          "metadata": {
+            "BBH": 53.8,
+            "GPQA": 11.5,
+            "IFEval": 67.9,
+            "MATH Lvl 5": 45.6,
+            "MMLU-PRO": 47.6,
+            "MUSR": 8.8,
+            "params_b": 8.5,
+            "type": "💬 chat models (RLHF, DPO, IFT, ...)"
+          },
+          "model": "unsloth/phi-4-unsloth-bnb-4bit",
+          "organization": "unsloth",
+          "rank": 2,
+          "score": 39.22,
+          "score_unit": "avg %"
+        },
+        {
+          "date": "2025-01-08",
+          "metadata": {
+            "BBH": 53.5,
+            "GPQA": 11.7,
+            "IFEval": 67.3,
+            "MATH Lvl 5": 46.1,
+            "MMLU-PRO": 47.3,
+            "MUSR": 8.4,
+            "params_b": 8.1,
+            "type": "💬 chat models (RLHF, DPO, IFT, ...)"
+          },
+          "model": "unsloth/phi-4-bnb-4bit",
+          "organization": "unsloth",
+          "rank": 3,
+          "score": 39.06,
+          "score_unit": "avg %"
+        },
+        {
+          "date": "2024-10-11",
+          "metadata": {
+            "BBH": 36.1,
+            "GPQA": 7.8,
+            "IFEval": 74.0,
+            "MATH Lvl 5": 50.5,
+            "MMLU-PRO": 37.9,
+            "MUSR": 12.2,
+            "params_b": 7.6,
+            "type": "💬 chat models (RLHF, DPO, IFT, ...)"
+          },
+          "model": "Tsunami-th/Tsunami-0.5-7B-Instruct",
+          "organization": "Tsunami-th",
+          "rank": 4,
+          "score": 36.43,
+          "score_unit": "avg %"
+        },
+        {
+          "date": "2024-11-29",
+          "metadata": {
+            "BBH": 37.9,
+            "GPQA": 8.1,
+            "IFEval": 76.1,
+            "MATH Lvl 5": 40.9,
+            "MMLU-PRO": 34.3,
+            "MUSR": 21.2,
+            "params_b": 7.5,
+            "type": "💬 chat models (RLHF, DPO, IFT, ...)"
+          },
+          "model": "tiiuae/Falcon3-7B-Instruct",
+          "organization": "tiiuae",
+          "rank": 5,
+          "score": 36.4,
+          "score_unit": "avg %"
+        },
+        {
+          "date": "2024-10-30",
+          "metadata": {
+            "BBH": 34.7,
+            "GPQA": 5.4,
+            "IFEval": 77.0,
+            "MATH Lvl 5": 47.1,
+            "MMLU-PRO": 36.2,
+            "MUSR": 16.8,
+            "params_b": 7.6,
+            "type": "🤝 base merges and moerges"
+          },
+          "model": "jeffmeloy/Qwen2.5-7B-nerd-uncensored-v1.0",
+          "organization": "jeffmeloy",
+          "rank": 6,
+          "score": 36.19,
+          "score_unit": "avg %"
+        },
+        {
+          "date": "2024-10-15",
+          "metadata": {
+            "BBH": 37.4,
+            "GPQA": 8.6,
+            "IFEval": 71.0,
+            "MATH Lvl 5": 42.1,
+            "MMLU-PRO": 38.4,
+            "MUSR": 18.6,
+            "params_b": 7.6,
+            "type": "💬 chat models (RLHF, DPO, IFT, ...)"
+          },
+          "model": "Tsunami-th/Tsunami-0.5x-7B-Instruct",
+          "organization": "Tsunami-th",
+          "rank": 7,
+          "score": 36.0,
+          "score_unit": "avg %"
+        },
+        {
+          "date": "2024-10-28",
+          "metadata": {
+            "BBH": 35.9,
+            "GPQA": 8.4,
+            "IFEval": 73.1,
+            "MATH Lvl 5": 43.4,
+            "MMLU-PRO": 38.0,
+            "MUSR": 15.8,
+            "params_b": 7.6,
+            "type": "💬 chat models (RLHF, DPO, IFT, ...)"
+          },
+          "model": "Tsunami-th/Tsunami-1.0-7B-Instruct",
+          "organization": "Tsunami-th",
+          "rank": 8,
+          "score": 35.75,
+          "score_unit": "avg %"
+        },
+        {
+          "date": "2024-09-26",
+          "metadata": {
+            "BBH": 35.8,
+            "GPQA": 7.0,
+            "IFEval": 72.0,
+            "MATH Lvl 5": 47.7,
+            "MMLU-PRO": 38.1,
+            "MUSR": 13.6,
+            "params_b": 7.6,
+            "type": "💬 chat models (RLHF, DPO, IFT, ...)"
+          },
+          "model": "Orion-zhen/Qwen2.5-7B-Instruct-Uncensored",
+          "organization": "Orion-zhen",
+          "rank": 9,
+          "score": 35.72,
+          "score_unit": "avg %"
+        },
+        {
+          "date": "2024-09-27",
+          "metadata": {
+            "BBH": 37.0,
+            "GPQA": 8.4,
+            "IFEval": 70.8,
+            "MATH Lvl 5": 44.6,
+            "MMLU-PRO": 38.1,
+            "MUSR": 15.3,
+            "params_b": 7.6,
+            "type": "💬 chat models (RLHF, DPO, IFT, ...)"
+          },
+          "model": "Cran-May/T.E-8.1",
+          "organization": "Cran-May",
+          "rank": 10,
+          "score": 35.7,
+          "score_unit": "avg %"
+        }
+      ],
+      "source_url": "https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard",
+      "status": "ok",
+      "update_strategy": "Download the official HF LLB2 Parquet file via the datasets-server /parquet API (URL discovered dynamically each run so file renames are handled automatically). Filter by param range, exclude Flagged and Merged models, sort by composite Average score, top 10.",
+      "warning": null
+    },
+    {
+      "authenticity": "HF Open LLM Leaderboard 2 uses six standardised benchmarks (IFEval, BBH, MATH Lvl 5, GPQA, MUSR, MMLU-PRO) with a public evaluation harness. Flagged and merged models are excluded. The leaderboard is gameable if labs train specifically on these test sets, so treat rankings as a discovery signal for well-rounded models, not absolute truth.",
+      "category": "Local inference",
+      "description": "Top 10 open-weight models in the 10–20B parameter range by composite HF Open LLM Leaderboard 2 score. Runnable on a single consumer GPU with 16–24 GB VRAM. Excludes flagged and merged models.",
+      "error": null,
+      "fetched_at": "2026-06-17T10:24:12Z",
+      "id": "hf_local_10to20b",
+      "methodology_url": "https://huggingface.co/docs/leaderboards/en/open_llm_leaderboard/about",
+      "name": "Local models 10–20B",
+      "rows": [
+        {
+          "date": "2025-03-09",
+          "metadata": {
+            "BBH": 65.5,
+            "GPQA": 22.3,
+            "IFEval": 73.2,
+            "MATH Lvl 5": 28.6,
+            "MMLU-PRO": 54.3,
+            "MUSR": 38.7,
+            "params_b": 14.8,
+            "type": "🔶 fine-tuned on domain-specific datasets"
+          },
+          "model": "JungZoona/T3Q-qwen2.5-14b-v1.0-e3",
+          "organization": "JungZoona",
+          "rank": 1,
+          "score": 47.09,
+          "score_unit": "avg %"
+        },
+        {
+          "date": "2025-02-02",
+          "metadata": {
+            "BBH": 56.7,
+            "GPQA": 16.2,
+            "IFEval": 66.7,
+            "MATH Lvl 5": 53.9,
+            "MMLU-PRO": 53.2,
+            "MUSR": 21.7,
+            "params_b": 17.6,
+            "type": "🤝 base merges and moerges"
+          },
+          "model": "FINGU-AI/RomboUltima-32B",
+          "organization": "FINGU-AI",
+          "rank": 2,
+          "score": 44.73,
+          "score_unit": "avg %"
+        },
+        {
+          "date": "2025-03-10",
+          "metadata": {
+            "BBH": 59.9,
+            "GPQA": 19.9,
+            "IFEval": 66.2,
+            "MATH Lvl 5": 34.7,
+            "MMLU-PRO": 52.1,
+            "MUSR": 28.5,
+            "params_b": 14.8,
+            "type": "🔶 fine-tuned on domain-specific datasets"
+          },
+          "model": "prithivMLmods/Galactic-Qwen-14B-Exp2",
+          "organization": "prithivMLmods",
+          "rank": 3,
+          "score": 43.56,
+          "score_unit": "avg %"
+        },
+        {
+          "date": "2025-03-09",
+          "metadata": {
+            "BBH": 51.0,
+            "GPQA": 14.8,
+            "IFEval": 76.0,
+            "MATH Lvl 5": 51.7,
+            "MMLU-PRO": 47.2,
+            "MUSR": 16.8,
+            "params_b": 14.8,
+            "type": "🤝 base merges and moerges"
+          },
+          "model": "tensopolis/lamarckvergence-14b-tensopolis-v1",
+          "organization": "tensopolis",
+          "rank": 4,
+          "score": 42.92,
+          "score_unit": "avg %"
+        },
+        {
+          "date": "2025-01-16",
+          "metadata": {
+            "BBH": 50.6,
+            "GPQA": 17.0,
+            "IFEval": 79.2,
+            "MATH Lvl 5": 47.4,
+            "MMLU-PRO": 47.7,
+            "MUSR": 14.6,
+            "params_b": 14.8,
+            "type": "🔶 fine-tuned on domain-specific datasets"
+          },
+          "model": "sthenno/tempesthenno-ppo-ckpt40",
+          "organization": "sthenno",
+          "rank": 5,
+          "score": 42.74,
+          "score_unit": "avg %"
+        },
+        {
+          "date": "2025-02-01",
+          "metadata": {
+            "BBH": 51.0,
+            "GPQA": 12.9,
+            "IFEval": 84.2,
+            "MATH Lvl 5": 45.2,
+            "MMLU-PRO": 46.4,
+            "MUSR": 16.5,
+            "params_b": 14.8,
+            "type": "🤝 base merges and moerges"
+          },
+          "model": "tensopolis/virtuoso-small-v2-tensopolis-v1",
+          "organization": "tensopolis",
+          "rank": 6,
+          "score": 42.7,
+          "score_unit": "avg %"
+        },
+        {
+          "date": "2024-09-20",
+          "metadata": {
+            "BBH": 48.5,
+            "GPQA": 15.0,
+            "IFEval": 82.3,
+            "MATH Lvl 5": 54.6,
+            "MMLU-PRO": 42.8,
+            "MUSR": 12.6,
+            "params_b": 14.8,
+            "type": "💬 chat models (RLHF, DPO, IFT, ...)"
+          },
+          "model": "tanliboy/lambda-qwen2.5-14b-dpo-test",
+          "organization": "tanliboy",
+          "rank": 7,
+          "score": 42.62,
+          "score_unit": "avg %"
+        },
+        {
+          "date": "2024-10-21",
+          "metadata": {
+            "BBH": 48.1,
+            "GPQA": 12.3,
+            "IFEval": 82.9,
+            "MATH Lvl 5": 54.2,
+            "MMLU-PRO": 44.6,
+            "MUSR": 13.2,
+            "params_b": 14.8,
+            "type": "🔶 fine-tuned on domain-specific datasets"
+          },
+          "model": "Goekdeniz-Guelmez/Josiefied-Qwen2.5-14B-Instruct-abliterated-v4",
+          "organization": "Goekdeniz-Guelmez",
+          "rank": 8,
+          "score": 42.55,
+          "score_unit": "avg %"
+        },
+        {
+          "date": "2025-01-30",
+          "metadata": {
+            "BBH": 50.9,
+            "GPQA": 13.8,
+            "IFEval": 82.7,
+            "MATH Lvl 5": 46.6,
+            "MMLU-PRO": 46.5,
+            "MUSR": 14.3,
+            "params_b": 14.8,
+            "type": "🔶 fine-tuned on domain-specific datasets"
+          },
+          "model": "arcee-ai/Virtuoso-Small-v2",
+          "organization": "arcee-ai",
+          "rank": 9,
+          "score": 42.48,
+          "score_unit": "avg %"
+        },
+        {
+          "date": "2024-12-22",
+          "metadata": {
+            "BBH": 54.8,
+            "GPQA": 12.2,
+            "IFEval": 70.4,
+            "MATH Lvl 5": 56.2,
+            "MMLU-PRO": 48.6,
+            "MUSR": 12.3,
+            "params_b": 14.7,
+            "type": "💬 chat models (RLHF, DPO, IFT, ...)"
+          },
+          "model": "jpacifico/Chocolatine-14B-Instruct-DPO-v1.3",
+          "organization": "jpacifico",
+          "rank": 10,
+          "score": 42.42,
+          "score_unit": "avg %"
+        }
+      ],
+      "source_url": "https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard",
+      "status": "ok",
+      "update_strategy": "Download the official HF LLB2 Parquet file via the datasets-server /parquet API (URL discovered dynamically each run so file renames are handled automatically). Filter by param range, exclude Flagged and Merged models, sort by composite Average score, top 10.",
+      "warning": null
     }
   ],
-  "generated_at": "2026-06-17T09:37:39Z",
+  "generated_at": "2026-06-17T10:24:07Z",
   "notes": [
     "If a source parser fails, the dashboard marks that benchmark as failed rather than silently fabricating data.",
     "Public benchmark rows often combine model + scaffold + settings. Treat them as model-selection signals, not absolute truth.",
