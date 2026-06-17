@@ -672,7 +672,12 @@ _HF_LLB2_REQUIRED_COLS = {
     "Available on the hub",
     "Weight type",
     "Type",
+    "Hub ❤️",
 }
+# Minimum Hub likes required to appear in the listing.
+# Benchmark-gaming fine-tunes have 0–3 likes; real lab models have hundreds.
+# 50 is the sweet spot: keeps Falcon3, drops Tsunami/T.E-8.1 etc.
+_HF_LLB2_MIN_LIKES = 50
 _HF_LLB2_BENCH_COLS = ["IFEval", "BBH", "MATH Lvl 5", "GPQA", "MUSR", "MMLU-PRO"]
 
 
@@ -717,6 +722,7 @@ def parse_hf_llm_leaderboard_parquet(
         & (~is_quantized)
         & (df["Available on the hub"] == True)  # noqa: E712
         & (df["Weight type"] == "Original")
+        & (df["Hub ❤️"] >= _HF_LLB2_MIN_LIKES)
     ]
     df = df.sort_values("Average ⬆️", ascending=False).head(limit).reset_index(drop=True)
 
@@ -770,18 +776,18 @@ def _collect_hf_local(
         source_url="https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard",
         methodology_url="https://huggingface.co/docs/leaderboards/en/open_llm_leaderboard/about",
         authenticity=(
-            "HF Open LLM Leaderboard 2 uses six standardised benchmarks (IFEval, BBH, MATH Lvl 5, "
-            "GPQA, MUSR, MMLU-PRO) with a public evaluation harness. Flagged, merged, adapter, and "
-            "quantized-repack models are excluded. The leaderboard is gameable if labs train "
-            "specifically on these test sets, so treat rankings as a discovery signal for "
-            "well-rounded models, not absolute truth."
+            "HF Open LLB2 uses six standardised benchmarks (IFEval, BBH, MATH Lvl 5, GPQA, MUSR, "
+            "MMLU-PRO) run by a third party on a reproducible harness — more trustworthy than "
+            "self-reported lab numbers. Restricted to models with ≥50 Hub likes, which cleanly "
+            "separates real lab models from benchmark-gaming fine-tunes (the latter have 0–3 likes). "
+            "Very new releases may not yet be submitted; they appear once the community or lab "
+            "submits them to the leaderboard."
         ),
         update_strategy=(
-            "Download the official HF LLB2 Parquet file via the datasets-server /parquet API (URL "
-            "discovered dynamically each run so file renames are handled automatically). Filter: "
-            "param range, Flagged=False, Merged=False, Type not containing 'merge', "
-            "Weight type=Original, no quantized-repack suffixes (bnb-4bit, gguf, etc). "
-            "Sort by composite Average score, top 10."
+            "Download official HF LLB2 Parquet via datasets-server /parquet API (URL discovered "
+            "dynamically each run). Filter: param range, Hub likes ≥ 50, Flagged=False, "
+            "Merged=False, Type not containing 'merge', Weight type=Original, no quantized-repack "
+            "name suffixes (bnb-4bit, gguf, etc). Sort by composite Average, top 10."
         ),
         fetcher=fetcher,
         min_rows=5,

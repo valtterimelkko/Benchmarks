@@ -353,6 +353,7 @@ def _llb2_row(**overrides) -> dict:
         "Available on the hub": True,
         "Weight type": "Original",
         "Type": "💬 chat models (RLHF, DPO, IFT, ...)",
+        "Hub ❤️": 100,  # enough likes by default
         "Upload To Hub Date": "2025-01-01",
     }
     return {**base, **overrides}
@@ -384,6 +385,10 @@ _LLB2_SAMPLE_ROWS = [
     _llb2_row(fullname="org/Adapter-7B", **{"#Params (B)": 7.0, "Average ⬆️": 85.0,
         "IFEval": 85.0, "BBH": 85.0, "MATH Lvl 5": 85.0, "GPQA": 85.0, "MUSR": 85.0, "MMLU-PRO": 85.0,
         "Weight type": "Adapter"}),
+    # Should be excluded: too few Hub likes (benchmark-gaming fine-tune)
+    _llb2_row(fullname="nobody/BenchGameOptim-7B", **{"#Params (B)": 7.5, "Average ⬆️": 80.0,
+        "IFEval": 80.0, "BBH": 80.0, "MATH Lvl 5": 80.0, "GPQA": 80.0, "MUSR": 80.0, "MMLU-PRO": 80.0,
+        "Hub ❤️": 3}),
     _llb2_row(fullname="meta-llama/Llama-3.1-8B-Instruct", **{"#Params (B)": 8.0, "Average ⬆️": 44.1,
         "IFEval": 68.0, "BBH": 40.2, "MATH Lvl 5": 22.0, "GPQA": 12.0, "MUSR": 36.5, "MMLU-PRO": 40.0,
         "Upload To Hub Date": "2024-07-01"}),
@@ -406,15 +411,16 @@ def test_parse_hf_llb2_parquet_under10b_top_order():
     assert rows[2].model == "meta-llama/Llama-3.1-8B-Instruct"
 
 
-def test_parse_hf_llb2_parquet_excludes_flagged_merged_mergetype_quantized_adapter():
+def test_parse_hf_llb2_parquet_excludes_flagged_merged_mergetype_quantized_adapter_lowlikes():
     content = _make_llb2_parquet(_LLB2_SAMPLE_ROWS)
     rows = parse_hf_llm_leaderboard_parquet(content, params_min=0.0, params_max=10.0)
     model_names = [r.model for r in rows]
-    assert "flagged/BadModel-7B" not in model_names          # Flagged=True
-    assert "merged/MegaMerge-8B" not in model_names          # Merged=True
-    assert "FINGU-AI/Chocolatine-Fusion-8B" not in model_names  # Type contains 'merge'
-    assert "unsloth/phi-4-bnb-4bit" not in model_names       # quantized repack
-    assert "org/Adapter-7B" not in model_names               # Weight type=Adapter
+    assert "flagged/BadModel-7B" not in model_names              # Flagged=True
+    assert "merged/MegaMerge-8B" not in model_names              # Merged=True
+    assert "FINGU-AI/Chocolatine-Fusion-8B" not in model_names   # Type contains 'merge'
+    assert "unsloth/phi-4-bnb-4bit" not in model_names           # quantized repack
+    assert "org/Adapter-7B" not in model_names                   # Weight type=Adapter
+    assert "nobody/BenchGameOptim-7B" not in model_names         # Hub likes < 50
 
 
 def test_parse_hf_llb2_parquet_10to20b_range():
