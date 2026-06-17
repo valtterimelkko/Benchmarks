@@ -5,7 +5,7 @@
       "category": "Coding agents",
       "description": "Long-horizon software engineering tasks written from scratch across active repositories.",
       "error": null,
-      "fetched_at": "2026-06-15T07:41:37Z",
+      "fetched_at": "2026-06-17T09:06:00Z",
       "id": "deep_swe",
       "methodology_url": "https://deepswe.datacurve.ai/blog",
       "name": "DeepSWE",
@@ -441,7 +441,7 @@
       "category": "Agentic professional work",
       "description": "1,320 real professional deliverables across 44 occupations (legal briefs, engineering plans, nursing care plans, customer support). Head-to-head Elo scored by Artificial Analysis.",
       "error": null,
-      "fetched_at": "2026-06-15T07:41:37Z",
+      "fetched_at": "2026-06-17T09:06:00Z",
       "id": "gdpval_aa",
       "methodology_url": "https://openai.com/index/gdpval/",
       "name": "GDPval-AA",
@@ -549,7 +549,7 @@
           "metadata": {
             "benchlm_slug": "minimax-m3",
             "context_window": "1M",
-            "overall_score": 76,
+            "overall_score": 75,
             "source_type": "Open Weight"
           },
           "model": "MiniMax M3",
@@ -563,7 +563,7 @@
           "metadata": {
             "benchlm_slug": "gemini-3-5-flash",
             "context_window": "1M",
-            "overall_score": 83,
+            "overall_score": 82,
             "source_type": "Proprietary"
           },
           "model": "Gemini 3.5 Flash",
@@ -633,7 +633,7 @@
           "metadata": {
             "benchlm_slug": "deepseek-v4-pro-high",
             "context_window": "1M",
-            "overall_score": 80,
+            "overall_score": 79,
             "source_type": "Open Weight"
           },
           "model": "DeepSeek V4 Pro (High)",
@@ -647,7 +647,7 @@
           "metadata": {
             "benchlm_slug": "deepseek-v4-pro-max",
             "context_window": "1M",
-            "overall_score": 85,
+            "overall_score": 84,
             "source_type": "Open Weight"
           },
           "model": "DeepSeek V4 Pro (Max)",
@@ -703,7 +703,7 @@
           "metadata": {
             "benchlm_slug": "qwen3-6-max-preview",
             "context_window": "256K",
-            "overall_score": 72,
+            "overall_score": 71,
             "source_type": "Proprietary"
           },
           "model": "Qwen 3.6 Max (preview)",
@@ -815,7 +815,7 @@
           "metadata": {
             "benchlm_slug": "claude-opus-4-5",
             "context_window": "200K",
-            "overall_score": 72,
+            "overall_score": 71,
             "source_type": "Proprietary"
           },
           "model": "Claude Opus 4.5",
@@ -877,7 +877,7 @@
       "category": "Terminal/tool use",
       "description": "Agent performance on real terminal tasks: shell commands, debugging, coding, sysadmin, and multi-step CLI workflows.",
       "error": null,
-      "fetched_at": "2026-06-15T07:41:38Z",
+      "fetched_at": "2026-06-17T09:06:01Z",
       "id": "terminal_bench",
       "methodology_url": "https://www.tbench.ai/",
       "name": "Terminal-Bench",
@@ -1036,7 +1036,7 @@
       "category": "Browser/web research",
       "description": "Hard web-browsing questions requiring persistent search, source inspection, and concise verified answers.",
       "error": null,
-      "fetched_at": "2026-06-15T07:41:39Z",
+      "fetched_at": "2026-06-17T09:06:03Z",
       "id": "browsecomp",
       "methodology_url": "https://openai.com/index/browsecomp/",
       "name": "BrowseComp",
@@ -1144,7 +1144,7 @@
           "metadata": {
             "benchlm_slug": "minimax-m3",
             "context_window": "1M",
-            "overall_score": 76,
+            "overall_score": 75,
             "source_type": "Open Weight"
           },
           "model": "MiniMax M3",
@@ -1158,7 +1158,7 @@
           "metadata": {
             "benchlm_slug": "deepseek-v4-pro-max",
             "context_window": "1M",
-            "overall_score": 85,
+            "overall_score": 84,
             "source_type": "Open Weight"
           },
           "model": "DeepSeek V4 Pro (Max)",
@@ -1200,7 +1200,7 @@
           "metadata": {
             "benchlm_slug": "deepseek-v4-pro-high",
             "context_window": "1M",
-            "overall_score": 80,
+            "overall_score": 79,
             "source_type": "Open Weight"
           },
           "model": "DeepSeek V4 Pro (High)",
@@ -1256,7 +1256,7 @@
           "metadata": {
             "benchlm_slug": "glm-5-1",
             "context_window": "203K",
-            "overall_score": 75,
+            "overall_score": 74,
             "source_type": "Open Weight"
           },
           "model": "GLM-5.1",
@@ -1284,7 +1284,7 @@
           "metadata": {
             "benchlm_slug": "qwen3-5-122b-a10b",
             "context_window": "262K",
-            "overall_score": 66,
+            "overall_score": 65,
             "source_type": "Open Weight"
           },
           "model": "Qwen3.5-122B-A10B",
@@ -1416,7 +1416,7 @@
       "category": "Computer use",
       "description": "Open-ended GUI/computer-use tasks in real desktop environments across apps and workflows.",
       "error": null,
-      "fetched_at": "2026-06-15T07:41:39Z",
+      "fetched_at": "2026-06-17T09:06:04Z",
       "id": "osworld_verified",
       "methodology_url": "https://github.com/xlang-ai/OSWorld",
       "name": "OSWorld-Verified",
@@ -1822,7 +1822,7 @@
       "category": "Long-context reasoning",
       "description": "Long-context reasoning and retrieval benchmark testing whether models can use extended context windows across diverse task types. Sourced directly from the official leaderboard.",
       "error": null,
-      "fetched_at": "2026-06-15T07:41:39Z",
+      "fetched_at": "2026-06-17T09:06:04Z",
       "id": "longbench_v2",
       "methodology_url": "https://arxiv.org/abs/2412.15204",
       "name": "LongBench v2",
@@ -2149,19 +2149,470 @@
       "authenticity": "Live human preference battles are harder to optimise directly than static tests, but they reflect popularity/style preferences rather than academic correctness.",
       "category": "Writing preference",
       "description": "Human-preference arena ratings for text models, used here as a pragmatic proxy for prose and style quality.",
-      "error": "HTTPError: 501 Server Error: Not Implemented for url: https://datasets-server.huggingface.co/rows?dataset=lmarena-ai%2Fleaderboard-dataset&config=text_style_control&split=latest&offset=0&length=50",
-      "fetched_at": "2026-06-15T07:41:40Z",
+      "error": null,
+      "fetched_at": "2026-06-17T09:06:05Z",
       "id": "lmarena_text_style",
       "methodology_url": "https://arena.ai/",
-      "name": "LMArena Text Style Control",
-      "rows": [],
+      "name": "LMArena Text",
+      "rows": [
+        {
+          "date": "2026-06-10",
+          "metadata": {
+            "category": "overall",
+            "license": "Proprietary",
+            "rating_lower": 1506.7720526575447,
+            "rating_upper": 1514.4904810656221,
+            "votes": 42147.0
+          },
+          "model": "claude-opus-4-6-thinking",
+          "organization": "Anthropic",
+          "rank": 1,
+          "score": 1510.63,
+          "score_unit": "Arena rating"
+        },
+        {
+          "date": "2026-06-10",
+          "metadata": {
+            "category": "overall",
+            "license": "Proprietary",
+            "rating_lower": 1496.6050383553854,
+            "rating_upper": 1504.5984293135634,
+            "votes": 42797.0
+          },
+          "model": "claude-opus-4-6-thinking",
+          "organization": "Anthropic",
+          "rank": 1,
+          "score": 1500.6,
+          "score_unit": "Arena rating"
+        },
+        {
+          "date": "2026-06-10",
+          "metadata": {
+            "category": "overall",
+            "license": "Proprietary",
+            "rating_lower": 1491.9080059698476,
+            "rating_upper": 1506.6176111808645,
+            "votes": 35214.0
+          },
+          "model": "gpt-5.4-mini-high",
+          "organization": "OpenAI",
+          "rank": 1,
+          "score": 1499.26,
+          "score_unit": "Arena rating"
+        },
+        {
+          "date": "2026-06-10",
+          "metadata": {
+            "category": "overall",
+            "license": "Proprietary",
+            "rating_lower": 1489.2214404686931,
+            "rating_upper": 1496.2036324243077,
+            "votes": 42147.0
+          },
+          "model": "claude-opus-4-6-thinking",
+          "organization": "Anthropic",
+          "rank": 1,
+          "score": 1492.71,
+          "score_unit": "Arena rating"
+        },
+        {
+          "date": "2026-06-10",
+          "metadata": {
+            "category": "overall",
+            "license": "Proprietary",
+            "rating_lower": 1485.5571448141854,
+            "rating_upper": 1496.6991703466479,
+            "votes": 36670.0
+          },
+          "model": "gpt-5.4-high",
+          "organization": "OpenAI",
+          "rank": 1,
+          "score": 1491.13,
+          "score_unit": "Arena rating"
+        },
+        {
+          "date": "2026-06-10",
+          "metadata": {
+            "category": "overall",
+            "license": "Proprietary",
+            "rating_lower": 1483.4711259911257,
+            "rating_upper": 1492.2372225619945,
+            "votes": 36670.0
+          },
+          "model": "gpt-5.4-high",
+          "organization": "OpenAI",
+          "rank": 1,
+          "score": 1487.85,
+          "score_unit": "Arena rating"
+        },
+        {
+          "date": "2026-06-10",
+          "metadata": {
+            "category": "overall",
+            "license": "Proprietary",
+            "rating_lower": 1502.998516258228,
+            "rating_upper": 1510.478836260815,
+            "votes": 45073.0
+          },
+          "model": "claude-opus-4-6",
+          "organization": "Anthropic",
+          "rank": 2,
+          "score": 1506.74,
+          "score_unit": "Arena rating"
+        },
+        {
+          "date": "2026-06-10",
+          "metadata": {
+            "category": "overall",
+            "license": "Proprietary",
+            "rating_lower": 1492.938363300363,
+            "rating_upper": 1500.7022540270389,
+            "votes": 45808.0
+          },
+          "model": "claude-opus-4-6",
+          "organization": "Anthropic",
+          "rank": 2,
+          "score": 1496.82,
+          "score_unit": "Arena rating"
+        },
+        {
+          "date": "2026-06-10",
+          "metadata": {
+            "category": "overall",
+            "license": "Proprietary",
+            "rating_lower": 1488.1830554402945,
+            "rating_upper": 1501.9685785645754,
+            "votes": 38876.0
+          },
+          "model": "gpt-5.4",
+          "organization": "OpenAI",
+          "rank": 2,
+          "score": 1495.08,
+          "score_unit": "Arena rating"
+        },
+        {
+          "date": "2026-06-10",
+          "metadata": {
+            "category": "overall",
+            "license": "Proprietary",
+            "rating_lower": 1483.9838144496202,
+            "rating_upper": 1495.3125755624505,
+            "votes": 38876.0
+          },
+          "model": "gpt-5.4",
+          "organization": "OpenAI",
+          "rank": 2,
+          "score": 1489.65,
+          "score_unit": "Arena rating"
+        },
+        {
+          "date": "2026-06-10",
+          "metadata": {
+            "category": "overall",
+            "license": "Proprietary",
+            "rating_lower": 1485.666380294878,
+            "rating_upper": 1492.5310294698302,
+            "votes": 45073.0
+          },
+          "model": "claude-opus-4-6",
+          "organization": "Anthropic",
+          "rank": 2,
+          "score": 1489.1,
+          "score_unit": "Arena rating"
+        },
+        {
+          "date": "2026-06-10",
+          "metadata": {
+            "category": "overall",
+            "license": "Proprietary",
+            "rating_lower": 1479.7297247707786,
+            "rating_upper": 1490.1199926030633,
+            "votes": 24206.0
+          },
+          "model": "gpt-5.5-high",
+          "organization": "OpenAI",
+          "rank": 2,
+          "score": 1484.92,
+          "score_unit": "Arena rating"
+        },
+        {
+          "date": "2026-06-10",
+          "metadata": {
+            "category": "overall",
+            "license": "Proprietary",
+            "rating_lower": 1493.788017019703,
+            "rating_upper": 1502.9149995146843,
+            "votes": 28398.0
+          },
+          "model": "claude-opus-4-7-thinking",
+          "organization": "Anthropic",
+          "rank": 3,
+          "score": 1498.35,
+          "score_unit": "Arena rating"
+        },
+        {
+          "date": "2026-06-10",
+          "metadata": {
+            "category": "overall",
+            "license": "Proprietary",
+            "rating_lower": 1485.5171578342336,
+            "rating_upper": 1507.9060931372944,
+            "votes": 2883.0
+          },
+          "model": "claude-fable-5",
+          "organization": "Anthropic",
+          "rank": 3,
+          "score": 1496.71,
+          "score_unit": "Arena rating"
+        },
+        {
+          "date": "2026-06-10",
+          "metadata": {
+            "category": "overall",
+            "license": "Proprietary",
+            "rating_lower": 1487.5985757756982,
+            "rating_upper": 1501.2645549177741,
+            "votes": 36670.0
+          },
+          "model": "gpt-5.4-high",
+          "organization": "OpenAI",
+          "rank": 3,
+          "score": 1494.43,
+          "score_unit": "Arena rating"
+        },
+        {
+          "date": "2026-06-10",
+          "metadata": {
+            "category": "overall",
+            "license": "Proprietary",
+            "rating_lower": 1480.6944536253986,
+            "rating_upper": 1494.1173654180288,
+            "votes": 24206.0
+          },
+          "model": "gpt-5.5-high",
+          "organization": "OpenAI",
+          "rank": 3,
+          "score": 1487.41,
+          "score_unit": "Arena rating"
+        },
+        {
+          "date": "2026-06-10",
+          "metadata": {
+            "category": "overall",
+            "license": "Proprietary",
+            "rating_lower": 1480.712313091213,
+            "rating_upper": 1487.9301597705507,
+            "votes": 36670.0
+          },
+          "model": "gpt-5.4-high",
+          "organization": "OpenAI",
+          "rank": 3,
+          "score": 1484.32,
+          "score_unit": "Arena rating"
+        },
+        {
+          "date": "2026-06-10",
+          "metadata": {
+            "category": "overall",
+            "license": "Proprietary",
+            "rating_lower": 1478.5976516968783,
+            "rating_upper": 1487.5204621092917,
+            "votes": 38876.0
+          },
+          "model": "gpt-5.4",
+          "organization": "OpenAI",
+          "rank": 3,
+          "score": 1483.06,
+          "score_unit": "Arena rating"
+        },
+        {
+          "date": "2026-06-10",
+          "metadata": {
+            "category": "overall",
+            "license": "Proprietary",
+            "rating_lower": 1486.2322796075046,
+            "rating_upper": 1499.7363903611988,
+            "votes": 47256.0
+          },
+          "model": "gpt-5.2-high",
+          "organization": "OpenAI",
+          "rank": 4,
+          "score": 1492.98,
+          "score_unit": "Arena rating"
+        },
+        {
+          "date": "2026-06-10",
+          "metadata": {
+            "category": "overall",
+            "license": "Proprietary",
+            "rating_lower": 1486.6561581244002,
+            "rating_upper": 1493.96019131134,
+            "votes": 54605.0
+          },
+          "model": "gemini-3.1-pro-preview",
+          "organization": "Google",
+          "rank": 4,
+          "score": 1490.31,
+          "score_unit": "Arena rating"
+        },
+        {
+          "date": "2026-06-10",
+          "metadata": {
+            "category": "overall",
+            "license": "Proprietary",
+            "rating_lower": 1484.2847621806197,
+            "rating_upper": 1493.6672597293523,
+            "votes": 28900.0
+          },
+          "model": "claude-opus-4-7-thinking",
+          "organization": "Anthropic",
+          "rank": 4,
+          "score": 1488.98,
+          "score_unit": "Arena rating"
+        },
+        {
+          "date": "2026-06-10",
+          "metadata": {
+            "category": "overall",
+            "license": "Proprietary",
+            "rating_lower": 1477.9599932213255,
+            "rating_upper": 1489.7903110034622,
+            "votes": 35214.0
+          },
+          "model": "gpt-5.4-mini-high",
+          "organization": "OpenAI",
+          "rank": 4,
+          "score": 1483.88,
+          "score_unit": "Arena rating"
+        },
+        {
+          "date": "2026-06-10",
+          "metadata": {
+            "category": "overall",
+            "license": "Proprietary",
+            "rating_lower": 1476.2976176069815,
+            "rating_upper": 1488.6535335799886,
+            "votes": 9967.0
+          },
+          "model": "gemini-3.5-flash",
+          "organization": "Google",
+          "rank": 4,
+          "score": 1482.48,
+          "score_unit": "Arena rating"
+        },
+        {
+          "date": "2026-06-10",
+          "metadata": {
+            "category": "overall",
+            "license": "Proprietary",
+            "rating_lower": 1474.928804836035,
+            "rating_upper": 1485.2256562446848,
+            "votes": 24819.0
+          },
+          "model": "gpt-5.5",
+          "organization": "OpenAI",
+          "rank": 4,
+          "score": 1480.08,
+          "score_unit": "Arena rating"
+        },
+        {
+          "date": "2026-06-10",
+          "metadata": {
+            "category": "overall",
+            "license": "Proprietary",
+            "rating_lower": 1485.1355017169087,
+            "rating_upper": 1494.326125592043,
+            "votes": 29467.0
+          },
+          "model": "claude-opus-4-7",
+          "organization": "Anthropic",
+          "rank": 5,
+          "score": 1489.73,
+          "score_unit": "Arena rating"
+        },
+        {
+          "date": "2026-06-10",
+          "metadata": {
+            "category": "overall",
+            "license": "Proprietary",
+            "rating_lower": 1480.9714058405227,
+            "rating_upper": 1497.707636778335,
+            "votes": 24206.0
+          },
+          "model": "gpt-5.5-high",
+          "organization": "OpenAI",
+          "rank": 5,
+          "score": 1489.34,
+          "score_unit": "Arena rating"
+        },
+        {
+          "date": "2026-06-10",
+          "metadata": {
+            "category": "overall",
+            "license": "Proprietary",
+            "rating_lower": 1476.7810025755493,
+            "rating_upper": 1490.0404662992987,
+            "votes": 24819.0
+          },
+          "model": "gpt-5.5",
+          "organization": "OpenAI",
+          "rank": 5,
+          "score": 1483.41,
+          "score_unit": "Arena rating"
+        },
+        {
+          "date": "2026-06-10",
+          "metadata": {
+            "category": "overall",
+            "license": "Proprietary",
+            "rating_lower": 1477.5095239083878,
+            "rating_upper": 1486.0208360865186,
+            "votes": 24206.0
+          },
+          "model": "gpt-5.5-high",
+          "organization": "OpenAI",
+          "rank": 5,
+          "score": 1481.77,
+          "score_unit": "Arena rating"
+        },
+        {
+          "date": "2026-06-10",
+          "metadata": {
+            "category": "overall",
+            "license": "Proprietary",
+            "rating_lower": 1477.0122531714376,
+            "rating_upper": 1484.6066753318346,
+            "votes": 55403.0
+          },
+          "model": "gemini-3.1-pro-preview",
+          "organization": "Google",
+          "rank": 5,
+          "score": 1480.81,
+          "score_unit": "Arena rating"
+        },
+        {
+          "date": "2026-06-10",
+          "metadata": {
+            "category": "overall",
+            "license": "Proprietary",
+            "rating_lower": 1472.8475011346748,
+            "rating_upper": 1481.7800308961987,
+            "votes": 42147.0
+          },
+          "model": "claude-opus-4-6-thinking",
+          "organization": "Anthropic",
+          "rank": 5,
+          "score": 1477.31,
+          "score_unit": "Arena rating"
+        }
+      ],
       "source_url": "https://huggingface.co/datasets/lmarena-ai/leaderboard-dataset",
-      "status": "failed",
-      "update_strategy": "Fetch the public Hugging Face dataset-server rows for the LMArena text_style_control latest split.",
+      "status": "ok",
+      "update_strategy": "Fetch the public Hugging Face dataset-server rows for the LMArena text latest split (falls back to text_style_control if the primary config is unavailable).",
       "warning": null
     }
   ],
-  "generated_at": "2026-06-15T07:41:37Z",
+  "generated_at": "2026-06-17T09:06:00Z",
   "notes": [
     "If a source parser fails, the dashboard marks that benchmark as failed rather than silently fabricating data.",
     "Public benchmark rows often combine model + scaffold + settings. Treat them as model-selection signals, not absolute truth.",
