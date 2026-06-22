@@ -5,7 +5,7 @@
       "category": "Coding agents",
       "description": "Long-horizon software engineering tasks written from scratch across active repositories.",
       "error": null,
-      "fetched_at": "2026-06-17T12:00:30Z",
+      "fetched_at": "2026-06-22T07:23:47Z",
       "id": "deep_swe",
       "methodology_url": "https://deepswe.datacurve.ai/blog",
       "name": "DeepSWE",
@@ -14,420 +14,300 @@
           "date": null,
           "metadata": {
             "harness": "mini-swe-agent",
-            "mean_cost_usd": 6.6059,
+            "mean_cost_usd": 13.4145,
             "reasoning_effort": "xhigh",
-            "tasks_attempted": 111,
-            "tasks_passed_any": 98
+            "tasks_attempted": 113,
+            "tasks_passed_any": 100
           },
-          "model": "gpt-5-5 [xhigh]",
-          "organization": "OpenAI",
+          "model": "claude-fable-5 [xhigh]",
+          "organization": "Anthropic",
           "rank": 1,
-          "score": 70.05,
+          "score": 69.91,
           "score_unit": "% solve rate"
         },
         {
           "date": null,
           "metadata": {
             "harness": "mini-swe-agent",
-            "mean_cost_usd": 4.4734,
-            "reasoning_effort": "high",
+            "mean_cost_usd": 21.6347,
+            "reasoning_effort": "max",
             "tasks_attempted": 113,
             "tasks_passed_any": 95
           },
-          "model": "gpt-5-5 [high]",
-          "organization": "OpenAI",
+          "model": "claude-fable-5 [max]",
+          "organization": "Anthropic",
           "rank": 2,
-          "score": 61.95,
+          "score": 69.72,
           "score_unit": "% solve rate"
         },
         {
           "date": null,
           "metadata": {
             "harness": "mini-swe-agent",
-            "mean_cost_usd": 12.5813,
-            "reasoning_effort": "max",
+            "mean_cost_usd": 9.1776,
+            "reasoning_effort": "high",
             "tasks_attempted": 113,
-            "tasks_passed_any": 89
+            "tasks_passed_any": 98
+          },
+          "model": "claude-fable-5 [high]",
+          "organization": "Anthropic",
+          "rank": 3,
+          "score": 68.6,
+          "score_unit": "% solve rate"
+        },
+        {
+          "date": null,
+          "metadata": {
+            "harness": "mini-swe-agent",
+            "mean_cost_usd": 7.2262,
+            "reasoning_effort": "xhigh",
+            "tasks_attempted": 113,
+            "tasks_passed_any": 100
+          },
+          "model": "gpt-5-5 [xhigh]",
+          "organization": "OpenAI",
+          "rank": 4,
+          "score": 67.04,
+          "score_unit": "% solve rate"
+        },
+        {
+          "date": null,
+          "metadata": {
+            "harness": "mini-swe-agent",
+            "mean_cost_usd": 6.0882,
+            "reasoning_effort": "medium",
+            "tasks_attempted": 113,
+            "tasks_passed_any": 94
+          },
+          "model": "claude-fable-5 [medium]",
+          "organization": "Anthropic",
+          "rank": 5,
+          "score": 65.37,
+          "score_unit": "% solve rate"
+        },
+        {
+          "date": null,
+          "metadata": {
+            "harness": "mini-swe-agent",
+            "mean_cost_usd": 5.1004,
+            "reasoning_effort": "high",
+            "tasks_attempted": 113,
+            "tasks_passed_any": 102
+          },
+          "model": "gpt-5-5 [high]",
+          "organization": "OpenAI",
+          "rank": 6,
+          "score": 64.38,
+          "score_unit": "% solve rate"
+        },
+        {
+          "date": null,
+          "metadata": {
+            "harness": "mini-swe-agent",
+            "mean_cost_usd": 3.7579,
+            "reasoning_effort": "low",
+            "tasks_attempted": 113,
+            "tasks_passed_any": 92
+          },
+          "model": "claude-fable-5 [low]",
+          "organization": "Anthropic",
+          "rank": 7,
+          "score": 59.58,
+          "score_unit": "% solve rate"
+        },
+        {
+          "date": null,
+          "metadata": {
+            "harness": "mini-swe-agent",
+            "mean_cost_usd": 13.2226,
+            "reasoning_effort": "max",
+            "tasks_attempted": 111,
+            "tasks_passed_any": 88
           },
           "model": "claude-opus-4-8 [max]",
           "organization": "Anthropic",
-          "rank": 3,
-          "score": 58.19,
+          "rank": 8,
+          "score": 58.97,
           "score_unit": "% solve rate"
         },
         {
           "date": null,
           "metadata": {
             "harness": "mini-swe-agent",
-            "mean_cost_usd": 7.5531,
+            "mean_cost_usd": 8.0064,
             "reasoning_effort": "xhigh",
             "tasks_attempted": 113,
             "tasks_passed_any": 91
           },
           "model": "claude-opus-4-8 [xhigh]",
           "organization": "Anthropic",
-          "rank": 4,
-          "score": 57.74,
+          "rank": 9,
+          "score": 54.36,
           "score_unit": "% solve rate"
         },
         {
           "date": null,
           "metadata": {
             "harness": "mini-swe-agent",
-            "mean_cost_usd": 4.3774,
-            "reasoning_effort": "xhigh",
-            "tasks_attempted": 113,
-            "tasks_passed_any": 87
-          },
-          "model": "gpt-5-4 [xhigh]",
-          "organization": "OpenAI",
-          "rank": 5,
-          "score": 55.53,
-          "score_unit": "% solve rate"
-        },
-        {
-          "date": null,
-          "metadata": {
-            "harness": "mini-swe-agent",
-            "mean_cost_usd": 18.1867,
-            "reasoning_effort": "max",
-            "tasks_attempted": 113,
-            "tasks_passed_any": 97
-          },
-          "model": "claude-opus-4-7 [max]",
-          "organization": "Anthropic",
-          "rank": 6,
-          "score": 54.2,
-          "score_unit": "% solve rate"
-        },
-        {
-          "date": null,
-          "metadata": {
-            "harness": "mini-swe-agent",
-            "mean_cost_usd": 3.9815,
-            "reasoning_effort": "high",
-            "tasks_attempted": 113,
-            "tasks_passed_any": 80
-          },
-          "model": "claude-opus-4-8 [high]",
-          "organization": "Anthropic",
-          "rank": 7,
-          "score": 50.66,
-          "score_unit": "% solve rate"
-        },
-        {
-          "date": null,
-          "metadata": {
-            "harness": "mini-swe-agent",
-            "mean_cost_usd": 2.3426,
+            "mean_cost_usd": 2.7493,
             "reasoning_effort": "medium",
             "tasks_attempted": 113,
-            "tasks_passed_any": 80
+            "tasks_passed_any": 88
           },
           "model": "gpt-5-5 [medium]",
           "organization": "OpenAI",
-          "rank": 8,
-          "score": 48.01,
+          "rank": 10,
+          "score": 53.98,
           "score_unit": "% solve rate"
         },
         {
           "date": null,
           "metadata": {
             "harness": "mini-swe-agent",
-            "mean_cost_usd": 3.254,
-            "reasoning_effort": "medium",
+            "mean_cost_usd": 4.2819,
+            "reasoning_effort": "high",
             "tasks_attempted": 113,
-            "tasks_passed_any": 77
+            "tasks_passed_any": 88
           },
-          "model": "claude-opus-4-8 [medium]",
+          "model": "claude-opus-4-8 [high]",
           "organization": "Anthropic",
-          "rank": 9,
-          "score": 47.35,
+          "rank": 11,
+          "score": 51.77,
           "score_unit": "% solve rate"
         },
         {
           "date": null,
           "metadata": {
             "harness": "mini-swe-agent",
-            "mean_cost_usd": 8.58,
+            "mean_cost_usd": 5.6525,
             "reasoning_effort": "xhigh",
+            "tasks_attempted": 113,
+            "tasks_passed_any": 88
+          },
+          "model": "gpt-5-4 [xhigh]",
+          "organization": "OpenAI",
+          "rank": 12,
+          "score": 51.77,
+          "score_unit": "% solve rate"
+        },
+        {
+          "date": null,
+          "metadata": {
+            "harness": "mini-swe-agent",
+            "mean_cost_usd": 3.4439,
+            "reasoning_effort": "medium",
             "tasks_attempted": 113,
             "tasks_passed_any": 86
           },
-          "model": "claude-opus-4-7 [xhigh]",
-          "organization": "Anthropic",
-          "rank": 10,
-          "score": 44.69,
-          "score_unit": "% solve rate"
-        },
-        {
-          "date": null,
-          "metadata": {
-            "harness": "mini-swe-agent",
-            "mean_cost_usd": 4.8301,
-            "reasoning_effort": "high",
-            "tasks_attempted": 113,
-            "tasks_passed_any": 78
-          },
-          "model": "claude-opus-4-7 [high]",
-          "organization": "Anthropic",
-          "rank": 11,
-          "score": 40.27,
-          "score_unit": "% solve rate"
-        },
-        {
-          "date": null,
-          "metadata": {
-            "harness": "mini-swe-agent",
-            "mean_cost_usd": 5.5185,
-            "reasoning_effort": "high",
-            "tasks_attempted": 113,
-            "tasks_passed_any": 70
-          },
-          "model": "claude-sonnet-4-6 [high]",
-          "organization": "Anthropic",
-          "rank": 12,
-          "score": 31.77,
-          "score_unit": "% solve rate"
-        },
-        {
-          "date": null,
-          "metadata": {
-            "harness": "mini-swe-agent",
-            "mean_cost_usd": 2.3404,
-            "reasoning_effort": "medium",
-            "tasks_attempted": 113,
-            "tasks_passed_any": 66
-          },
-          "model": "claude-opus-4-7 [medium]",
+          "model": "claude-opus-4-8 [medium]",
           "organization": "Anthropic",
           "rank": 13,
-          "score": 31.64,
+          "score": 48.67,
           "score_unit": "% solve rate"
         },
         {
           "date": null,
           "metadata": {
             "harness": "mini-swe-agent",
-            "mean_cost_usd": 7.4231,
+            "mean_cost_usd": 3.9199,
+            "reasoning_effort": "max",
+            "tasks_attempted": 113,
+            "tasks_passed_any": 87
+          },
+          "model": "glm-5-2 [max]",
+          "organization": "Z.AI",
+          "rank": 14,
+          "score": 43.78,
+          "score_unit": "% solve rate"
+        },
+        {
+          "date": null,
+          "metadata": {
+            "harness": "mini-swe-agent",
+            "mean_cost_usd": 2.2934,
+            "reasoning_effort": "low",
+            "tasks_attempted": 113,
+            "tasks_passed_any": 77
+          },
+          "model": "claude-opus-4-8 [low]",
+          "organization": "Anthropic",
+          "rank": 15,
+          "score": 40.8,
+          "score_unit": "% solve rate"
+        },
+        {
+          "date": null,
+          "metadata": {
+            "harness": "mini-swe-agent",
+            "mean_cost_usd": 7.3418,
             "reasoning_effort": "medium",
             "tasks_attempted": 113,
-            "tasks_passed_any": 64
+            "tasks_passed_any": 75
           },
           "model": "gemini-3-5-flash [medium]",
           "organization": "Google",
-          "rank": 14,
-          "score": 28.32,
-          "score_unit": "% solve rate"
-        },
-        {
-          "date": null,
-          "metadata": {
-            "harness": "mini-swe-agent",
-            "mean_cost_usd": 5.3946,
-            "reasoning_effort": "max",
-            "tasks_attempted": 113,
-            "tasks_passed_any": 57
-          },
-          "model": "claude-opus-4-6 [max]",
-          "organization": "Anthropic",
-          "rank": 15,
-          "score": 27.6,
-          "score_unit": "% solve rate"
-        },
-        {
-          "date": null,
-          "metadata": {
-            "harness": "mini-swe-agent",
-            "mean_cost_usd": 2.0848,
-            "reasoning_effort": "xhigh",
-            "tasks_attempted": 113,
-            "tasks_passed_any": 52
-          },
-          "model": "gpt-5-4-mini [xhigh]",
-          "organization": "OpenAI",
           "rank": 16,
-          "score": 24.34,
+          "score": 37.39,
           "score_unit": "% solve rate"
         },
         {
           "date": null,
           "metadata": {
             "harness": "mini-swe-agent",
-            "mean_cost_usd": 3.1616,
+            "mean_cost_usd": 2.8155,
             "reasoning_effort": null,
             "tasks_attempted": 113,
-            "tasks_passed_any": 55
+            "tasks_passed_any": 69
           },
-          "model": "kimi-k2-6",
+          "model": "kimi-k2-7-code",
           "organization": "Moonshot AI",
           "rank": 17,
-          "score": 23.89,
+          "score": 30.53,
           "score_unit": "% solve rate"
         },
         {
           "date": null,
           "metadata": {
             "harness": "mini-swe-agent",
-            "mean_cost_usd": 5.571,
-            "reasoning_effort": null,
+            "mean_cost_usd": 5.5224,
+            "reasoning_effort": "high",
             "tasks_attempted": 113,
-            "tasks_passed_any": 55
+            "tasks_passed_any": 64
           },
-          "model": "minimax-m3",
-          "organization": "MiniMax",
-          "rank": 18,
-          "score": 20.44,
-          "score_unit": "% solve rate"
-        },
-        {
-          "date": null,
-          "metadata": {
-            "harness": "mini-swe-agent",
-            "mean_cost_usd": 1.9863,
-            "reasoning_effort": null,
-            "tasks_attempted": 113,
-            "tasks_passed_any": 51
-          },
-          "model": "mimo-v2-5-pro",
-          "organization": null,
-          "rank": 19,
-          "score": 19.47,
-          "score_unit": "% solve rate"
-        },
-        {
-          "date": null,
-          "metadata": {
-            "harness": "mini-swe-agent",
-            "mean_cost_usd": 2.1211,
-            "reasoning_effort": null,
-            "tasks_attempted": 113,
-            "tasks_passed_any": 47
-          },
-          "model": "qwen3-7-max",
-          "organization": "Alibaba",
-          "rank": 20,
-          "score": 17.7,
-          "score_unit": "% solve rate"
-        },
-        {
-          "date": null,
-          "metadata": {
-            "harness": "mini-swe-agent",
-            "mean_cost_usd": 7.4641,
-            "reasoning_effort": null,
-            "tasks_attempted": 113,
-            "tasks_passed_any": 44
-          },
-          "model": "glm-5-1",
-          "organization": "Z.AI",
-          "rank": 21,
-          "score": 17.52,
-          "score_unit": "% solve rate"
-        },
-        {
-          "date": null,
-          "metadata": {
-            "harness": "mini-swe-agent",
-            "mean_cost_usd": 6.6011,
-            "reasoning_effort": null,
-            "tasks_attempted": 113,
-            "tasks_passed_any": 33
-          },
-          "model": "grok-build-0-1",
-          "organization": "xAI",
-          "rank": 22,
-          "score": 13.08,
-          "score_unit": "% solve rate"
-        },
-        {
-          "date": null,
-          "metadata": {
-            "harness": "mini-swe-agent",
-            "mean_cost_usd": 1.8365,
-            "reasoning_effort": null,
-            "tasks_attempted": 113,
-            "tasks_passed_any": 28
-          },
-          "model": "gemini-3-1-pro-preview",
-          "organization": "Google",
-          "rank": 23,
-          "score": 9.73,
-          "score_unit": "% solve rate"
-        },
-        {
-          "date": null,
-          "metadata": {
-            "harness": "mini-swe-agent",
-            "mean_cost_usd": 4.2184,
-            "reasoning_effort": null,
-            "tasks_attempted": 113,
-            "tasks_passed_any": 21
-          },
-          "model": "deepseek-v4-pro",
-          "organization": "DeepSeek",
-          "rank": 24,
-          "score": 7.52,
-          "score_unit": "% solve rate"
-        },
-        {
-          "date": null,
-          "metadata": {
-            "harness": "mini-swe-agent",
-            "mean_cost_usd": 1.527,
-            "reasoning_effort": null,
-            "tasks_attempted": 113,
-            "tasks_passed_any": 17
-          },
-          "model": "gemini-3-flash-preview",
-          "organization": "Google",
-          "rank": 25,
-          "score": 5.14,
-          "score_unit": "% solve rate"
-        },
-        {
-          "date": null,
-          "metadata": {
-            "harness": "mini-swe-agent",
-            "mean_cost_usd": 4.2547,
-            "reasoning_effort": null,
-            "tasks_attempted": 113,
-            "tasks_passed_any": 11
-          },
-          "model": "qwen3-6-plus",
-          "organization": "Alibaba",
-          "rank": 26,
-          "score": 2.65,
-          "score_unit": "% solve rate"
-        },
-        {
-          "date": null,
-          "metadata": {
-            "harness": "mini-swe-agent",
-            "mean_cost_usd": 0.8383,
-            "reasoning_effort": null,
-            "tasks_attempted": 113,
-            "tasks_passed_any": 1
-          },
-          "model": "claude-haiku-4-5",
+          "model": "claude-sonnet-4-6 [high]",
           "organization": "Anthropic",
-          "rank": 27,
-          "score": 0.22,
+          "rank": 18,
+          "score": 29.93,
           "score_unit": "% solve rate"
         },
         {
           "date": null,
           "metadata": {
             "harness": "mini-swe-agent",
-            "mean_cost_usd": 0.7044,
-            "reasoning_effort": null,
+            "mean_cost_usd": 1.2002,
+            "reasoning_effort": "low",
             "tasks_attempted": 113,
-            "tasks_passed_any": 1
+            "tasks_passed_any": 54
           },
-          "model": "minimax-m2-7",
-          "organization": "MiniMax",
-          "rank": 28,
-          "score": 0.22,
+          "model": "gpt-5-5 [low]",
+          "organization": "OpenAI",
+          "rank": 19,
+          "score": 26.99,
+          "score_unit": "% solve rate"
+        },
+        {
+          "date": null,
+          "metadata": {
+            "harness": "mini-swe-agent",
+            "mean_cost_usd": 9.4815,
+            "reasoning_effort": "high",
+            "tasks_attempted": 113,
+            "tasks_passed_any": 32
+          },
+          "model": "gemini-3-1-pro-preview [high]",
+          "organization": "Google",
+          "rank": 20,
+          "score": 11.75,
           "score_unit": "% solve rate"
         }
       ],
@@ -441,7 +321,7 @@
       "category": "Agentic professional work",
       "description": "1,320 real professional deliverables across 44 occupations (legal briefs, engineering plans, nursing care plans, customer support). Head-to-head Elo scored by Artificial Analysis.",
       "error": null,
-      "fetched_at": "2026-06-17T12:00:30Z",
+      "fetched_at": "2026-06-22T07:23:48Z",
       "id": "gdpval_aa",
       "methodology_url": "https://openai.com/index/gdpval/",
       "name": "GDPval-AA",
@@ -449,37 +329,25 @@
         {
           "date": "Jun 2026",
           "metadata": {
-            "ci_lower": -26,
-            "ci_upper": 26
+            "ci_lower": -24,
+            "ci_upper": 24
           },
           "model": "Claude Fable 5 (Adaptive Reasoning, Max Effort, Opus 4.8 Fallback)",
           "organization": "Anthropic",
           "rank": 1,
-          "score": 1794.0,
+          "score": 1783.0,
           "score_unit": "Elo rating"
         },
         {
           "date": "May 2026",
           "metadata": {
-            "ci_lower": -24,
-            "ci_upper": 24
+            "ci_lower": -23,
+            "ci_upper": 23
           },
           "model": "Claude Opus 4.8 (Adaptive Reasoning, Max Effort)",
           "organization": "Anthropic",
           "rank": 2,
-          "score": 1620.0,
-          "score_unit": "Elo rating"
-        },
-        {
-          "date": "Apr 2026",
-          "metadata": {
-            "ci_lower": -24,
-            "ci_upper": 24
-          },
-          "model": "Claude Opus 4.7 (Adaptive Reasoning, Max Effort)",
-          "organization": "Anthropic",
-          "rank": 3,
-          "score": 1525.0,
+          "score": 1615.0,
           "score_unit": "Elo rating"
         },
         {
@@ -490,140 +358,32 @@
           },
           "model": "GLM-5.2 (max)",
           "organization": "Z AI",
-          "rank": 4,
+          "rank": 3,
           "score": 1524.0,
           "score_unit": "Elo rating"
         },
         {
           "date": "Apr 2026",
           "metadata": {
-            "ci_lower": -23,
-            "ci_upper": 23
+            "ci_lower": -22,
+            "ci_upper": 22
+          },
+          "model": "Claude Opus 4.7 (Adaptive Reasoning, Max Effort)",
+          "organization": "Anthropic",
+          "rank": 4,
+          "score": 1512.0,
+          "score_unit": "Elo rating"
+        },
+        {
+          "date": "Apr 2026",
+          "metadata": {
+            "ci_lower": -22,
+            "ci_upper": 22
           },
           "model": "GPT-5.5 (xhigh)",
           "organization": "OpenAI",
           "rank": 5,
-          "score": 1514.0,
-          "score_unit": "Elo rating"
-        },
-        {
-          "date": "Apr 2026",
-          "metadata": {
-            "ci_lower": -23,
-            "ci_upper": 23
-          },
-          "model": "GPT-5.5 (high)",
-          "organization": "OpenAI",
-          "rank": 6,
-          "score": 1492.0,
-          "score_unit": "Elo rating"
-        },
-        {
-          "date": "Jun 2026",
-          "metadata": {
-            "ci_lower": -22,
-            "ci_upper": 22
-          },
-          "model": "MiniMax-M3",
-          "organization": "MiniMax",
-          "rank": 7,
-          "score": 1418.0,
-          "score_unit": "Elo rating"
-        },
-        {
-          "date": "Mar 2026",
-          "metadata": {
-            "ci_lower": -23,
-            "ci_upper": 23
-          },
-          "model": "GPT-5.4 (xhigh)",
-          "organization": "OpenAI",
-          "rank": 8,
-          "score": 1415.0,
-          "score_unit": "Elo rating"
-        },
-        {
-          "date": "Feb 2026",
-          "metadata": {
-            "ci_lower": -23,
-            "ci_upper": 23
-          },
-          "model": "Claude Sonnet 4.6 (Adaptive Reasoning, Max Effort)",
-          "organization": "Anthropic",
-          "rank": 9,
-          "score": 1405.0,
-          "score_unit": "Elo rating"
-        },
-        {
-          "date": "May 2026",
-          "metadata": {
-            "ci_lower": -23,
-            "ci_upper": 23
-          },
-          "model": "Gemini 3.5 Flash (high)",
-          "organization": "Google",
-          "rank": 10,
-          "score": 1363.0,
-          "score_unit": "Elo rating"
-        },
-        {
-          "date": "Apr 2026",
-          "metadata": {
-            "ci_lower": -23,
-            "ci_upper": 23
-          },
-          "model": "DeepSeek V4 Pro (Reasoning, Max Effort)",
-          "organization": "DeepSeek",
-          "rank": 11,
-          "score": 1328.0,
-          "score_unit": "Elo rating"
-        },
-        {
-          "date": "May 2026",
-          "metadata": {
-            "ci_lower": -23,
-            "ci_upper": 23
-          },
-          "model": "Qwen3.7 Max",
-          "organization": "Alibaba",
-          "rank": 12,
-          "score": 1300.0,
-          "score_unit": "Elo rating"
-        },
-        {
-          "date": "Apr 2026",
-          "metadata": {
-            "ci_lower": -22,
-            "ci_upper": 22
-          },
-          "model": "MiMo-V2.5-Pro",
-          "organization": "Xiaomi",
-          "rank": 13,
-          "score": 1281.0,
-          "score_unit": "Elo rating"
-        },
-        {
-          "date": "Apr 2026",
-          "metadata": {
-            "ci_lower": -23,
-            "ci_upper": 23
-          },
-          "model": "GLM-5.1 (Reasoning)",
-          "organization": "Z AI",
-          "rank": 14,
-          "score": 1280.0,
-          "score_unit": "Elo rating"
-        },
-        {
-          "date": "Jun 2026",
-          "metadata": {
-            "ci_lower": -22,
-            "ci_upper": 22
-          },
-          "model": "Kimi K2.7 Code",
-          "organization": "Kimi",
-          "rank": 15,
-          "score": 1201.0,
+          "score": 1509.0,
           "score_unit": "Elo rating"
         },
         {
@@ -632,10 +392,46 @@
             "ci_lower": -21,
             "ci_upper": 21
           },
-          "model": "Kimi K2.6",
-          "organization": "Kimi",
-          "rank": 16,
-          "score": 1201.0,
+          "model": "GPT-5.5 (high)",
+          "organization": "OpenAI",
+          "rank": 6,
+          "score": 1479.0,
+          "score_unit": "Elo rating"
+        },
+        {
+          "date": "Jun 2026",
+          "metadata": {
+            "ci_lower": -21,
+            "ci_upper": 21
+          },
+          "model": "MiniMax-M3",
+          "organization": "MiniMax",
+          "rank": 7,
+          "score": 1408.0,
+          "score_unit": "Elo rating"
+        },
+        {
+          "date": "Mar 2026",
+          "metadata": {
+            "ci_lower": -22,
+            "ci_upper": 22
+          },
+          "model": "GPT-5.4 (xhigh)",
+          "organization": "OpenAI",
+          "rank": 8,
+          "score": 1401.0,
+          "score_unit": "Elo rating"
+        },
+        {
+          "date": "Feb 2026",
+          "metadata": {
+            "ci_lower": -22,
+            "ci_upper": 22
+          },
+          "model": "Claude Sonnet 4.6 (Adaptive Reasoning, Max Effort)",
+          "organization": "Anthropic",
+          "rank": 9,
+          "score": 1395.0,
           "score_unit": "Elo rating"
         },
         {
@@ -644,10 +440,118 @@
             "ci_lower": -23,
             "ci_upper": 23
           },
+          "model": "GPT-5.5 (medium)",
+          "organization": "OpenAI",
+          "rank": 10,
+          "score": 1376.0,
+          "score_unit": "Elo rating"
+        },
+        {
+          "date": "May 2026",
+          "metadata": {
+            "ci_lower": -22,
+            "ci_upper": 22
+          },
+          "model": "Gemini 3.5 Flash (high)",
+          "organization": "Google",
+          "rank": 11,
+          "score": 1357.0,
+          "score_unit": "Elo rating"
+        },
+        {
+          "date": "Apr 2026",
+          "metadata": {
+            "ci_lower": -22,
+            "ci_upper": 22
+          },
+          "model": "DeepSeek V4 Pro (Reasoning, Max Effort)",
+          "organization": "DeepSeek",
+          "rank": 12,
+          "score": 1318.0,
+          "score_unit": "Elo rating"
+        },
+        {
+          "date": "May 2026",
+          "metadata": {
+            "ci_lower": -21,
+            "ci_upper": 21
+          },
+          "model": "Qwen3.7 Max",
+          "organization": "Alibaba",
+          "rank": 13,
+          "score": 1289.0,
+          "score_unit": "Elo rating"
+        },
+        {
+          "date": "Apr 2026",
+          "metadata": {
+            "ci_lower": -21,
+            "ci_upper": 21
+          },
+          "model": "MiMo-V2.5-Pro",
+          "organization": "Xiaomi",
+          "rank": 14,
+          "score": 1277.0,
+          "score_unit": "Elo rating"
+        },
+        {
+          "date": "Apr 2026",
+          "metadata": {
+            "ci_lower": -21,
+            "ci_upper": 21
+          },
+          "model": "GLM-5.1 (Reasoning)",
+          "organization": "Z AI",
+          "rank": 15,
+          "score": 1268.0,
+          "score_unit": "Elo rating"
+        },
+        {
+          "date": "Apr 2026",
+          "metadata": {
+            "ci_lower": -20,
+            "ci_upper": 20
+          },
+          "model": "Kimi K2.6",
+          "organization": "Kimi",
+          "rank": 16,
+          "score": 1200.0,
+          "score_unit": "Elo rating"
+        },
+        {
+          "date": "Apr 2026",
+          "metadata": {
+            "ci_lower": -23,
+            "ci_upper": 23
+          },
+          "model": "GPT-5.5 (low)",
+          "organization": "OpenAI",
+          "rank": 17,
+          "score": 1200.0,
+          "score_unit": "Elo rating"
+        },
+        {
+          "date": "Jun 2026",
+          "metadata": {
+            "ci_lower": -21,
+            "ci_upper": 21
+          },
+          "model": "Kimi K2.7 Code",
+          "organization": "Kimi",
+          "rank": 18,
+          "score": 1199.0,
+          "score_unit": "Elo rating"
+        },
+        {
+          "date": "Apr 2026",
+          "metadata": {
+            "ci_lower": -22,
+            "ci_upper": 22
+          },
           "model": "DeepSeek V4 Flash (Reasoning, Max Effort)",
           "organization": "DeepSeek",
-          "rank": 17,
-          "score": 1195.0,
+          "rank": 19,
+          "score": 1191.0,
           "score_unit": "Elo rating"
         },
         {
@@ -658,8 +562,8 @@
           },
           "model": "GPT-5.4 mini (xhigh)",
           "organization": "OpenAI",
-          "rank": 18,
-          "score": 1186.0,
+          "rank": 20,
+          "score": 1179.0,
           "score_unit": "Elo rating"
         },
         {
@@ -670,8 +574,8 @@
           },
           "model": "Nemotron 3 Ultra 550B A55B (Reasoning)",
           "organization": "NVIDIA",
-          "rank": 19,
-          "score": 1179.0,
+          "rank": 21,
+          "score": 1174.0,
           "score_unit": "Elo rating"
         },
         {
@@ -682,8 +586,8 @@
           },
           "model": "MiniMax-M2.7",
           "organization": "MiniMax",
-          "rank": 20,
-          "score": 1177.0,
+          "rank": 22,
+          "score": 1171.0,
           "score_unit": "Elo rating"
         },
         {
@@ -694,20 +598,8 @@
           },
           "model": "Muse Spark",
           "organization": "Meta",
-          "rank": 21,
-          "score": 1164.0,
-          "score_unit": "Elo rating"
-        },
-        {
-          "date": "Apr 2026",
-          "metadata": {
-            "ci_lower": -21,
-            "ci_upper": 21
-          },
-          "model": "Qwen3.6 Plus",
-          "organization": "Alibaba",
-          "rank": 22,
-          "score": 1159.0,
+          "rank": 23,
+          "score": 1158.0,
           "score_unit": "Elo rating"
         },
         {
@@ -718,8 +610,8 @@
           },
           "model": "Qwen3.6 27B (Reasoning)",
           "organization": "Alibaba",
-          "rank": 23,
-          "score": 1159.0,
+          "rank": 24,
+          "score": 1157.0,
           "score_unit": "Elo rating"
         },
         {
@@ -728,82 +620,70 @@
             "ci_lower": -21,
             "ci_upper": 21
           },
+          "model": "Qwen3.6 Plus",
+          "organization": "Alibaba",
+          "rank": 25,
+          "score": 1156.0,
+          "score_unit": "Elo rating"
+        },
+        {
+          "date": "Apr 2026",
+          "metadata": {
+            "ci_lower": -20,
+            "ci_upper": 20
+          },
           "model": "GPT-5.5 (Non-reasoning)",
           "organization": "OpenAI",
-          "rank": 24,
-          "score": 1134.0,
+          "rank": 26,
+          "score": 1123.0,
           "score_unit": "Elo rating"
         },
         {
           "date": "Mar 2026",
           "metadata": {
-            "ci_lower": -21,
-            "ci_upper": 21
+            "ci_lower": -20,
+            "ci_upper": 20
           },
           "model": "GPT-5.4 nano (xhigh)",
           "organization": "OpenAI",
-          "rank": 25,
-          "score": 1113.0,
+          "rank": 27,
+          "score": 1109.0,
           "score_unit": "Elo rating"
         },
         {
           "date": "Apr 2026",
           "metadata": {
-            "ci_lower": -21,
-            "ci_upper": 21
+            "ci_lower": -20,
+            "ci_upper": 20
           },
           "model": "Grok 4.3 (Non-reasoning)",
           "organization": "xAI",
-          "rank": 26,
-          "score": 1106.0,
+          "rank": 28,
+          "score": 1102.0,
           "score_unit": "Elo rating"
         },
         {
           "date": "Apr 2026",
           "metadata": {
-            "ci_lower": -21,
-            "ci_upper": 21
+            "ci_lower": -20,
+            "ci_upper": 20
           },
           "model": "Grok 4.3 (high)",
           "organization": "xAI",
-          "rank": 27,
-          "score": 1098.0,
+          "rank": 29,
+          "score": 1094.0,
           "score_unit": "Elo rating"
         },
         {
           "date": "Apr 2026",
           "metadata": {
-            "ci_lower": -21,
-            "ci_upper": 21
+            "ci_lower": -20,
+            "ci_upper": 20
           },
           "model": "Qwen3.6 35B A3B (Reasoning)",
           "organization": "Alibaba",
-          "rank": 28,
-          "score": 1053.0,
-          "score_unit": "Elo rating"
-        },
-        {
-          "date": "May 2026",
-          "metadata": {
-            "ci_lower": -21,
-            "ci_upper": 21
-          },
-          "model": "Step 3.7 Flash",
-          "organization": "StepFun",
-          "rank": 29,
-          "score": 1029.0,
-          "score_unit": "Elo rating"
-        },
-        {
-          "date": "Feb 2026",
-          "metadata": {
-            "ci_lower": -21,
-            "ci_upper": 21
-          },
-          "model": "Qwen3.5 122B A10B (Reasoning)",
-          "organization": "Alibaba",
           "rank": 30,
-          "score": 981.0,
+          "score": 1052.0,
           "score_unit": "Elo rating"
         }
       ],
@@ -817,7 +697,7 @@
       "category": "Terminal/tool use",
       "description": "Agent performance on real terminal tasks: shell commands, debugging, coding, sysadmin, and multi-step CLI workflows.",
       "error": null,
-      "fetched_at": "2026-06-17T12:00:30Z",
+      "fetched_at": "2026-06-22T07:23:48Z",
       "id": "terminal_bench",
       "methodology_url": "https://www.tbench.ai/",
       "name": "Terminal-Bench",
@@ -836,6 +716,32 @@
           "score_unit": "% accuracy"
         },
         {
+          "date": "2026-06-17",
+          "metadata": {
+            "agent": "Claude Code",
+            "agent_org": "Anthropic",
+            "raw_accuracy": "83.1 % ± 2.0"
+          },
+          "model": "Claude 5 Fable",
+          "organization": "Anthropic",
+          "rank": 2,
+          "score": 83.1,
+          "score_unit": "% accuracy"
+        },
+        {
+          "date": "2026-06-17",
+          "metadata": {
+            "agent": "Terminus 2",
+            "agent_org": "Terminal-Bench",
+            "raw_accuracy": "80.4 % ± 2.3"
+          },
+          "model": "Claude 5 Fable",
+          "organization": "Anthropic",
+          "rank": 3,
+          "score": 80.4,
+          "score_unit": "% accuracy"
+        },
+        {
           "date": "2026-05-29",
           "metadata": {
             "agent": "Claude Code",
@@ -844,7 +750,7 @@
           },
           "model": "Claude Opus 4.8",
           "organization": "Anthropic",
-          "rank": 2,
+          "rank": 4,
           "score": 78.9,
           "score_unit": "% accuracy"
         },
@@ -857,7 +763,7 @@
           },
           "model": "GPT-5.5",
           "organization": "OpenAI",
-          "rank": 3,
+          "rank": 5,
           "score": 78.2,
           "score_unit": "% accuracy"
         },
@@ -870,7 +776,7 @@
           },
           "model": "Claude Opus 4.8",
           "organization": "Anthropic",
-          "rank": 4,
+          "rank": 6,
           "score": 74.6,
           "score_unit": "% accuracy"
         },
@@ -883,7 +789,7 @@
           },
           "model": "Gemini 3 Pro",
           "organization": "Google",
-          "rank": 5,
+          "rank": 7,
           "score": 74.4,
           "score_unit": "% accuracy"
         },
@@ -896,7 +802,7 @@
           },
           "model": "Gemini 3.1 Pro",
           "organization": "Google",
-          "rank": 6,
+          "rank": 8,
           "score": 70.7,
           "score_unit": "% accuracy"
         },
@@ -909,7 +815,7 @@
           },
           "model": "Gemini 3.1 Pro",
           "organization": "Google",
-          "rank": 7,
+          "rank": 9,
           "score": 70.3,
           "score_unit": "% accuracy"
         },
@@ -922,7 +828,7 @@
           },
           "model": "Claude Opus 4.7",
           "organization": "Anthropic",
-          "rank": 8,
+          "rank": 10,
           "score": 69.7,
           "score_unit": "% accuracy"
         },
@@ -935,7 +841,7 @@
           },
           "model": "Gemini 3 Pro",
           "organization": "Google",
-          "rank": 9,
+          "rank": 11,
           "score": 66.3,
           "score_unit": "% accuracy"
         },
@@ -948,7 +854,7 @@
           },
           "model": "Claude Opus 4.7",
           "organization": "Anthropic",
-          "rank": 10,
+          "rank": 12,
           "score": 66.1,
           "score_unit": "% accuracy"
         },
@@ -961,7 +867,7 @@
           },
           "model": "GLM 5.1",
           "organization": "Z-AI",
-          "rank": 11,
+          "rank": 13,
           "score": 58.7,
           "score_unit": "% accuracy"
         }
@@ -976,7 +882,7 @@
       "category": "Browser/web research",
       "description": "Hard web-browsing questions requiring persistent search, source inspection, and concise verified answers.",
       "error": null,
-      "fetched_at": "2026-06-17T12:00:32Z",
+      "fetched_at": "2026-06-22T07:23:49Z",
       "id": "browsecomp",
       "methodology_url": "https://openai.com/index/browsecomp/",
       "name": "BrowseComp",
@@ -1224,7 +1130,7 @@
           "metadata": {
             "benchlm_slug": "qwen3-5-122b-a10b",
             "context_window": "262K",
-            "overall_score": 65,
+            "overall_score": 66,
             "source_type": "Open Weight"
           },
           "model": "Qwen3.5-122B-A10B",
@@ -1252,7 +1158,7 @@
           "metadata": {
             "benchlm_slug": "qwen3-5-27b",
             "context_window": "262K",
-            "overall_score": 63,
+            "overall_score": 64,
             "source_type": "Open Weight"
           },
           "model": "Qwen3.5-27B",
@@ -1356,7 +1262,7 @@
       "category": "Computer use",
       "description": "Open-ended GUI/computer-use tasks in real desktop environments across apps and workflows.",
       "error": null,
-      "fetched_at": "2026-06-17T12:00:33Z",
+      "fetched_at": "2026-06-22T07:23:49Z",
       "id": "osworld_verified",
       "methodology_url": "https://github.com/xlang-ai/OSWorld",
       "name": "OSWorld-Verified",
@@ -1762,7 +1668,7 @@
       "category": "Long-context reasoning",
       "description": "Long-context reasoning and retrieval benchmark testing whether models can use extended context windows across diverse task types. Sourced directly from the official leaderboard.",
       "error": null,
-      "fetched_at": "2026-06-17T12:00:34Z",
+      "fetched_at": "2026-06-22T07:23:50Z",
       "id": "longbench_v2",
       "methodology_url": "https://arxiv.org/abs/2412.15204",
       "name": "LongBench v2",
@@ -2090,7 +1996,7 @@
       "category": "Writing preference",
       "description": "Human-preference arena ratings for text models, used here as a pragmatic proxy for prose and style quality.",
       "error": null,
-      "fetched_at": "2026-06-17T12:00:34Z",
+      "fetched_at": "2026-06-22T07:23:50Z",
       "id": "lmarena_text_style",
       "methodology_url": "https://arena.ai/",
       "name": "LMArena Text",
@@ -2556,7 +2462,7 @@
       "category": "Local inference",
       "description": "Best general-capability open-weight models under 10 billion parameters, ranked by the HF Open LLM Leaderboard 2 composite score. The composite averages six standardised benchmarks: IFEval (can the model follow precise, verifiable instructions?), BBH (multi-step reasoning across 23 challenging BIG-Bench Hard tasks), MATH Lvl 5 (competition-level mathematics at AMC/AIME difficulty), GPQA (graduate-level science questions written by PhD researchers), MUSR (multi-step soft reasoning over long narratives), and MMLU-PRO (expert professional knowledge across 14 domains). These rankings reflect general academic capability, not task-specific tuning — a high score means the model is broadly capable. Runnable on a laptop GPU or Apple Silicon. Rankings cover only models submitted to the leaderboard; very new releases may appear after community or lab submission.",
       "error": null,
-      "fetched_at": "2026-06-17T12:00:35Z",
+      "fetched_at": "2026-06-22T07:23:51Z",
       "id": "hf_local_under10b",
       "methodology_url": "https://huggingface.co/docs/leaderboards/en/open_llm_leaderboard/about",
       "name": "Local models < 10B",
@@ -2752,7 +2658,7 @@
       "category": "Local inference",
       "description": "Best general-capability open-weight models in the 10–20 billion parameter range, ranked by the HF Open LLM Leaderboard 2 composite score. The composite averages six standardised benchmarks: IFEval (can the model follow precise, verifiable instructions?), BBH (multi-step reasoning across 23 challenging BIG-Bench Hard tasks), MATH Lvl 5 (competition-level mathematics at AMC/AIME difficulty), GPQA (graduate-level science questions written by PhD researchers), MUSR (multi-step soft reasoning over long narratives), and MMLU-PRO (expert professional knowledge across 14 domains). These rankings reflect general academic capability, not task-specific tuning — a high score means the model is broadly capable. Runnable on a single consumer GPU with 16–24 GB VRAM. Rankings cover only models submitted to the leaderboard; very new releases may appear after community or lab submission.",
       "error": null,
-      "fetched_at": "2026-06-17T12:00:36Z",
+      "fetched_at": "2026-06-22T07:23:52Z",
       "id": "hf_local_10to20b",
       "methodology_url": "https://huggingface.co/docs/leaderboards/en/open_llm_leaderboard/about",
       "name": "Local models 10–20B",
@@ -2948,7 +2854,7 @@
       "category": "Local inference",
       "description": "Best coding-capable open-weight models under 10 billion parameters, ranked by BigCodeBench Instruct score. BigCodeBench tests 1,140 practical coding tasks that require calling real Python libraries (NumPy, pandas, requests, PIL, and 130+ others) — significantly harder than classic HumanEval because tasks demand multi-library orchestration, not just pattern completion. The Instruct split used for ranking evaluates models on natural-language coding instructions, mirroring how developers actually prompt models. The Complete split (docstring prompts) score is shown as a secondary note. Runnable on a laptop GPU or Apple Silicon; coding-focused scores complement the general-capability HF LLB2 ranking.",
       "error": null,
-      "fetched_at": "2026-06-17T12:00:37Z",
+      "fetched_at": "2026-06-22T07:23:52Z",
       "id": "bigcodebench_under10b",
       "methodology_url": "https://bigcodebench.github.io/",
       "name": "Local coding < 10B",
@@ -3084,7 +2990,7 @@
       "category": "Local inference",
       "description": "Best coding-capable open-weight models in the 10–20 billion parameter range, ranked by BigCodeBench Instruct score. BigCodeBench tests 1,140 practical coding tasks that require calling real Python libraries (NumPy, pandas, requests, PIL, and 130+ others) — significantly harder than classic HumanEval because tasks demand multi-library orchestration, not just pattern completion. The Instruct split used for ranking evaluates models on natural-language coding instructions, mirroring how developers actually prompt models. The Complete split (docstring prompts) score is shown as a secondary note. Runnable on a single consumer GPU with 16–24 GB VRAM; coding-focused scores complement the general-capability HF LLB2 ranking.",
       "error": null,
-      "fetched_at": "2026-06-17T12:00:38Z",
+      "fetched_at": "2026-06-22T07:23:53Z",
       "id": "bigcodebench_10to20b",
       "methodology_url": "https://bigcodebench.github.io/",
       "name": "Local coding 10–20B",
@@ -3218,7 +3124,7 @@
       "warning": null
     }
   ],
-  "generated_at": "2026-06-17T12:00:30Z",
+  "generated_at": "2026-06-22T07:23:47Z",
   "notes": [
     "If a source parser fails, the dashboard marks that benchmark as failed rather than silently fabricating data.",
     "Public benchmark rows often combine model + scaffold + settings. Treat them as model-selection signals, not absolute truth.",
