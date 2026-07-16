@@ -35,6 +35,7 @@ The current dashboard includes:
 5. **OSWorld-Verified** — desktop/computer-use agents
 6. **LongBench v2** — long-context retrieval and reasoning
 7. **LMArena Text Style Control** — human preference proxy for writing/style
+8. **AA Intelligence Index** — Artificial Analysis' composite of 9 independently-run evaluations (reasoning, knowledge, agentic, coding, long-context)
 
 These were chosen because they say more about the kinds of work I actually do than the most easily optimised headline benchmarks.
 

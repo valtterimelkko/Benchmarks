@@ -94,6 +94,30 @@ curl -I https://benchmarks.letsautomate.work
 
 If Authelia redirects to login, routing is probably working.
 
+## Validating page content end-to-end (Authelia wall)
+
+Unauthenticated requests to `https://benchmarks.letsautomate.work` get a 302 to
+`auth.letsautomate.work`, and login requires the owner's password plus TOTP — so
+unattended live browser validation through the public URL is blocked by design.
+Validate the two halves of the path separately instead:
+
+1. **Rendered artifact in a real browser** — serve `public/` locally and run the
+   Playwright acceptance tests:
+
+   ```bash
+   python3 -m pytest tests/test_playwright_dashboard.py -q
+   ```
+
+2. **Serving path after auth** — the container bind-mounts `public/`, so query
+   the exact upstream Caddy proxies to once Authelia passes:
+
+   ```bash
+   docker exec n8n-docker-caddy-caddy-1 wget -qO- http://benchmarks-dashboard:8766/ | grep -o "AA Intelligence Index"
+   ```
+
+For a genuine live check, log in via the VNC desktop browser manually and open
+the public URL there.
+
 Before manual reload, validate config syntax:
 
 ```bash

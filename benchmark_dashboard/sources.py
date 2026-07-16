@@ -33,6 +33,7 @@ ORG_PATTERNS = [
     ("qwen", "Alibaba"),
     ("alibaba", "Alibaba"),
     ("minimax", "MiniMax"),
+    ("mimo", "Xiaomi"),
     ("mistral", "Mistral"),
     ("xai", "xAI"),
     ("grok", "xAI"),
@@ -401,6 +402,73 @@ def parse_aa_gdpval_table(html: str) -> list[BenchmarkRow]:
     return rows
 
 
+def parse_aa_intelligence_index_ldjson(html: str) -> list[BenchmarkRow]:
+    """Parse the Artificial Analysis Intelligence Index from schema.org JSON-LD blocks.
+
+    The AA homepage embeds multiple <script type="application/ld+json"> Dataset
+    blocks. The headline composite is named 'Artificial Analysis Intelligence
+    Index' (score key 'intelligenceIndex'); a shorter 'Intelligence' dataset
+    (score key 'artificialAnalysisIntelligenceIndex') mirrors the same ranking
+    and acts as a fallback if AA renames the headline block. Names must match
+    exactly — e.g. 'Intelligence Index by Open Weights / Proprietary' is a
+    different cut of the data and must not be picked up.
+    """
+    candidates = {
+        "Artificial Analysis Intelligence Index": "intelligenceIndex",
+        "Intelligence": "artificialAnalysisIntelligenceIndex",
+    }
+    found: dict[str, list[BenchmarkRow]] = {}
+    for match in re.finditer(r'<script type="application/ld\+json">(.*?)</script>', html, re.DOTALL):
+        try:
+            dataset = json.loads(match.group(1))
+        except (json.JSONDecodeError, ValueError):
+            continue
+        if not isinstance(dataset, dict) or dataset.get("@type") != "Dataset":
+            continue
+        name = str(dataset.get("name") or "").strip()
+        score_key = candidates.get(name)
+        if score_key is None or name in found:
+            continue
+        data = dataset.get("data")
+        if not isinstance(data, list):
+            continue
+        description = str(dataset.get("description") or "")
+        version_match = re.search(r"Intelligence Index\s+(v[\d.]+)", description)
+        index_version = version_match.group(1) if version_match else None
+        rows: list[BenchmarkRow] = []
+        for item in data:
+            if not isinstance(item, dict):
+                continue
+            label = clean_text(item.get("label"))
+            score = as_float(item.get(score_key))
+            if not label or score is None:
+                continue
+            details = clean_text(item.get("detailsUrl")) or None
+            if details and details.startswith("/"):
+                details = f"https://artificialanalysis.ai{details}"
+            rows.append(
+                BenchmarkRow(
+                    rank=0,
+                    model=label,
+                    organization=infer_org(label),
+                    score=round(score, 1),
+                    score_unit="index points",
+                    metadata={
+                        "details_url": details,
+                        "index_version": index_version,
+                    },
+                )
+            )
+        if rows:
+            found[name] = rows
+    # Prefer the full headline dataset; the shorter 'Intelligence' block is the fallback.
+    rows = found.get("Artificial Analysis Intelligence Index") or found.get("Intelligence") or []
+    rows.sort(key=lambda row: row.score, reverse=True)
+    for index, row in enumerate(rows, start=1):
+        row.rank = index
+    return rows
+
+
 def parse_lmarena_rows(payload: dict[str, Any]) -> list[BenchmarkRow]:
     rows: list[BenchmarkRow] = []
     for wrapper in payload.get("rows", []):
@@ -654,6 +722,40 @@ def collect_lmarena_text() -> BenchmarkSnapshot:
         fetcher=fetcher,
         min_rows=10,
         score_range=(900.0, 2200.0),
+    )
+
+
+def collect_aa_intelligence_index() -> BenchmarkSnapshot:
+    return _snapshot(
+        id="aa_intelligence_index",
+        name="AA Intelligence Index",
+        category="Composite intelligence",
+        description=(
+            "Artificial Analysis Intelligence Index — a composite of 9 evaluations run independently by "
+            "Artificial Analysis rather than self-reported by labs: GDPval-AA (professional deliverables), "
+            "τ³-Banking (agentic tool use), Terminal-Bench (terminal tasks), SciCode (scientific coding), "
+            "Humanity's Last Exam and GPQA Diamond (frontier knowledge), CritPt (physics research), "
+            "AA-Omniscience (knowledge/hallucination) and AA-LCR (long-context retrieval). Higher is better."
+        ),
+        source_url="https://artificialanalysis.ai/",
+        methodology_url="https://artificialanalysis.ai/methodology/intelligence-benchmarking",
+        authenticity=(
+            "Every component evaluation is run independently by Artificial Analysis on its own harnesses, "
+            "not self-reported by providers, and the mix spans reasoning, knowledge, agentic, coding and "
+            "long-context tasks, so a model cannot top the index on a single narrow strength. It is still "
+            "a weighted composite: the choice and weighting of components is Artificial Analysis' editorial "
+            "decision, and the index version evolves over time (v4.1 at integration). Use as a headline "
+            "general-capability signal alongside — not instead of — the task-specific benchmarks above."
+        ),
+        update_strategy=(
+            "Parse the schema.org Dataset JSON-LD blocks embedded in the Artificial Analysis homepage, "
+            "matching the exact dataset name 'Artificial Analysis Intelligence Index' (score key "
+            "'intelligenceIndex'). If AA renames the headline block, fall back to the shorter 'Intelligence' "
+            "dataset (score key 'artificialAnalysisIntelligenceIndex') from the same page."
+        ),
+        fetcher=lambda: parse_aa_intelligence_index_ldjson(fetch_text("https://artificialanalysis.ai/")),
+        min_rows=10,
+        score_range=(0.0, 100.0),
     )
 
 
@@ -996,6 +1098,7 @@ def collect_all() -> list[BenchmarkSnapshot]:
         collect_osworld,
         collect_longbench_v2,
         collect_lmarena_text,
+        collect_aa_intelligence_index,
         collect_hf_local_under10b,
         collect_hf_local_10to20b,
         collect_bigcodebench_under10b,

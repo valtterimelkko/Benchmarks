@@ -12,6 +12,7 @@ from benchmark_dashboard.sources import (
     _find_col,
     _validate_snapshot,
     parse_aa_gdpval_table,
+    parse_aa_intelligence_index_ldjson,
     parse_benchlm_next_data,
     parse_bigcodebench_parquet,
     parse_deepswe_html,
@@ -564,3 +565,160 @@ def test_parse_bigcodebench_parquet_raises_on_missing_columns():
     df.to_parquet(buf, index=False)
     with pytest.raises(ValueError, match="missing columns"):
         parse_bigcodebench_parquet(buf.getvalue(), params_min=0.0, params_max=10.0)
+
+
+# ── Artificial Analysis Intelligence Index (JSON-LD) ─────────────────────────
+
+
+def _ldjson(dataset: dict) -> str:
+    return f'<script type="application/ld+json">{json.dumps(dataset)}</script>'
+
+
+_AA_II_DESCRIPTION = (
+    "Artificial Analysis Intelligence Index v4.1 incorporates 9 evaluations: "
+    "GDPval-AA v2, τ³-Banking, Terminal-Bench v2.1, SciCode, Humanity's Last Exam, "
+    "GPQA Diamond, CritPt, AA-Omniscience, AA-LCR · Evaluation results measured "
+    "independently by Artificial Analysis"
+)
+
+_AA_II_HTML = (
+    "<html><head>"
+    + _ldjson({
+        "@context": "https://schema.org",
+        "@type": "Dataset",
+        "name": "Speed",
+        "description": "Median output speed",
+        "data": [{"label": "Gemini 3.5 Flash", "outputSpeed": 210.5}],
+    })
+    + _ldjson({
+        "@context": "https://schema.org",
+        "@type": "Dataset",
+        "name": "Artificial Analysis Intelligence Index",
+        "description": _AA_II_DESCRIPTION,
+        "data": [
+            {"label": "Claude Fable 5 (with fallback)", "intelligenceIndex": 59.8606463217303, "detailsUrl": "/models/claude-fable-5"},
+            {"label": "GPT-5.6 Sol (max)", "intelligenceIndex": 58.889831189723, "detailsUrl": "/models/gpt-5-6-sol"},
+            {"label": "Kimi K3", "intelligenceIndex": 57.1123394372091, "detailsUrl": "/models/kimi-k3"},
+            {"label": "Grok 4.5 (high)", "intelligenceIndex": 53.8265951657731, "detailsUrl": "/models/grok-4-5"},
+            {"label": "GLM-5.2 (max)", "intelligenceIndex": 51.0858347714416, "detailsUrl": "/models/glm-5-2"},
+        ],
+    })
+    + "</head><body></body></html>"
+)
+
+
+def test_parse_aa_intelligence_index_basic():
+    rows = parse_aa_intelligence_index_ldjson(_AA_II_HTML)
+    assert len(rows) == 5
+    assert rows[0].rank == 1
+    assert rows[0].model == "Claude Fable 5 (with fallback)"
+    assert rows[0].organization == "Anthropic"
+    assert rows[0].score == 59.9
+    assert rows[0].score_unit == "index points"
+    assert rows[1].model == "GPT-5.6 Sol (max)"
+    assert rows[1].organization == "OpenAI"
+    assert rows[2].organization == "Moonshot AI"
+    assert rows[3].organization == "xAI"
+    assert rows[4].organization == "Z.AI"
+
+
+def test_parse_aa_intelligence_index_details_url_made_absolute():
+    rows = parse_aa_intelligence_index_ldjson(_AA_II_HTML)
+    assert rows[0].metadata["details_url"] == "https://artificialanalysis.ai/models/claude-fable-5"
+
+
+def test_parse_aa_intelligence_index_extracts_version_from_description():
+    rows = parse_aa_intelligence_index_ldjson(_AA_II_HTML)
+    assert rows[0].metadata["index_version"] == "v4.1"
+
+
+def test_parse_aa_intelligence_index_sorts_and_ranks_by_score():
+    html = _ldjson({
+        "@type": "Dataset",
+        "name": "Artificial Analysis Intelligence Index",
+        "description": "Artificial Analysis Intelligence Index v9.9 incorporates 2 evaluations",
+        "data": [
+            {"label": "Low Model", "intelligenceIndex": 10.0},
+            {"label": "High Model", "intelligenceIndex": 90.0},
+            {"label": "Mid Model", "intelligenceIndex": 50.0},
+        ],
+    })
+    rows = parse_aa_intelligence_index_ldjson(html)
+    assert [r.model for r in rows] == ["High Model", "Mid Model", "Low Model"]
+    assert [r.rank for r in rows] == [1, 2, 3]
+
+
+def test_parse_aa_intelligence_index_skips_other_datasets():
+    html = _ldjson({
+        "@type": "Dataset",
+        "name": "Artificial Analysis Intelligence Index by Open Weights / Proprietary",
+        "data": [{"label": "Wrong Dataset Model", "intelligenceIndex": 99.0}],
+    }) + _ldjson({
+        "@type": "Dataset",
+        "name": "Cost per Task",
+        "data": [{"label": "Cost Model", "costPerTask": 1.23}],
+    })
+    assert parse_aa_intelligence_index_ldjson(html) == []
+
+
+def test_parse_aa_intelligence_index_fallback_to_short_dataset_name():
+    """If AA renames the headline dataset, fall back to the 'Intelligence' JSON-LD block."""
+    html = _ldjson({
+        "@type": "Dataset",
+        "name": "Intelligence",
+        "description": "Artificial Analysis Intelligence Index · Higher is better",
+        "data": [
+            {"label": "Claude Fable 5 (with fallback)", "artificialAnalysisIntelligenceIndex": 59.86, "detailsUrl": "/models/claude-fable-5"},
+            {"label": "GPT-5.6 Sol (max)", "artificialAnalysisIntelligenceIndex": 58.89, "detailsUrl": "/models/gpt-5-6-sol"},
+        ],
+    })
+    rows = parse_aa_intelligence_index_ldjson(html)
+    assert len(rows) == 2
+    assert rows[0].model == "Claude Fable 5 (with fallback)"
+    assert rows[0].score == 59.9
+    assert rows[0].metadata["index_version"] is None
+
+
+def test_parse_aa_intelligence_index_skips_rows_without_numeric_score():
+    html = _ldjson({
+        "@type": "Dataset",
+        "name": "Artificial Analysis Intelligence Index",
+        "data": [
+            {"label": "Pending Model", "intelligenceIndex": None},
+            {"label": "", "intelligenceIndex": 40.0},
+            {"label": "Real Model", "intelligenceIndex": "41.25"},
+        ],
+    })
+    rows = parse_aa_intelligence_index_ldjson(html)
+    assert len(rows) == 1
+    assert rows[0].model == "Real Model"
+    assert rows[0].score == 41.2
+
+
+def test_parse_aa_intelligence_index_prefers_full_dataset_when_both_present():
+    """The real AA homepage embeds the short 'Intelligence' block BEFORE the full
+    'Artificial Analysis Intelligence Index' block — the parser must still prefer
+    the fuller headline dataset."""
+    html = _ldjson({
+        "@type": "Dataset",
+        "name": "Intelligence",
+        "description": "Artificial Analysis Intelligence Index · Higher is better",
+        "data": [{"label": "Only Model", "artificialAnalysisIntelligenceIndex": 59.86}],
+    }) + _ldjson({
+        "@type": "Dataset",
+        "name": "Artificial Analysis Intelligence Index",
+        "description": _AA_II_DESCRIPTION,
+        "data": [
+            {"label": "Full Model A", "intelligenceIndex": 59.86},
+            {"label": "Full Model B", "intelligenceIndex": 50.0},
+        ],
+    })
+    rows = parse_aa_intelligence_index_ldjson(html)
+    assert [r.model for r in rows] == ["Full Model A", "Full Model B"]
+    assert rows[0].metadata["index_version"] == "v4.1"
+
+
+def test_parse_aa_intelligence_index_tolerates_broken_json_and_missing_dataset():
+    html = '<script type="application/ld+json">{not valid json</script>' + _ldjson({"@type": "WebPage", "name": "Intelligence"})
+    assert parse_aa_intelligence_index_ldjson(html) == []
+    assert parse_aa_intelligence_index_ldjson("<html><body>no scripts</body></html>") == []

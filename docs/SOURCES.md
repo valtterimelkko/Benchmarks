@@ -159,6 +159,27 @@ Maintenance warning:
 
 - This is a writing/style preference proxy, not a rigorous academic-writing benchmark. It should not be used to judge citation accuracy or factuality.
 
+### 8. Artificial Analysis Intelligence Index
+
+- Dashboard ID: `aa_intelligence_index`
+- Source used for rows: `https://artificialanalysis.ai/` (homepage)
+- Methodology: `https://artificialanalysis.ai/methodology/intelligence-benchmarking`
+- Parser: `parse_aa_intelligence_index_ldjson()`
+
+Logic:
+
+- Fetch the Artificial Analysis homepage.
+- It embeds multiple `<script type="application/ld+json">` schema.org `Dataset` blocks.
+- Use the dataset named exactly `Artificial Analysis Intelligence Index` (score key `intelligenceIndex`).
+- Fallback: the shorter `Intelligence` dataset (score key `artificialAnalysisIntelligenceIndex`) from the same page if AA renames the headline block.
+- Exact name matching matters: `Artificial Analysis Intelligence Index by Open Weights / Proprietary` is a different cut and must not be parsed.
+- Sort descending by score, assign ranks, round to 1 decimal, make `detailsUrl` absolute, extract the index version (e.g. `v4.1`) from the dataset description into row metadata.
+- Organisation is inferred from the model label via `infer_org()`; genuinely unknown orgs (e.g. new labs) render as `Unknown` rather than being guessed.
+
+Maintenance warning:
+
+- The JSON-LD blocks are AA's own machine-readable export and quite stable, but if rows disappear, check whether the dataset `name` or score key changed (`grep -o 'intelligenceIndex[^,}]*'` on the saved HTML). The component evaluations (and the index version) change over time — the description text in `collect_aa_intelligence_index()` may need refreshing when AA bumps the version.
+
 ## Adding or replacing a benchmark
 
 1. Add a parser function with unit tests in `tests/test_sources.py`.
@@ -173,3 +194,4 @@ python3 -m benchmark_dashboard.update
 ```
 
 6. Inspect `public/index.html` and `data/benchmarks.json`.
+7. Browser-level acceptance tests live in `tests/test_playwright_dashboard.py` (real Chromium via Playwright against the served artifact; skips cleanly when Playwright is unavailable).

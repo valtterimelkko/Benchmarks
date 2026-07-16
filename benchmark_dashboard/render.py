@@ -54,7 +54,8 @@ def render_dashboard(data: DashboardData) -> str:
             rows_html = f"<tr><td colspan='5' class='error'>{_esc(benchmark.error or 'No rows available')}</td></tr>"
         top_html = "No data"
         if top:
-            top_html = f"{_esc(top.model)} <span>{top.score:g}{_esc(top.score_unit.replace('% ', '% '))}</span>"
+            leader_sep = "" if top.score_unit.startswith("%") else " "
+            top_html = f"{_esc(top.model)} <span>{top.score:g}{leader_sep}{_esc(top.score_unit)}</span>"
         cards.append(
             f"""
             <section class="benchmark-card" id="{_esc(benchmark.id)}">

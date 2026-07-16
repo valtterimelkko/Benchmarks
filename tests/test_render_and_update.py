@@ -36,6 +36,15 @@ def test_render_dashboard_contains_intent_sources_and_rows():
     assert "Generated 2026-06-08T12:00:00Z" in html
 
 
+def test_render_dashboard_leader_line_spacing_by_unit():
+    # %-units attach directly to the number; word units get a separating space.
+    assert "70.05% solve rate" in render_dashboard(sample_dashboard())
+    elo_dashboard = sample_dashboard()
+    elo_dashboard.benchmarks[0].rows[0].score = 59.9
+    elo_dashboard.benchmarks[0].rows[0].score_unit = "index points"
+    assert "59.9 index points" in render_dashboard(elo_dashboard)
+
+
 def test_is_usable_snapshot_requires_enough_successful_sources():
     good = sample_dashboard()
     assert is_usable_snapshot(good, minimum_ok=1) is True
