@@ -120,3 +120,13 @@ def test_embedded_snapshot_json_contains_aa_intelligence_index(dashboard_page):
     # All pre-existing snapshots must still be in the data too.
     for card_id in PRE_EXISTING_CARD_IDS:
         assert card_id in ids
+
+
+def test_aa_intelligence_index_card_sits_between_deepswe_and_gdpval(dashboard_page):
+    """Maintainer-requested position: DeepSWE → AA Intelligence Index → GDPval-AA."""
+    card_ids = dashboard_page.locator("main section.benchmark-card").evaluate_all(
+        "(els) => els.map((el) => el.id).filter(Boolean)"
+    )
+    assert card_ids.index("deep_swe") < card_ids.index("aa_intelligence_index") < card_ids.index("gdpval_aa"), (
+        f"unexpected card order: {card_ids}"
+    )

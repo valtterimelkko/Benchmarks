@@ -1092,13 +1092,13 @@ def collect_bigcodebench_10to20b() -> BenchmarkSnapshot:
 def collect_all() -> list[BenchmarkSnapshot]:
     collectors = [
         collect_deepswe,
+        collect_aa_intelligence_index,
         collect_gdpval_aa,
         collect_terminal_bench,
         collect_browsecomp,
         collect_osworld,
         collect_longbench_v2,
         collect_lmarena_text,
-        collect_aa_intelligence_index,
         collect_hf_local_under10b,
         collect_hf_local_10to20b,
         collect_bigcodebench_under10b,
