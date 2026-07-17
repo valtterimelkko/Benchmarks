@@ -9,7 +9,7 @@ Type=simple
 User=root
 WorkingDirectory=/root/benchmarks
 ExecStartPre=-/usr/bin/docker rm -f benchmarks-dashboard
-ExecStart=/usr/bin/docker run --name benchmarks-dashboard --network n8n-docker-caddy_default --read-only --tmpfs /tmp:rw,noexec,nosuid,size=16m --tmpfs /data:rw,noexec,nosuid,size=16m --tmpfs /config:rw,noexec,nosuid,size=16m -v /root/benchmarks/public:/srv:ro caddy:latest caddy file-server --listen :8766 --root /srv
+ExecStart=/usr/bin/docker run --name benchmarks-dashboard --network n8n-docker-caddy_default --read-only --tmpfs /tmp:rw,noexec,nosuid,size=16m --tmpfs /data:rw,noexec,nosuid,size=16m --tmpfs /config:rw,noexec,nosuid,size=16m -v /root/benchmarks/public:/srv:ro -v /root/benchmarks/deploy/Caddyfile:/etc/caddy/Caddyfile:ro caddy:latest caddy run --config /etc/caddy/Caddyfile --adapter caddyfile
 ExecStop=/usr/bin/docker stop benchmarks-dashboard
 Restart=always
 RestartSec=5

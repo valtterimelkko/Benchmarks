@@ -94,6 +94,30 @@ curl -I https://benchmarks.letsautomate.work
 
 If Authelia redirects to login, routing is probably working.
 
+## Stale page / newly added content not visible
+
+Symptom: the origin `public/index.html` contains new content but the browser
+shows the old page. Cause: before 2026-07-17 the container sent no
+`Cache-Control` header, so browsers applied heuristic caching from
+`Last-Modified` and served the old snapshot from disk cache.
+
+Fix for the viewer: one hard refresh (Ctrl+Shift+R / Cmd+Shift+R).
+
+Permanent fix (deployed): the container now runs `caddy run` with
+`deploy/Caddyfile`, which sets `Cache-Control: no-cache` — every visit
+revalidates (cheap 304 via ETag). Verify:
+
+```bash
+docker exec n8n-docker-caddy-caddy-1 wget -S -qO /dev/null http://benchmarks-dashboard:8766/ 2>&1 | grep -i cache-control
+# expected: Cache-Control: no-cache
+```
+
+If the header is missing, check the service runs the Caddyfile variant:
+
+```bash
+systemctl cat benchmarks-dashboard.service | grep deploy/Caddyfile
+```
+
 ## Validating page content end-to-end (Authelia wall)
 
 Unauthenticated requests to `https://benchmarks.letsautomate.work` get a 302 to

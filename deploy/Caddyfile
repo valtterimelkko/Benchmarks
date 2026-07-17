@@ -1,0 +1,12 @@
+# Container-internal Caddyfile for the benchmarks-dashboard static container.
+# Mounted to /etc/caddy/Caddyfile by benchmarks-dashboard.service.
+#
+# Cache-Control: no-cache forces browsers to revalidate on every visit
+# (ETag/Last-Modified still make revalidation a cheap 304). Without it,
+# browsers apply heuristic caching from Last-Modified and can show a stale
+# dashboard for hours after a weekly snapshot update.
+:8766 {
+	root * /srv
+	file_server
+	header Cache-Control "no-cache"
+}

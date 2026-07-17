@@ -95,6 +95,10 @@ Safe validation without reload:
 docker exec n8n-docker-caddy-caddy-1 caddy validate --config /etc/caddy/Caddyfile
 ```
 
+## Cache behaviour
+
+The container sends `Cache-Control: no-cache` (see `deploy/Caddyfile`). If a user still sees a stale dashboard, one hard refresh (Ctrl+Shift+R / Cmd+Shift+R) replaces the cached copy; afterwards every visit revalidates automatically.
+
 ## Landing page
 
 Landing source:
