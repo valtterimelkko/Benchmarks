@@ -11,6 +11,7 @@ from benchmark_dashboard.sources import (
     _fetch_with_retry,
     _find_col,
     _validate_snapshot,
+    parse_aa_agentic_index_ldjson,
     parse_aa_gdpval_table,
     parse_aa_intelligence_index_ldjson,
     parse_benchlm_next_data,
@@ -722,3 +723,54 @@ def test_parse_aa_intelligence_index_tolerates_broken_json_and_missing_dataset()
     html = '<script type="application/ld+json">{not valid json</script>' + _ldjson({"@type": "WebPage", "name": "Intelligence"})
     assert parse_aa_intelligence_index_ldjson(html) == []
     assert parse_aa_intelligence_index_ldjson("<html><body>no scripts</body></html>") == []
+
+
+# ── Artificial Analysis Agentic Index (JSON-LD) ──────────────────────────────
+
+
+_AA_AGENTIC_DESCRIPTION = (
+    "Measures performance in agentic workflows, focusing on behaviors like tool use, "
+    "planning, autonomy, and complex problem solving. · Evaluation results measured "
+    "independently by Artificial Analysis"
+)
+
+_AA_AGENTIC_HTML = (
+    _ldjson({
+        "@context": "https://schema.org",
+        "@type": "Dataset",
+        "name": "Artificial Analysis Agentic Index",
+        "description": _AA_AGENTIC_DESCRIPTION,
+        "data": [
+            {"label": "GPT-5.6 Sol (max)", "score": 57.7836323024055, "detailsUrl": "/models/gpt-5-6-sol"},
+            {"label": "Claude Opus 5 (max)", "score": 59.1729518900344, "detailsUrl": "/models/claude-opus-5"},
+            {"label": "Qwen3.8 Max", "score": 58.4030687285223, "detailsUrl": "/models/qwen3-8-max"},
+        ],
+    })
+    + _ldjson({
+        "@type": "Dataset",
+        "name": "Artificial Analysis Agentic Index: Cost per Task",
+        "data": [{"label": "Wrong dataset", "score": 999.0}],
+    })
+)
+
+
+def test_parse_aa_agentic_index_basic():
+    rows = parse_aa_agentic_index_ldjson(_AA_AGENTIC_HTML)
+    assert [row.model for row in rows] == ["Claude Opus 5 (max)", "Qwen3.8 Max", "GPT-5.6 Sol (max)"]
+    assert [row.rank for row in rows] == [1, 2, 3]
+    assert rows[0].organization == "Anthropic"
+    assert rows[0].score == 59.2
+    assert rows[0].score_unit == "index points"
+    assert rows[0].metadata["details_url"] == "https://artificialanalysis.ai/models/claude-opus-5"
+
+
+def test_parse_aa_agentic_index_ignores_other_datasets_and_malformed_json():
+    html = (
+        '<script type="application/ld+json">{not valid json</script>'
+        + _ldjson({
+            "@type": "Dataset",
+            "name": "Artificial Analysis Agentic Index by Open Weights / Proprietary",
+            "data": [{"label": "Wrong cut", "score": 99.0}],
+        })
+    )
+    assert parse_aa_agentic_index_ldjson(html) == []

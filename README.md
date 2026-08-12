@@ -31,11 +31,12 @@ The current dashboard includes:
 1. **DeepSWE** — long-horizon software engineering agents
 2. **AA Intelligence Index** — Artificial Analysis' composite of 9 independently-run evaluations (reasoning, knowledge, agentic, coding, long-context)
 3. **GDPval-AA** — agentic professional work across real deliverables
-4. **Terminal-Bench** — shell, terminal, and tool-use tasks
-5. **BrowseComp** — browser/web research tasks
-6. **OSWorld-Verified** — desktop/computer-use agents
-7. **LongBench v2** — long-context retrieval and reasoning
-8. **LMArena Text Style Control** — human preference proxy for writing/style
+4. **Artificial Analysis Agentic Index** — composite agentic capability across GDPval-AA v2 and τ³-Banking
+5. **Terminal-Bench** — shell, terminal, and tool-use tasks
+6. **BrowseComp** — browser/web research tasks
+7. **OSWorld-Verified** — desktop/computer-use agents
+8. **LongBench v2** — long-context retrieval and reasoning
+9. **LMArena Text Style Control** — human preference proxy for writing/style
 
 These were chosen because they say more about the kinds of work I actually do than the most easily optimised headline benchmarks.
 

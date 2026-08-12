@@ -469,6 +469,54 @@ def parse_aa_intelligence_index_ldjson(html: str) -> list[BenchmarkRow]:
     return rows
 
 
+def parse_aa_agentic_index_ldjson(html: str) -> list[BenchmarkRow]:
+    """Parse the Artificial Analysis Agentic Index from schema.org JSON-LD.
+
+    The Artificial Analysis Agentic Index page publishes several Dataset blocks. Match the
+    exact headline dataset so cost, time, token, and alternate capability cuts do
+    not get mistaken for the score leaderboard.
+    """
+    rows: list[BenchmarkRow] = []
+    for match in re.finditer(r'<script type="application/ld\+json">(.*?)</script>', html, re.DOTALL):
+        try:
+            dataset = json.loads(match.group(1))
+        except (json.JSONDecodeError, ValueError):
+            continue
+        if not isinstance(dataset, dict) or dataset.get("@type") != "Dataset":
+            continue
+        if str(dataset.get("name") or "").strip() != "Artificial Analysis Agentic Index":
+            continue
+        data = dataset.get("data")
+        if not isinstance(data, list):
+            continue
+        for item in data:
+            if not isinstance(item, dict):
+                continue
+            label = clean_text(item.get("label"))
+            score = as_float(item.get("score"))
+            if not label or score is None:
+                continue
+            details = clean_text(item.get("detailsUrl")) or None
+            if details and details.startswith("/"):
+                details = f"https://artificialanalysis.ai{details}"
+            rows.append(
+                BenchmarkRow(
+                    rank=0,
+                    model=label,
+                    organization=infer_org(label),
+                    score=round(score, 1),
+                    score_unit="index points",
+                    metadata={"details_url": details},
+                )
+            )
+        if rows:
+            break
+    rows.sort(key=lambda row: row.score, reverse=True)
+    for index, row in enumerate(rows, start=1):
+        row.rank = index
+    return rows
+
+
 def parse_lmarena_rows(payload: dict[str, Any]) -> list[BenchmarkRow]:
     rows: list[BenchmarkRow] = []
     for wrapper in payload.get("rows", []):
@@ -754,6 +802,37 @@ def collect_aa_intelligence_index() -> BenchmarkSnapshot:
             "dataset (score key 'artificialAnalysisIntelligenceIndex') from the same page."
         ),
         fetcher=lambda: parse_aa_intelligence_index_ldjson(fetch_text("https://artificialanalysis.ai/")),
+        min_rows=10,
+        score_range=(0.0, 100.0),
+    )
+
+
+def collect_aa_agentic_index() -> BenchmarkSnapshot:
+    return _snapshot(
+        id="aa_agentic_index",
+        name="Artificial Analysis Agentic Index",
+        category="Agentic capability",
+        description=(
+            "Artificial Analysis' composite index for tool use, planning, autonomy and complex problem "
+            "solving. It is an equal-weighted average of GDPval-AA v2 and τ³-Banking, with higher scores "
+            "indicating stronger overall agentic performance."
+        ),
+        source_url="https://artificialanalysis.ai/models/capabilities/agentic",
+        methodology_url="https://artificialanalysis.ai/methodology/capability-indices",
+        authenticity=(
+            "Both component evaluations are run independently by Artificial Analysis rather than self-reported "
+            "by model providers. The composite covers real-world professional deliverables and multi-turn, "
+            "tool-using customer-support workflows, but it remains a two-benchmark average and should be read "
+            "alongside the underlying GDPval-AA and τ³-Banking results."
+        ),
+        update_strategy=(
+            "Fetch the official Artificial Analysis Agentic Index page during the dashboard's existing weekly "
+            "refresh and parse its schema.org Dataset JSON-LD block, matching the exact dataset name "
+            "'Artificial Analysis Agentic Index' and its 'score' field."
+        ),
+        fetcher=lambda: parse_aa_agentic_index_ldjson(
+            fetch_text("https://artificialanalysis.ai/models/capabilities/agentic")
+        ),
         min_rows=10,
         score_range=(0.0, 100.0),
     )
@@ -1094,6 +1173,7 @@ def collect_all() -> list[BenchmarkSnapshot]:
         collect_deepswe,
         collect_aa_intelligence_index,
         collect_gdpval_aa,
+        collect_aa_agentic_index,
         collect_terminal_bench,
         collect_browsecomp,
         collect_osworld,

@@ -122,6 +122,29 @@ def test_embedded_snapshot_json_contains_aa_intelligence_index(dashboard_page):
         assert card_id in ids
 
 
+def test_aa_agentic_index_card_appears_with_content(dashboard_page):
+    card = dashboard_page.locator("section#aa_agentic_index")
+    assert card.count() == 1, "AA Agentic Index card is missing from the page"
+    assert "Artificial Analysis Agentic Index" in card.locator("h2").inner_text()
+    source_link = card.locator('a[href*="artificialanalysis.ai"]')
+    assert source_link.count() >= 1, "card has no Artificial Analysis source link"
+    embedded = json.loads(dashboard_page.locator("#benchmark-data").inner_text())
+    snapshot = next(b for b in embedded["benchmarks"] if b["id"] == "aa_agentic_index")
+    if snapshot["status"] == "ok":
+        rows = card.locator("tbody tr")
+        assert rows.count() >= 10, f"expected ≥10 model rows, found {rows.count()}"
+        assert rows.first.locator("td").nth(1).inner_text().strip()
+        assert "index points" in rows.first.locator("td.score").inner_text()
+
+
+def test_aa_agentic_index_card_is_fourth(dashboard_page):
+    """Maintainer-requested position: it is the fourth benchmark card top-to-bottom."""
+    card_ids = dashboard_page.locator("main section.benchmark-card").evaluate_all(
+        "(els) => els.map((el) => el.id).filter(Boolean)"
+    )
+    assert card_ids[3] == "aa_agentic_index", f"unexpected card order: {card_ids}"
+
+
 def test_aa_intelligence_index_card_sits_between_deepswe_and_gdpval(dashboard_page):
     """Maintainer-requested position: DeepSWE → AA Intelligence Index → GDPval-AA."""
     card_ids = dashboard_page.locator("main section.benchmark-card").evaluate_all(

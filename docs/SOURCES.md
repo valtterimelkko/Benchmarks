@@ -180,6 +180,25 @@ Maintenance warning:
 
 - The JSON-LD blocks are AA's own machine-readable export and quite stable, but if rows disappear, check whether the dataset `name` or score key changed (`grep -o 'intelligenceIndex[^,}]*'` on the saved HTML). The component evaluations (and the index version) change over time — the description text in `collect_aa_intelligence_index()` may need refreshing when AA bumps the version.
 
+### 9. Artificial Analysis Agentic Index
+
+- Dashboard ID: `aa_agentic_index`
+- Source: `https://artificialanalysis.ai/models/capabilities/agentic`
+- Methodology: `https://artificialanalysis.ai/methodology/capability-indices`
+- Parser: `parse_aa_agentic_index_ldjson()`
+
+Logic:
+
+- Fetch the official Artificial Analysis Agentic Index page during the same weekly update run as every other dashboard source.
+- Parse the exact schema.org `Dataset` block named `Artificial Analysis Agentic Index` and its `score` field.
+- The index is an equal-weighted composite of GDPval-AA v2 and τ³-Banking, measuring tool use, planning, autonomy and complex problem solving.
+- Sort descending by index points, assign ranks, round to one decimal place, and make each model's `detailsUrl` absolute.
+
+Maintenance warning:
+
+- The page also publishes separate cost, time and output-token Dataset blocks. Keep exact dataset-name matching so those metrics cannot become leaderboard rows. If the source changes, inspect the JSON-LD block for a renamed score field or dataset name before changing the parser.
+- This collector is part of `collect_all()` and therefore follows the existing Monday weekly systemd timer; it has no separate refresh schedule.
+
 ## Adding or replacing a benchmark
 
 1. Add a parser function with unit tests in `tests/test_sources.py`.
