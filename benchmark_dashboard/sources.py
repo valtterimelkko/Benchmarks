@@ -737,23 +737,34 @@ def collect_longbench_v2() -> BenchmarkSnapshot:
 
 
 _LMARENA_HF_BASE = "https://datasets-server.huggingface.co/rows?dataset=lmarena-ai%2Fleaderboard-dataset&split=latest&offset=0&length=50"
+_LMARENA_HF_FIRST_ROWS_BASE = "https://datasets-server.huggingface.co/first-rows?dataset=lmarena-ai%2Fleaderboard-dataset&split=latest"
 # HF dataset configs in preference order; the first one that returns rows wins.
 _LMARENA_CONFIGS = ("text", "text_style_control")
+
+
+def _lmarena_overall_rows(payload: dict[str, Any]) -> list[BenchmarkRow]:
+    rows = parse_lmarena_rows(payload)
+    overall = [row for row in rows if row.metadata.get("category") == "overall"]
+    return overall or rows
 
 
 def collect_lmarena_text() -> BenchmarkSnapshot:
     def fetcher() -> list[BenchmarkRow]:
         last_exc: Exception | None = None
         for config in _LMARENA_CONFIGS:
-            try:
-                url = f"{_LMARENA_HF_BASE}&config={config}"
-                response = requests.get(url, timeout=TIMEOUT, headers={"User-Agent": USER_AGENT})
-                response.raise_for_status()
-                rows = parse_lmarena_rows(response.json())
-                if rows:
-                    return rows
-            except Exception as exc:  # noqa: BLE001
-                last_exc = exc
+            for endpoint in ("rows", "first-rows"):
+                try:
+                    if endpoint == "rows":
+                        url = f"{_LMARENA_HF_BASE}&config={config}"
+                    else:
+                        url = f"{_LMARENA_HF_FIRST_ROWS_BASE}&config={config}"
+                    response = requests.get(url, timeout=TIMEOUT, headers={"User-Agent": USER_AGENT})
+                    response.raise_for_status()
+                    rows = _lmarena_overall_rows(response.json())
+                    if rows:
+                        return rows
+                except Exception as exc:  # noqa: BLE001
+                    last_exc = exc
         if last_exc is not None:
             raise last_exc
         return []
@@ -766,7 +777,7 @@ def collect_lmarena_text() -> BenchmarkSnapshot:
         source_url="https://huggingface.co/datasets/lmarena-ai/leaderboard-dataset",
         methodology_url="https://arena.ai/",
         authenticity="Live human preference battles are harder to optimise directly than static tests, but they reflect popularity/style preferences rather than academic correctness.",
-        update_strategy="Fetch the public Hugging Face dataset-server rows for the LMArena text latest split (falls back to text_style_control if the primary config is unavailable).",
+        update_strategy="Fetch the public Hugging Face dataset-server latest rows for LMArena text (falls back to the first-rows preview endpoint when the paginated rows endpoint is busy, then to text_style_control if the primary config is unavailable).",
         fetcher=fetcher,
         min_rows=10,
         score_range=(900.0, 2200.0),

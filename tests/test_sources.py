@@ -5,6 +5,7 @@ from unittest.mock import MagicMock, patch
 import openpyxl
 import pandas as pd
 import pytest
+import requests
 
 from benchmark_dashboard.models import BenchmarkRow
 from benchmark_dashboard.sources import (
@@ -19,6 +20,7 @@ from benchmark_dashboard.sources import (
     parse_deepswe_html,
     parse_hf_llm_leaderboard_parquet,
     parse_longbench_html,
+    collect_lmarena_text,
     parse_lmarena_rows,
     parse_osworld_workbook,
     parse_terminal_html,
@@ -137,6 +139,42 @@ def test_parse_lmarena_rows_from_hf_dataset_response():
     assert rows[0].organization == "Anthropic"
     assert rows[0].score == 1499.3
     assert rows[0].metadata["votes"] == 34186
+
+
+def test_collect_lmarena_uses_first_rows_when_hf_rows_endpoint_is_busy():
+    payload = {
+        "rows": [{
+            "row": {
+                "model_name": "claude-opus-5",
+                "organization": "anthropic",
+                "rating": 1512.5,
+                "rating_lower": 1505.0,
+                "rating_upper": 1520.0,
+                "vote_count": 1000,
+                "rank": 1,
+                "category": "overall",
+                "leaderboard_publish_date": "2026-08-11",
+            }
+        }]
+    }
+    calls: list[str] = []
+
+    def fake_get(url, **kwargs):
+        calls.append(url)
+        response = MagicMock()
+        if "first-rows" in url:
+            response.raise_for_status.return_value = None
+            response.json.return_value = payload
+        else:
+            response.raise_for_status.side_effect = requests.HTTPError("500 server busy")
+        return response
+
+    with patch("benchmark_dashboard.sources.requests.get", side_effect=fake_get):
+        snapshot = collect_lmarena_text()
+
+    assert snapshot.status == "ok"
+    assert snapshot.rows[0].model == "claude-opus-5"
+    assert any("first-rows" in url for url in calls)
 
 
 # ── Artificial Analysis GDPval-AA table ──────────────────────────────────────

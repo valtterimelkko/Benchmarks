@@ -151,13 +151,17 @@ Maintenance warning:
 
 Logic:
 
-- Fetch Hugging Face dataset-server rows.
+- Fetch the latest Hugging Face dataset-server rows for the preferred text config.
+- If the paginated `rows` endpoint is busy/unavailable, fall back to the dataset-server `first-rows` preview endpoint, which contains the current top rows.
+- Try the `text_style_control` config if the primary text config is unavailable.
+- Keep only the `overall` category when category labels are present.
 - Use arena `rating` as score.
 - Keep confidence bounds, votes, licence and category in metadata.
 
 Maintenance warning:
 
 - This is a writing/style preference proxy, not a rigorous academic-writing benchmark. It should not be used to judge citation accuracy or factuality.
+- The `rows` endpoint has returned transient HTTP 500 responses when Hugging Face is busy; retain the `first-rows` fallback unless the dataset API changes.
 
 ### 8. Artificial Analysis Intelligence Index
 
