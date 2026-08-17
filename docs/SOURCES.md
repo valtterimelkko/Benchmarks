@@ -1,5 +1,7 @@
 # Benchmark source and parser map
 
+> **Last verified:** 2026-08-17 — parsers and source URLs checked against live sites; see commit history. Re-verify after any source change.
+
 This document is for future agents maintaining `/root/benchmarks`. The most likely failure mode is an upstream site changing HTML/JS structure. Fix parsers in `benchmark_dashboard/sources.py`, then run `python3 -m pytest -q` and `python3 -m benchmark_dashboard.update`.
 
 ## Design principles

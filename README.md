@@ -57,13 +57,17 @@ tests/                 Parser/render regression tests
 ```text
 weekly timer
   -> fetch benchmark sources
-  -> parse and normalise rows
+  -> parse and normalise rows (see docs/SOURCES.md)
   -> write data/benchmarks.json
   -> render public/index.html
   -> optionally commit updated snapshots
 ```
 
 The output is a simple static dashboard, so the repo is easy to self-host behind any static web server.
+
+**Robustness:** `benchmark_dashboard.update` refuses to overwrite an existing dashboard if fewer than **3** sources succeed — a transient upstream outage cannot clobber a good dashboard with mostly-empty output. Each collector runs independently; one source failing does not abort the update. See [`docs/SOURCES.md`](docs/SOURCES.md) and [`docs/MAINTAINER-RUNBOOK.md`](docs/MAINTAINER-RUNBOOK.md#robustness-behaviour).
+
+**Schema:** every parser returns `BenchmarkRow` (`rank`, `model`, `organization`, `score`, `score_unit`, `date`, `metadata`) and every collector returns `BenchmarkSnapshot` (`id`, `name`, `category`, `source_url`, `status` `ok`/`failed`, `rows`, `warning`/`error`). Normalised rows are persisted to `data/benchmarks.json` — see [`docs/SOURCES.md#normalised-row-schema`](docs/SOURCES.md#normalised-row-schema) and `benchmark_dashboard/models.py`.
 
 ## Quick start
 
@@ -90,6 +94,30 @@ Serve the generated site locally:
 ```bash
 python3 -m benchmark_dashboard.server --host 127.0.0.1 --port 8766
 ```
+
+### Public fork — 60-second quickstart
+
+Fork this repo, then:
+
+```bash
+git clone https://github.com/<you>/Benchmarks.git
+cd Benchmarks
+pip install -r requirements.txt
+python3 -m benchmark_dashboard.update   # writes data/benchmarks.json + public/index.html
+python3 -m benchmark_dashboard.server --host 127.0.0.1 --port 8766  # open http://127.0.0.1:8766
+```
+
+No secrets, no Auth, no infrastructure required — the committed `data/benchmarks.json` and `public/index.html` are a portable static snapshot. To automate weekly refreshes, wire the helper in `scripts/update_and_commit.sh` to cron or systemd (see [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) and [`systemd/`](systemd/)).
+
+### Helper scripts
+
+| Script | Purpose |
+|--------|---------|
+| [`scripts/update_and_commit.sh`](scripts/update_and_commit.sh) | `python3 -m benchmark_dashboard.update --commit` — fetch, render, commit + push if changed |
+| [`scripts/serve_local.sh`](scripts/serve_local.sh) | `python3 -m benchmark_dashboard.server --host 172.18.0.1 --port 8766` — dev serve (private-setup host) |
+| `python3 -m benchmark_dashboard.update` | One-off fetch + render (no commit) |
+| `python3 -m benchmark_dashboard.update --commit` | Fetch + render + git commit/push of `data/` and `public/` |
+| `python3 -m benchmark_dashboard.server` | Tiny stdlib static server for `public/` |
 
 ## Documentation map
 
