@@ -153,3 +153,33 @@ def test_aa_intelligence_index_card_sits_between_deepswe_and_gdpval(dashboard_pa
     assert card_ids.index("deep_swe") < card_ids.index("aa_intelligence_index") < card_ids.index("gdpval_aa"), (
         f"unexpected card order: {card_ids}"
     )
+
+
+def test_theme_toggle_switches_and_persists(browser, base_url):
+    """Maintainer-requested light/dark switch: toggling flips the palette and
+    the choice survives a reload via localStorage."""
+    page = browser.new_page(viewport={"width": 1280, "height": 1600})
+    try:
+        page.goto(base_url, wait_until="domcontentloaded", timeout=20000)
+        toggle = page.locator("#theme-toggle")
+        assert toggle.count() == 1, "theme toggle button is missing"
+
+        def body_bg() -> str:
+            return page.evaluate("getComputedStyle(document.body).backgroundColor")
+
+        initial_theme = page.evaluate("document.documentElement.getAttribute('data-theme')")
+        assert initial_theme in ("light", "dark"), f"no data-theme applied on load: {initial_theme!r}"
+        initial_bg = body_bg()
+
+        page.click("#theme-toggle")
+        toggled_theme = page.evaluate("document.documentElement.getAttribute('data-theme')")
+        assert toggled_theme != initial_theme, "clicking the toggle did not switch data-theme"
+        assert page.evaluate("localStorage.getItem('theme')") == toggled_theme, "choice not persisted"
+        assert body_bg() != initial_bg, "palette did not change after toggling theme"
+
+        page.reload(wait_until="domcontentloaded")
+        assert page.evaluate("document.documentElement.getAttribute('data-theme')") == toggled_theme, (
+            "theme did not survive reload"
+        )
+    finally:
+        page.close()
