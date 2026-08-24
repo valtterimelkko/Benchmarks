@@ -45,6 +45,30 @@ def test_render_dashboard_leader_line_spacing_by_unit():
     assert "59.9 index points" in render_dashboard(elo_dashboard)
 
 
+def test_render_dashboard_includes_functioning_theme_toggle():
+    html = render_dashboard(sample_dashboard())
+    # Toggle control exists in the page
+    assert "theme-toggle" in html
+    # Both themes are defined via data-theme attribute switching
+    assert 'data-theme="light"' in html or "data-theme='light'" in html
+    assert "prefers-color-scheme" in html
+    # Preference is persisted in localStorage and applied before first paint
+    assert "localStorage" in html
+    assert html.index("localStorage") < html.index("<body>")
+
+
+def test_render_dashboard_light_theme_overrides_all_core_variables():
+    html = render_dashboard(sample_dashboard())
+    # Every dark-theme variable has a light-theme counterpart block
+    for variable in ["--bg", "--surface", "--text", "--muted", "--line", "--accent"]:
+        assert html.count(variable) >= 2, f"{variable} not overridden for light mode"
+
+
+def test_render_dashboard_theme_toggle_button_has_accessible_label():
+    html = render_dashboard(sample_dashboard())
+    assert 'aria-label="Switch colour theme"' in html
+
+
 def test_is_usable_snapshot_requires_enough_successful_sources():
     good = sample_dashboard()
     assert is_usable_snapshot(good, minimum_ok=1) is True

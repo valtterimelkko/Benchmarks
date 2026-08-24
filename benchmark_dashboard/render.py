@@ -94,20 +94,34 @@ def render_dashboard(data: DashboardData) -> str:
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>LLM Agent Benchmark Dashboard</title>
+<script>
+(function() {{
+  var theme = null;
+  try {{ theme = localStorage.getItem('theme'); }} catch (e) {{}}
+  if (theme !== 'light' && theme !== 'dark') {{
+    theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  }}
+  document.documentElement.setAttribute('data-theme', theme);
+}})();
+</script>
 <style>
-:root {{ color-scheme: dark; --bg:#111113; --surface:#1a1a1f; --surface2:#22232a; --text:#eee8df; --muted:#a59d92; --line:rgba(255,255,255,.08); --accent:#d48a5a; --good:#79d18b; --bad:#ff7a7a; --warn:#f2bf65; }}
+:root {{ color-scheme: dark; --bg:#111113; --surface:#1a1a1f; --surface2:#22232a; --text:#eee8df; --muted:#a59d92; --line:rgba(255,255,255,.08); --accent:#d48a5a; --good:#79d18b; --bad:#ff7a7a; --warn:#f2bf65; --bg-glow:#2b211d; --card-tint-a:rgba(255,255,255,.055); --card-tint-b:rgba(255,255,255,.025); --panel-tint:rgba(255,255,255,.045); --th-tint:rgba(255,255,255,.03); --shadow:0 24px 80px rgba(0,0,0,.22); }}
+[data-theme="light"] {{ color-scheme: light; --bg:#f6f4ef; --surface:#ffffff; --surface2:#ece8e0; --text:#23211e; --muted:#6d675d; --line:rgba(35,33,30,.16); --accent:#a85620; --good:#1f7a3d; --bad:#b3322f; --warn:#8f6410; --bg-glow:#efe1d6; --card-tint-a:rgba(255,255,255,.9); --card-tint-b:rgba(255,255,255,.6); --panel-tint:rgba(35,33,30,.045); --th-tint:rgba(35,33,30,.04); --shadow:0 20px 60px rgba(70,58,46,.12); }}
 * {{ box-sizing:border-box; }}
-body {{ margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; background:radial-gradient(circle at top left,#2b211d 0,#111113 38rem); color:var(--text); }}
+body {{ margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; background:radial-gradient(circle at top left,var(--bg-glow) 0,var(--bg) 38rem); color:var(--text); }}
+.theme-row {{ display:flex; justify-content:flex-end; margin-bottom:10px; }}
+.theme-toggle {{ display:inline-flex; align-items:center; gap:8px; background:var(--panel-tint); border:1px solid var(--line); border-radius:999px; padding:8px 16px; color:var(--muted); font:inherit; font-size:.76rem; text-transform:uppercase; letter-spacing:.08em; cursor:pointer; }}
+.theme-toggle:hover {{ color:var(--text); border-color:var(--accent); }}
 a {{ color:var(--accent); }}
 header {{ max-width:1180px; margin:0 auto; padding:56px 22px 28px; }}
 h1 {{ font-family:Georgia,serif; font-weight:400; letter-spacing:-.04em; font-size:clamp(2.3rem,6vw,5rem); line-height:.94; margin:0 0 18px; }}
 header p {{ color:var(--muted); max-width:780px; line-height:1.6; font-size:1.03rem; }}
 .summary {{ display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px; margin-top:28px; }}
-.summary div {{ background:rgba(255,255,255,.045); border:1px solid var(--line); border-radius:18px; padding:18px; }}
+.summary div {{ background:var(--panel-tint); border:1px solid var(--line); border-radius:18px; padding:18px; }}
 .summary span {{ display:block; color:var(--muted); font-size:.78rem; text-transform:uppercase; letter-spacing:.08em; }}
 .summary strong {{ display:block; margin-top:8px; font-size:1.5rem; }}
 main {{ max-width:1180px; margin:0 auto; padding:10px 22px 64px; display:grid; gap:18px; }}
-.benchmark-card {{ background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.025)); border:1px solid var(--line); border-radius:24px; padding:22px; box-shadow:0 24px 80px rgba(0,0,0,.22); }}
+.benchmark-card {{ background:linear-gradient(180deg,var(--card-tint-a),var(--card-tint-b)); border:1px solid var(--line); border-radius:24px; padding:22px; box-shadow:var(--shadow); }}
 .card-head {{ display:flex; justify-content:space-between; gap:16px; align-items:flex-start; }}
 .category {{ color:var(--accent); margin:0 0 6px; text-transform:uppercase; letter-spacing:.1em; font-size:.74rem; font-weight:700; }}
 h2 {{ margin:0; font-size:1.55rem; letter-spacing:-.02em; }}
@@ -120,7 +134,7 @@ h2 {{ margin:0; font-size:1.55rem; letter-spacing:-.02em; }}
 details {{ margin:12px 0 16px; color:var(--muted); }} summary {{ cursor:pointer; color:var(--text); }}
 .table-wrap {{ overflow:auto; border:1px solid var(--line); border-radius:18px; }}
 table {{ width:100%; border-collapse:collapse; min-width:780px; }}
-th,td {{ padding:12px 14px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; }} th {{ color:var(--muted); font-size:.76rem; text-transform:uppercase; letter-spacing:.08em; background:rgba(255,255,255,.03); }}
+th,td {{ padding:12px 14px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; }} th {{ color:var(--muted); font-size:.76rem; text-transform:uppercase; letter-spacing:.08em; background:var(--th-tint); }}
 td.rank {{ color:var(--accent); font-variant-numeric:tabular-nums; width:56px; }}
 td strong {{ display:block; }} td span, .meta {{ color:var(--muted); font-size:.86rem; }}
 .score {{ font-variant-numeric:tabular-nums; font-weight:700; }} .score small {{ display:block; color:var(--muted); font-weight:400; }}
@@ -131,6 +145,9 @@ footer {{ max-width:1180px; margin:0 auto; color:var(--muted); padding:0 22px 38
 </head>
 <body>
 <header>
+  <div class="theme-row">
+    <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Switch colour theme">Theme</button>
+  </div>
   <h1>LLM Agent Benchmark Dashboard</h1>
   <p>A private weekly snapshot of benchmarks that matter for practical agent work: coding, terminal/CLI use, browser research, computer use, long-context reading, and writing quality. This page intentionally favours hard-to-game agentic benchmarks over generic marketing scores.</p>
   <div class="summary">
@@ -151,6 +168,21 @@ footer {{ max-width:1180px; margin:0 auto; color:var(--muted); padding:0 22px 38
   Generated {_esc(data.generated_at)} · Protected by Authelia/Caddy · Snapshot JSON embedded for debugging.
 </footer>
 <script id="benchmark-data" type="application/json">{embedded_json}</script>
+<script>
+(function() {{
+  var button = document.getElementById('theme-toggle');
+  if (!button) return;
+  function apply(theme) {{
+    document.documentElement.setAttribute('data-theme', theme);
+    try {{ localStorage.setItem('theme', theme); }} catch (e) {{}}
+    button.textContent = theme === 'light' ? '\u263d Dark mode' : '\u2600 Light mode';
+  }}
+  button.addEventListener('click', function() {{
+    apply(document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
+  }});
+  apply(document.documentElement.getAttribute('data-theme') || 'dark');
+}})();
+</script>
 </body>
 </html>
 """
