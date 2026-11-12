@@ -44,3 +44,6 @@ cache/
 .idea/
 .kimi/
 .commandcode/
+
+# Local Wheelhouse Firebase Test Lab walk harness (not for the public repo)
+openbot-lab/
