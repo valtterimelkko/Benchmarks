@@ -24,7 +24,7 @@ Why a same-network container instead of a host port:
 
 - Existing Caddy entries use mixed host routing (`172.18.0.1`, `host.docker.internal`) and have had routing challenges before.
 - During build testing, newly bound host ports on `172.18.0.1` were reachable from the host but timed out from the Caddy container, while existing long-running host services behaved differently.
-- Running the static dashboard in a small `caddy:latest` container on the same Docker network as the main Caddy container gives the most reliable internal route: `http://benchmarks-dashboard:8766`.
+- Running the static dashboard in a small Caddy container (pinned, `caddy:2.11.9` since 2026-11-13; bump with the main gateway) on the same Docker network as the main Caddy container gives the most reliable internal route: `http://benchmarks-dashboard:8766`.
 - No host port is published, so there is no direct public exposure and no UFW allow rule is needed.
 
 Validate from host:
